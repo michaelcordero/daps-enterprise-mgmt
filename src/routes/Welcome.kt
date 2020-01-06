@@ -24,9 +24,11 @@ fun Route.welcome(dao: DataService) {
     get<Welcome> {
         // replace with db call obviously
         val user: User? =
-         User(userId = "test", email = "user@email.com", displayName = "testuser",
-                    passwordHash = "6819b57a326945c1968f45236589"
-                )
+         User(
+             userId = "test", email = "user@email.com", first_name = "test",
+             last_name ="user",
+             passwordHash = "6819b57a326945c1968f45236589"
+         )
         if ( user == null ) {
             call.respond(HttpStatusCode.InternalServerError, "missing name paramter")
         } else {

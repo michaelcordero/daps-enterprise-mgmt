@@ -1,0 +1,9 @@
+.card .center-card {
+    /*width: 100%;*/
+    /*max-width: 330px;*/
+    /*padding: 35px;*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
