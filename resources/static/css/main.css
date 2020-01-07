@@ -5,13 +5,13 @@
 
 input:required:invalid, input:focus:invalid {
       /*background-image: url(/images/invalid.png);*/
-      border-color: red;
+      border-bottom-color: indianred;
       background-position: right top;
       background-repeat: no-repeat;
 }
 input:required:valid {
     /*background-image: url(/images/valid.png);*/
-    border-color: green;
+    border-bottom-color: green;
     background-position: right top;
     background-repeat: no-repeat;
 }

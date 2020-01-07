@@ -4,6 +4,7 @@ import com.daps.ent.database.DataPool
 import com.daps.ent.database.DataService
 import com.daps.ent.database.LocalDatabase
 import com.daps.ent.model.User
+import com.daps.ent.presenters.LoginPresenter
 import com.daps.ent.presenters.RegisterPresenter
 import com.daps.ent.routes.*
 import com.daps.ent.security.DAPSSecurity
@@ -23,15 +24,15 @@ import io.ktor.request.header
 import io.ktor.request.host
 import io.ktor.request.port
 import io.ktor.response.respondRedirect
-import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
-import io.ktor.sessions.*
+import io.ktor.sessions.SessionTransportTransformerMessageAuthentication
+import io.ktor.sessions.Sessions
+import io.ktor.sessions.cookie
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
-import org.h2.engine.Session
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -106,9 +107,8 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // pages
-        val presenter: RegisterPresenter = RegisterPresenter(dao)
-        login(presenter)
-        register(presenter)
+        login(LoginPresenter(dao))
+        register(RegisterPresenter(dao))
         index(dao)
         welcome(dao)
         users(dao)

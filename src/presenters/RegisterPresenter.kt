@@ -3,19 +3,11 @@ package com.daps.ent.presenters
 import com.daps.ent.dao
 import com.daps.ent.database.DataService
 import com.daps.ent.model.User
-import com.daps.ent.security.DAPSSecurity
-import com.daps.ent.validators.RegisterValidator
-import kotlinx.coroutines.async
 import io.ktor.util.KtorExperimentalAPI
-import kotlinx.coroutines.CoroutineScope
 import java.io.IOException
 
 @KtorExperimentalAPI
-class RegisterPresenter (dao: DataService) {
-
-    fun user(email: String): User? {
-        return dao.userByEmail(email)
-    }
+class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
 
     @Throws(IOException::class)
     suspend fun createUser(first_name: String, last_name: String, email: String, password: String): User? {
@@ -31,11 +23,6 @@ class RegisterPresenter (dao: DataService) {
             val created: User = dao.user(email, new_password)!!
             return created
         }
-    }
-
-    @KtorExperimentalAPI
-    fun hashPassword(password: String): String {
-        return DAPSSecurity.hash(password)
     }
 
     fun validate(first_name: String, last_name: String, email: String, password: String ): String {
@@ -56,23 +43,14 @@ class RegisterPresenter (dao: DataService) {
         return message.toString()
     }
 
-    companion object Validator: RegisterValidator {
+    companion object Validator {
         // https://www.mkyong.com/regular-expressions/10-java-regular-expression-examples-you-should-know/
         val user_name_pattern: Regex = "[a-zA-Z0-9_.]+".toRegex()
-        val password_pattern: Regex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%]).{6,20})".toRegex()
-        val email_pattern: Regex = ("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*+(\\+[_A-Za-z0-9-]+)*@[A-Za-z0-9.-]" +
-                "+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})\$").toRegex()
-        override fun validFirstName(first_name: String): Boolean {
+        fun validFirstName(first_name: String): Boolean {
             return first_name.matches(user_name_pattern)
         }
-        override fun validLastName(last_name: String): Boolean {
+        fun validLastName(last_name: String): Boolean {
             return last_name.matches(user_name_pattern)
-        }
-        override fun validEmail(email: String): Boolean {
-            return email.matches(email_pattern)
-        }
-        override fun validPassword(password: String): Boolean {
-            return password.matches(password_pattern)
         }
     }
 
