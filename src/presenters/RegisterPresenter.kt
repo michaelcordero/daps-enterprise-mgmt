@@ -10,18 +10,15 @@ import java.io.IOException
 class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
 
     @Throws(IOException::class)
-    suspend fun createUser(first_name: String, last_name: String, email: String, password: String): User? {
+    fun createUser(first_name: String, last_name: String, email: String, password: String): User? {
         val error: String = validate(first_name, last_name, email, password)
         if ( error.isNotEmpty() ){
             throw Exception(error)
         } else {
             val new_password: String = hashPassword(password)
             val newUser = User(email, first_name, last_name, new_password)
-//            val co: CoroutineScope = CoroutineScope()
-//            co.async {  }
             dao.addUser(newUser)
-            val created: User = dao.user(email, new_password)!!
-            return created
+            return dao.user(email, new_password)!!
         }
     }
 
@@ -46,6 +43,15 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
     companion object Validator {
         // https://www.mkyong.com/regular-expressions/10-java-regular-expression-examples-you-should-know/
         val user_name_pattern: Regex = "[a-zA-Z0-9_.]+".toRegex()
+        val password_pattern: Regex = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%]).{6,20})".toRegex()
+        val email_pattern: Regex = ("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*+(\\+[_A-Za-z0-9-]+)*@[A-Za-z0-9.-]" +
+                "+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})\$").toRegex()
+        fun validEmail(email: String): Boolean {
+            return email.matches(email_pattern)
+        }
+        fun validPassword(password: String): Boolean {
+            return password.matches(password_pattern)
+        }
         fun validFirstName(first_name: String): Boolean {
             return first_name.matches(user_name_pattern)
         }

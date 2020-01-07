@@ -20,8 +20,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
-import kotlinx.coroutines.runBlocking
-import kotlin.Exception
+import kotlinx.coroutines.withContext
 
 @KtorExperimentalLocationsAPI
 @Location("/register")
@@ -49,7 +48,7 @@ fun Route.register(presenter: RegisterPresenter) {
 
         // do biz work
         try {
-            presenter.createUser(first_name, last_name, email, password)
+            withContext(application.coroutineContext) { presenter.createUser(first_name, last_name, email, password) }
             call.sessions.set(DAPSSession(email))
             call.redirect(Welcome(email))
         } catch (e: Exception) {

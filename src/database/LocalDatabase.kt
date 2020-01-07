@@ -14,8 +14,8 @@ class LocalDatabase(val db: Database ): DataService {
         // may remove this method because the DataPool closes the connections.
     }
 
-    override suspend fun user(email: String, hash: String?): User? {
-        val user: User? = db.transaction {
+    override fun user(email: String, hash: String?): User? {
+        return db.transaction {
             UsersTable.select { UsersTable.email.eq(email) }
                 .mapNotNull {
                     if (hash == null || it[UsersTable.passwordHash] == hash) {
@@ -31,7 +31,6 @@ class LocalDatabase(val db: Database ): DataService {
                 }
                 .singleOrNull()
         }
-        return user
     }
 
     override fun userByEmail(email: String): User? {
@@ -54,7 +53,7 @@ class LocalDatabase(val db: Database ): DataService {
         )
     }
 
-    override suspend fun addUser(user: User) {
+    override fun addUser(user: User) {
         db.transaction {
             UsersTable.insert {
                 it[first_name] = user.first_name
