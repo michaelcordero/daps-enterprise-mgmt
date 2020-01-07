@@ -14,12 +14,17 @@ class LocalDatabase(val db: Database ): DataService {
         // may remove this method because the DataPool closes the connections.
     }
 
-    override fun user(userId: String, hash: String?): User? {
+    override suspend fun user(email: String, hash: String?): User? {
         val user: User? = db.transaction {
-            UsersTable.select { UsersTable.id.eq(userId) }
+            UsersTable.select { UsersTable.email.eq(email) }
                 .mapNotNull {
                     if (hash == null || it[UsersTable.passwordHash] == hash) {
-                        User(userId, it[UsersTable.email], it[UsersTable.first_name],it[UsersTable.last_name], it[UsersTable.passwordHash])
+                        User(
+                            it[UsersTable.email],
+                            it[UsersTable.first_name],
+                            it[UsersTable.last_name],
+                            it[UsersTable.passwordHash]
+                        )
                     } else {
                         null
                     }
@@ -32,7 +37,7 @@ class LocalDatabase(val db: Database ): DataService {
     override fun userByEmail(email: String): User? {
         val user: User? = db.transaction {
             UsersTable.select { UsersTable.email.eq(email) }
-                .map { User(it[UsersTable.id], email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
+                .map { User(email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
                 .singleOrNull()
         }
         return user
@@ -42,7 +47,6 @@ class LocalDatabase(val db: Database ): DataService {
         UsersTable.selectAll().toMutableList()
     }.map {
         User(
-            it[UsersTable.id],
             it[UsersTable.email],
             it[UsersTable.first_name],
             it[UsersTable.last_name],
@@ -50,11 +54,11 @@ class LocalDatabase(val db: Database ): DataService {
         )
     }
 
-    override fun addUser(user: User) {
+    override suspend fun addUser(user: User) {
         db.transaction {
             UsersTable.insert {
-                it[id] = user.userId
                 it[first_name] = user.first_name
+                it[last_name] = user.last_name
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
             }
@@ -65,7 +69,7 @@ class LocalDatabase(val db: Database ): DataService {
     override fun editUser(user: User) {
         db.transaction {
            UsersTable.update({
-               UsersTable.id.eq(user.userId)
+               UsersTable.email.eq(user.email)
            }){
                it[first_name] = user.first_name
                it[email] = user.email
@@ -76,7 +80,7 @@ class LocalDatabase(val db: Database ): DataService {
 
     override fun removeUser(userId: String) {
         db.transaction {
-            UsersTable.deleteWhere { UsersTable.id.eq(userId) }
+            UsersTable.deleteWhere { UsersTable.email.eq(userId) }
         }
     }
 }

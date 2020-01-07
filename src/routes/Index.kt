@@ -23,9 +23,9 @@ Register the index route of the app
 fun Route.index(dao: DataService){
     // If the user has not already been authenticated we want to redirect to the login page otherwise dashboard.
     get<Index> {
-        val user: User? = call.sessions.get<DAPSSession>()?.let { dao.user(it.userId) }
+        val user: User? = call.sessions.get<DAPSSession>()?.let { dao.user(it.emailId) }
         if (user != null ) {
-            call.respond(FreeMarkerContent("index.ftl", mapOf("" to ""), "some etag"))
+            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "some etag"))
         } else {
             call.respond(FreeMarkerContent("login.ftl", null, "some etag"))
         }

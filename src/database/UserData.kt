@@ -7,7 +7,7 @@ interface UserData {
     /**
      * Attempt to get the user given the [userId] and password [hash]
      */
-    fun user(userId: String, hash: String? = null ): User?
+    suspend fun user(email: String, hash: String? = null): User?
 
     /**
      * Attempt to get user by using the [email].
@@ -22,7 +22,7 @@ interface UserData {
     /**
      * Creates a new user
      */
-    fun addUser(user: User)
+    suspend fun addUser(user: User)
 
     /**
      * Edits a user
