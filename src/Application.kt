@@ -11,9 +11,7 @@ import com.daps.ent.security.DAPSSession
 import com.daps.ent.status.statuses
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.PartialContent
-import io.ktor.features.StatusPages
+import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.HttpHeaders
 import io.ktor.http.content.resources
@@ -80,6 +78,10 @@ fun Application.module() {  //testing: Boolean = false
     }
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
+    // This uses use the logger to log every call (request/response)
+    install(CallLogging)
+    // Automatic '304 Not Modified' Responses
+    install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
     // SESSION cookie
@@ -104,8 +106,9 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // pages
-        login(RegisterPresenter(dao))
-        register(RegisterPresenter(dao))
+        val presenter: RegisterPresenter = RegisterPresenter(dao)
+        login(presenter)
+        register(presenter)
         index(dao)
         welcome(dao)
         users(dao)
@@ -116,7 +119,7 @@ fun Application.module() {  //testing: Boolean = false
 @KtorExperimentalLocationsAPI
 suspend fun ApplicationCall.redirect(location: Any) {
     val host = request.host() ?: "localhost"
-    val port = request.port().let { if (it == 8080) "" else ":$it" }
+    val port = request.port().let { if (it == 8080) ":8080" else ":$it" }
     val address = host + port
     respondRedirect("http://$address${application.locations.href(location)}")
 }
