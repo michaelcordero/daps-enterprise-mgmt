@@ -74,7 +74,7 @@ fun Application.module() {  //testing: Boolean = false
         dp.pool.close();
         // try to figure out how to call the /logout route from here
         //it.locations.href(Login())
-        //it.dispose()
+        it.dispose()
     }
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)

@@ -20,6 +20,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
+import kotlinx.coroutines.runBlocking
 import kotlin.Exception
 
 @KtorExperimentalLocationsAPI
@@ -41,7 +42,6 @@ fun Route.register(presenter: RegisterPresenter) {
 
         // get post data
         val registration = call.receive<Parameters>()
-//        val user_id: String = registration["user_id"] ?: return@post call.redirect(it)
         val first_name: String = registration["first_name"] ?: return@post call.redirect(it)
         val last_name: String = registration["last_name"] ?: return@post call.redirect(it)
         val email: String = registration["email"] ?: return@post call.redirect(it)

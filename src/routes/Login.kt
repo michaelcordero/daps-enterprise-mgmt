@@ -46,7 +46,7 @@ fun Route.login(presenter: RegisterPresenter ) {
         val user: User? = presenter.user(emailId)
 
         if (user == null) {
-            call.redirect(error.copy("Invalid email"))
+            call.redirect(error.copy(error = "Invalid email"))
         } else if (user.passwordHash != presenter.hashPassword(password)){
             call.redirect(error.copy(error = "Invalid password"))
         } else {
@@ -57,6 +57,7 @@ fun Route.login(presenter: RegisterPresenter ) {
 
     get<Logout> {
         call.sessions.clear<DAPSSession>()
+        call.redirect(Login())
     }
 }
 

@@ -8,7 +8,7 @@
         <img class="mb-4" src="/static/images/daps_logo.png" width="80" height="80" alt="logo">
         <h3 class="h3 mb-3 font-weight-normal">DAPS Enterprise</h3>
         <#if error??>
-            <p class="error">${error}</p>
+            <p class="error" style="color: indianred">${error}</p>
         </#if>
         <div class="form-group">
         <label for="emailId" class="sr-only">Email address</label>
