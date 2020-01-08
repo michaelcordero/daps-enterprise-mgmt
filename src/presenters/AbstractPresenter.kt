@@ -16,7 +16,4 @@ abstract class AbstractPresenter(dao: DataService) {
         return DAPSSecurity.hash(password)
     }
 
-    open class AbstractValidator {
-
-    }
 }

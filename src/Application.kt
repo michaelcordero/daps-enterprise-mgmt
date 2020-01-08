@@ -72,7 +72,7 @@ fun Application.module() {  //testing: Boolean = false
     log.info("Application module starting...")
 
     environment.monitor.subscribe(ApplicationStopped){
-        dp.pool.close();
+        dp.pool.close()
         // try to figure out how to call the /logout route from here
         //it.locations.href(Login())
         it.dispose()
@@ -118,7 +118,7 @@ fun Application.module() {  //testing: Boolean = false
 
 @KtorExperimentalLocationsAPI
 suspend fun ApplicationCall.redirect(location: Any) {
-    val host = request.host() ?: "localhost"
+    val host = request.host()
     val port = request.port().let { if (it == 8080) ":8080" else ":$it" }
     val address = host + port
     respondRedirect("http://$address${application.locations.href(location)}")

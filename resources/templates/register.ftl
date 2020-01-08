@@ -8,6 +8,7 @@
     <div class="card mx-auto" style="width: 35rem; margin-top: 15rem">
         <div class="card-body">
             <div class="m-sm-4">
+                <#--noinspection HtmlUnknownTarget-->
                 <form action="/register" method="post" enctype="application/x-www-form-urlencoded">
                     <#if error??>
                         <p class="error">${error}</p>

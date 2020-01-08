@@ -4,7 +4,9 @@
 <@layout.mainLayout title="Login">
     <body class="text-center">
     <link rel="stylesheet" href="/static/css/main.css">
+    <#--noinspection HtmlUnknownTarget-->
     <form class="form-login" action="/login" method="post" enctype="application/x-www-form-urlencoded">
+        <#--noinspection CheckImageSize-->
         <img class="mb-4" src="/static/images/daps_logo.png" width="80" height="80" alt="logo">
         <h3 class="h3 mb-3 font-weight-normal">DAPS Enterprise</h3>
         <#if error??>
@@ -14,11 +16,13 @@
         <label for="emailId" class="sr-only">Email address</label>
         <input type="text" id="emailId" name="emailId"  class="form-control" placeholder="Email address" autofocus="">
         </div>
+        <#--noinspection HtmlUnknownTarget-->
         <a href="/register" class="links">Register </a>
         <div class="form-group">
         <label for="password" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="form-control" placeholder="Password">
         </div>
+        <#--noinspection HtmlUnknownTarget,HtmlUnknownTarget-->
         <a href="/password" class="links">Forgot Password? </a>
         <div class="checkbox mb-3">
             <label>

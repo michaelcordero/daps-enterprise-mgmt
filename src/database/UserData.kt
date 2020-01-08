@@ -5,7 +5,7 @@ import com.daps.ent.model.User
 interface UserData {
 
     /**
-     * Attempt to get the user given the [userId] and password [hash]
+     * Attempt to get the user given the [email] and password [hash]
      */
     fun user(email: String, hash: String? = null): User?
 

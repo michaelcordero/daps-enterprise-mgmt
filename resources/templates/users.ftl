@@ -6,7 +6,7 @@
         <h3 class="content-subhead">Users</h3>
         <ul>
             <#list users as user>
-                <li>UserId: ${user.userId}| UserDisplayName: ${user.displayName}
+                <li> UserFirstName: ${user.first_name} | UserLastName: ${user.last_name}
                     | UserEmail:  ${user.email} | UserPassword: ${user.passwordHash }</li>
                 <#else>
                     <p> No users </p>

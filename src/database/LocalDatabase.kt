@@ -34,12 +34,11 @@ class LocalDatabase(val db: Database ): DataService {
     }
 
     override fun userByEmail(email: String): User? {
-        val user: User? = db.transaction {
+        return db.transaction {
             UsersTable.select { UsersTable.email.eq(email) }
                 .map { User(email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
                 .singleOrNull()
         }
-        return user
     }
 
     override fun all(): List<User> = db.transaction {

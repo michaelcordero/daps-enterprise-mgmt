@@ -4,13 +4,11 @@ import com.daps.ent.dao
 import com.daps.ent.database.DataService
 import com.daps.ent.model.User
 import io.ktor.util.KtorExperimentalAPI
-import java.io.IOException
 
 @KtorExperimentalAPI
 class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
 
-    @Throws(IOException::class)
-    fun createUser(first_name: String, last_name: String, email: String, password: String): User? {
+    fun createUser(first_name: String, last_name: String, email: String, password: String): User?  {
         val error: String = validate(first_name, last_name, email, password)
         if ( error.isNotEmpty() ){
             throw Exception(error)
@@ -18,7 +16,7 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
             val new_password: String = hashPassword(password)
             val newUser = User(email, first_name, last_name, new_password)
             dao.addUser(newUser)
-            return dao.user(email, new_password)!!
+            return dao.user(email, new_password)
         }
     }
 
