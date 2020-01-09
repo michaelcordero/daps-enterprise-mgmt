@@ -6,6 +6,7 @@ import com.daps.ent.database.LocalDatabase
 import com.daps.ent.model.User
 import com.daps.ent.presenters.LoginPresenter
 import com.daps.ent.presenters.RegisterPresenter
+import com.daps.ent.presenters.WelcomePresenter
 import com.daps.ent.routes.*
 import com.daps.ent.security.DAPSSecurity
 import com.daps.ent.security.DAPSSession
@@ -110,7 +111,7 @@ fun Application.module() {  //testing: Boolean = false
         login(LoginPresenter(dao))
         register(RegisterPresenter(dao))
         index(dao)
-        welcome(dao)
+        welcome(WelcomePresenter(dao))
         users(dao)
         table(dao)
     }

@@ -2,13 +2,15 @@ package com.daps.ent.routes
 
 import com.daps.ent.database.DataService
 import com.daps.ent.model.User
+import com.daps.ent.redirect
 import com.daps.ent.security.DAPSSession
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.routing.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.application.*
+import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
+import io.ktor.locations.KtorExperimentalLocationsAPI
+import io.ktor.locations.Location
+import io.ktor.locations.get
+import io.ktor.response.respond
+import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 
@@ -25,7 +27,9 @@ fun Route.index(dao: DataService){
     get<Index> {
         val user: User? = call.sessions.get<DAPSSession>()?.let { dao.user(it.emailId) }
         if (user != null ) {
-            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "some etag"))
+            // this probably needs
+            call.redirect(location = Welcome(user.email))
+//            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "some etag"))
         } else {
             call.respond(FreeMarkerContent("login.ftl", null, "some etag"))
         }
