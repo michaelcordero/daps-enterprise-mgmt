@@ -63,3 +63,12 @@ jar {
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+
+// To run from command line:
+// ./gradlew csv --args=/Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
+task csv(type: JavaExec) {
+    group = "Execution"
+    description = "Run the H2exCSVKt main class"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.daps.ent.utilities.H2exCSVKt'
+}
