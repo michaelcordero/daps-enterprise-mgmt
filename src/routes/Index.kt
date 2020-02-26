@@ -29,9 +29,9 @@ fun Route.index(dao: DataService){
         if (user != null ) {
             // this probably needs
             call.redirect(location = Welcome(user.email))
-//            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "some etag"))
+//            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "someetag"))
         } else {
-            call.respond(FreeMarkerContent("login.ftl", null, "some etag"))
+            call.respond(FreeMarkerContent("login.ftl", null, "some-etag"))
         }
 
     }
