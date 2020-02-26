@@ -7,6 +7,17 @@ import java.sql.ResultSet
 import java.sql.ResultSetMetaData
 import kotlin.system.exitProcess
 
+/**
+ * Both H2 and Flyway have existing migration tools that will take a .sql file and migrate it to the database dialect of
+ * your choice with the commands:
+ *
+ * H2: java -cp ~/h2/bin/h2*.jar org.h2.tools.RunScript -url jdbc:h2:/db-url -script /daps.sql
+ * Flyway: flyway migrate (after you made the /conf/flyway.conf file changes of course)
+ *
+ * However, neither of these worked for me, the data given could be just bad data. In the event that it's not,
+ * CSV did produce consistent results, but of course the data still has to be normalized and then inserted into the
+ * app's database. Thus the purpose of this program is to serve as a data processor and batch database updater.
+ */
 class H2exCSV {
     fun process(directory: File): Unit {
         println("Directory passed in: ${directory}")
