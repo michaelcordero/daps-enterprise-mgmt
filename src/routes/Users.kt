@@ -1,6 +1,6 @@
 package com.daps.ent.routes
 
-import com.daps.ent.database.DataService
+import com.daps.ent.facades.DataService
 import com.daps.ent.model.User
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent

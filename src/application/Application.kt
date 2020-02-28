@@ -1,8 +1,8 @@
-package com.daps.ent
+package com.daps.ent.Application
 
 import com.daps.ent.database.DataPool
-import com.daps.ent.database.DataService
 import com.daps.ent.database.LocalDatabase
+import com.daps.ent.facades.DataService
 import com.daps.ent.model.User
 import com.daps.ent.presenters.LoginPresenter
 import com.daps.ent.presenters.RegisterPresenter
@@ -70,7 +70,7 @@ fun main(args: Array<String>) {
 @Suppress("unused") // Referenced in application.conf
 //@JvmOverloads
 fun Application.module() {  //testing: Boolean = false
-    log.info("Application module starting...")
+    log.info("application module starting...")
 
     environment.monitor.subscribe(ApplicationStopped){
         dp.pool.close()

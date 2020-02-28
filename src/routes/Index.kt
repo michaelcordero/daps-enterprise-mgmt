@@ -1,8 +1,8 @@
 package com.daps.ent.routes
 
-import com.daps.ent.database.DataService
+import com.daps.ent.Application.redirect
+import com.daps.ent.facades.DataService
 import com.daps.ent.model.User
-import com.daps.ent.redirect
 import com.daps.ent.security.DAPSSession
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent

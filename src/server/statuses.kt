@@ -9,7 +9,7 @@ import io.ktor.http.withCharset
 import io.ktor.response.respond
 import io.ktor.response.respondText
 
-// This extracts the 404 and 500 errors away from the Application.kt file...
+// This extracts the 404 and 500 errors away from the application.kt file...
 fun statuses(configuration: StatusPages.Configuration ) {
     // 404 Error
     configuration.status(HttpStatusCode.NotFound) {

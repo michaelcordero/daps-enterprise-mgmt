@@ -1,7 +1,7 @@
 package com.daps.ent.presenters
 
-import com.daps.ent.dao
-import com.daps.ent.database.DataService
+import com.daps.ent.Application.dao
+import com.daps.ent.facades.DataService
 import com.daps.ent.model.User
 import com.daps.ent.security.DAPSSecurity
 import io.ktor.util.KtorExperimentalAPI

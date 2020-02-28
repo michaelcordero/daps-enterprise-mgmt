@@ -1,4 +1,4 @@
-package com.daps.ent.database
+package com.daps.ent.Tables
 
 import org.jetbrains.exposed.sql.Table
 

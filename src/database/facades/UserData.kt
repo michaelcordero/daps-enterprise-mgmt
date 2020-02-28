@@ -1,4 +1,4 @@
-package com.daps.ent.database
+package com.daps.ent.facades
 
 import com.daps.ent.model.User
 

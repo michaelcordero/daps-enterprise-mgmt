@@ -1,5 +1,6 @@
 package com.daps.ent
 
+import com.daps.ent.Application.module
 import com.daps.ent.routes.Index
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode

@@ -1,8 +1,8 @@
 package com.daps.ent.routes
 
+import com.daps.ent.Application.redirect
 import com.daps.ent.model.User
 import com.daps.ent.presenters.RegisterPresenter
-import com.daps.ent.redirect
 import com.daps.ent.security.DAPSSession
 import io.ktor.application.application
 import io.ktor.application.call
