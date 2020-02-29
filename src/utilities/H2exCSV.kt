@@ -20,7 +20,7 @@ import kotlin.system.exitProcess
  */
 class H2exCSV {
     fun process(directory: File): Unit {
-        println("Directory passed in: ${directory}")
+        println("Directory passed in: $directory")
         val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
         for (f in files){
 //            if (f.name.equals("DAPSaddress.csv")) {

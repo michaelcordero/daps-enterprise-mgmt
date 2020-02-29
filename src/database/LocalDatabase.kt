@@ -1,6 +1,6 @@
 package database
-import com.daps.ent.Tables.UsersTable
 import database.facades.DataService
+import database.tables.UsersTable
 import model.User
 import org.jetbrains.exposed.sql.*
 
