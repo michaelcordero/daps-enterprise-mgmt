@@ -1,5 +1,5 @@
-package com.daps.ent.presenters
+package presenters
 
-import com.daps.ent.facades.DataService
+import database.facades.DataService
 
 class LoginPresenter(dao: DataService) : AbstractPresenter(dao)

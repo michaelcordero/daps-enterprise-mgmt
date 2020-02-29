@@ -1,5 +1,5 @@
-package com.daps.ent.database
-import com.mchange.v2.c3p0.*
+package database
+import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.h2.Driver
 import java.io.File
 

@@ -1,26 +1,17 @@
-package com.daps.ent.Application
+package application
 
-import com.daps.ent.database.DataPool
-import com.daps.ent.database.LocalDatabase
-import com.daps.ent.facades.DataService
-import com.daps.ent.presenters.LoginPresenter
-import com.daps.ent.presenters.RegisterPresenter
-import com.daps.ent.presenters.WelcomePresenter
-import com.daps.ent.routes.*
-import com.daps.ent.security.DAPSSecurity
-import com.daps.ent.security.DAPSSession
-import com.daps.ent.status.statuses
+import database.DataPool
+import database.LocalDatabase
+import database.facades.DataService
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
-import io.ktor.http.HttpHeaders
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.locations.locations
-import io.ktor.request.header
 import io.ktor.request.host
 import io.ktor.request.port
 import io.ktor.response.respondRedirect
@@ -33,13 +24,17 @@ import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
-import model.User
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.net.URI
+import presenters.LoginPresenter
+import presenters.RegisterPresenter
+import presenters.WelcomePresenter
+import routes.*
+import security.DAPSSecurity
+import security.DAPSSession
+import server.statuses
 import java.time.ZoneId
-import java.util.concurrent.TimeUnit
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
@@ -125,26 +120,26 @@ suspend fun ApplicationCall.redirect(location: Any) {
     respondRedirect("http://$address${application.locations.href(location)}")
 }
 
-/**
- * Generates a security code using a [hashFunction], a [date], a [user] and an implicit [HttpHeaders.Referrer]
- * to generate tokens to prevent CSRF attacks.
- */
-fun ApplicationCall.securityCode(date: Long, user: User, hashFunction: (String) -> String) =
-    hashFunction("$date:${user.email}:${request.host()}:${refererHost()}")
+///**
+// * Generates a security code using a [hashFunction], a [date], a [user] and an implicit [HttpHeaders.Referrer]
+// * to generate tokens to prevent CSRF attacks.
+// */
+//fun ApplicationCall.securityCode(date: Long, user: User, hashFunction: (String) -> String) =
+//    hashFunction("$date:${user.email}:${request.host()}:${refererHost()}")
 
-/**
- * Verifies that a code generated from [securityCode] is valid for a [date] and a [user] and an implicit [HttpHeaders.Referrer].
- * It should match the generated [securityCode] and also not be older than two hours.
- * Used to prevent CSRF attacks.
- */
-fun ApplicationCall.verifyCode(date: Long, user: User, code: String, hashFunction: (String) -> String) =
-    securityCode(date, user, hashFunction) == code
-            && (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
+///**
+// * Verifies that a code generated from [securityCode] is valid for a [date] and a [user] and an implicit [HttpHeaders.Referrer].
+// * It should match the generated [securityCode] and also not be older than two hours.
+// * Used to prevent CSRF attacks.
+// */
+//fun ApplicationCall.verifyCode(date: Long, user: User, code: String, hashFunction: (String) -> String) =
+//    securityCode(date, user, hashFunction) == code
+//            && (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
 
-/**
- * Obtains the [refererHost] from the [HttpHeaders.Referrer] header, to check it to prevent CSRF attacks
- * from other domains.
- */
-fun ApplicationCall.refererHost() = request.header(HttpHeaders.Referrer)?.let { URI.create(it).host }
+///**
+// * Obtains the [refererHost] from the [HttpHeaders.Referrer] header, to check it to prevent CSRF attacks
+// * from other domains.
+// */
+//fun ApplicationCall.refererHost() = request.header(HttpHeaders.Referrer)?.let { URI.create(it).host }
 
 

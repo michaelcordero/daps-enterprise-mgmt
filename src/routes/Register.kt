@@ -1,8 +1,6 @@
-package com.daps.ent.routes
+package routes
 
-import com.daps.ent.Application.redirect
-import com.daps.ent.presenters.RegisterPresenter
-import com.daps.ent.security.DAPSSession
+import application.redirect
 import io.ktor.application.application
 import io.ktor.application.call
 import io.ktor.application.log
@@ -20,6 +18,8 @@ import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
 import model.User
+import presenters.RegisterPresenter
+import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
 @Location("/register")

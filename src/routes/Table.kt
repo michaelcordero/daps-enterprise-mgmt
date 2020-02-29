@@ -1,6 +1,6 @@
-package com.daps.ent.routes
+package routes
 
-import com.daps.ent.facades.DataService
+import database.facades.DataService
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import io.ktor.locations.get

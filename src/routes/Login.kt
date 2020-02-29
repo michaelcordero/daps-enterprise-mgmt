@@ -1,8 +1,6 @@
-package com.daps.ent.routes
+package routes
 
-import com.daps.ent.Application.redirect
-import com.daps.ent.presenters.LoginPresenter
-import com.daps.ent.security.DAPSSession
+import application.redirect
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.http.Parameters
@@ -19,6 +17,8 @@ import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
 import model.User
+import presenters.LoginPresenter
+import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
 @Location("/login")
@@ -30,7 +30,7 @@ class Logout
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.login(presenter: LoginPresenter ) {
+fun Route.login(presenter: LoginPresenter) {
     get<Login> {
         val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
         if (user != null) {

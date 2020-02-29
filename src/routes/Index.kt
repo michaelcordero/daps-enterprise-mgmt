@@ -1,8 +1,7 @@
-package com.daps.ent.routes
+package routes
 
-import com.daps.ent.Application.redirect
-import com.daps.ent.facades.DataService
-import com.daps.ent.security.DAPSSession
+import application.redirect
+import database.facades.DataService
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -13,6 +12,7 @@ import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import model.User
+import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
 @Location("/")

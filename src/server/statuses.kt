@@ -1,4 +1,4 @@
-package com.daps.ent.status
+package server
 
 import io.ktor.application.call
 import io.ktor.content.TextContent

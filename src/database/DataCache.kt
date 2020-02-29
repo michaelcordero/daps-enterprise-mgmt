@@ -1,6 +1,6 @@
-package com.daps.ent.database
+package database
 
-import com.daps.ent.facades.DataService
+import database.facades.DataService
 import java.io.File
 
 class DataCache(val delegate: DataService, val storage: File)

@@ -1,3 +1,3 @@
-package com.daps.ent.security
+package security
 
 data class DAPSSession(val emailId: String )

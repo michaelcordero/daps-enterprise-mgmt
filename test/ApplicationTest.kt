@@ -1,7 +1,6 @@
 package com.daps.ent
 
-import com.daps.ent.Application.module
-import com.daps.ent.routes.Index
+import application.module
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -9,6 +8,7 @@ import io.ktor.locations.locations
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
+import routes.Index
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
