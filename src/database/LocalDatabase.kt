@@ -1,7 +1,7 @@
 package com.daps.ent.database
 import com.daps.ent.Tables.UsersTable
 import com.daps.ent.facades.DataService
-import com.daps.ent.model.User
+import model.User
 import org.jetbrains.exposed.sql.*
 
 class LocalDatabase(val db: Database ): DataService {

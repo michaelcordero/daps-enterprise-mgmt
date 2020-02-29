@@ -1,4 +1,4 @@
-package com.daps.ent.validators
+package presenters.validators
 
 interface RegisterValidator {
     fun validFirstName(first_name: String): Boolean

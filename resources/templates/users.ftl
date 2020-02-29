@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="users" type="java.util.List<com.daps.ent.model.User>" -->
+<#-- @ftlvariable name="users" type="java.util.List<model.User>" -->
 <#import "template.ftl" as layout />
 
 <@layout.mainLayout title="Users">

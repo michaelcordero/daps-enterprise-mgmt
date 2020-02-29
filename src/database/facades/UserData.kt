@@ -1,6 +1,6 @@
 package com.daps.ent.facades
 
-import com.daps.ent.model.User
+import model.User
 
 interface UserData {
 

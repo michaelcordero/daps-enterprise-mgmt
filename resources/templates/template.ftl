@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="welcome" type="com.daps.ent.model.User" -->
+<#-- @ftlvariable name="welcome" type="model.User" -->
 
 <#macro mainLayout title="Template">
     <!DOCTYPE html>

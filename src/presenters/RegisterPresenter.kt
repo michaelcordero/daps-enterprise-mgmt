@@ -2,8 +2,8 @@ package com.daps.ent.presenters
 
 import com.daps.ent.Application.dao
 import com.daps.ent.facades.DataService
-import com.daps.ent.model.User
 import io.ktor.util.KtorExperimentalAPI
+import model.User
 
 @KtorExperimentalAPI
 class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {

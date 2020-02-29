@@ -1,6 +1,5 @@
 package com.daps.ent.routes
 
-import com.daps.ent.model.User
 import com.daps.ent.presenters.WelcomePresenter
 import com.daps.ent.security.DAPSSession
 import io.ktor.application.call
@@ -13,6 +12,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
+import model.User
 
 /*
 Register the welcome route of the app

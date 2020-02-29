@@ -1,7 +1,6 @@
 package com.daps.ent.routes
 
 import com.daps.ent.Application.redirect
-import com.daps.ent.model.User
 import com.daps.ent.presenters.LoginPresenter
 import com.daps.ent.security.DAPSSession
 import io.ktor.application.call
@@ -19,6 +18,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
+import model.User
 
 @KtorExperimentalLocationsAPI
 @Location("/login")

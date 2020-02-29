@@ -3,7 +3,6 @@ package com.daps.ent.Application
 import com.daps.ent.database.DataPool
 import com.daps.ent.database.LocalDatabase
 import com.daps.ent.facades.DataService
-import com.daps.ent.model.User
 import com.daps.ent.presenters.LoginPresenter
 import com.daps.ent.presenters.RegisterPresenter
 import com.daps.ent.presenters.WelcomePresenter
@@ -34,6 +33,7 @@ import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
+import model.User
 import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
