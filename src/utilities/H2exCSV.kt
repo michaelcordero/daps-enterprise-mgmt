@@ -1,10 +1,10 @@
 package utilities
 
 import io.ktor.utils.io.errors.IOException
+import model.Billing
 import org.h2.tools.Csv
 import java.io.File
 import java.sql.ResultSet
-import java.sql.ResultSetMetaData
 import kotlin.system.exitProcess
 
 /**
@@ -20,34 +20,30 @@ import kotlin.system.exitProcess
  */
 class H2exCSV {
     fun process(directory: File): Unit {
-        println("Directory passed in: $directory")
-        val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
-        for (f in files){
-//            if (f.name.equals("DAPSaddress.csv")) {
-            if (f.name.endsWith(".csv")){
-                println("=======================================")
-                println("Processing... ${f.name}")
-                val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
-                val meta: ResultSetMetaData = result_set.metaData
-                println("=======================================")
-                while (result_set.next()) {
-                    // Print the column labels once
-                    if ( result_set.row.equals(1) ){
-                        for (i in 0..meta.columnCount-1) {
-                            print(meta.getColumnLabel(i+1)+"  \t")
+        try {
+//            val dao: LocalDataService = LocalDataService()
+            println("Directory passed in: $directory")
+            val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
+            for (f in files){
+                if (f.name.endsWith(".csv") && f.name == "Billing.csv") {
+                    println("=======================================")
+                    println("Processing... ${f.name}")
+                    val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
+                    println("=======================================")
+                    while (result_set.next()) {
+                        for (i in 0 until result_set.metaData.columnCount) {
+                            when(f.name) {
+                                "Billing.csv" -> println(Billing(result_set)) //application.dao.createBilling(Billing(result_set))
+                            }
                         }
                     }
-                    println()
-                    // Print each of the rows
-                    for (i in 0..meta.columnCount-1) {
-                        print(result_set.getString(i+1)+"   \t")
-                    }
-                    println()
                 }
-                println("=======================================")
-                result_set.close()
             }
-//            }
+        } catch (e: Exception) {
+            println("Error occurred during migration:")
+            println(e.message)
+        } finally {
+//            dao.close()
         }
     }
 }

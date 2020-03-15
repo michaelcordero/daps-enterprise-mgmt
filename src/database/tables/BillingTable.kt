@@ -24,5 +24,5 @@ object BillingTable: Table() {
     val pending = bool("Pending")
     val assign_date = datetime("Assign Date")
     val assigned_by = text("Assigned By")
-    val service_category = text("Service Category")
+    val service_category = text("ServiceCategory")
 }
