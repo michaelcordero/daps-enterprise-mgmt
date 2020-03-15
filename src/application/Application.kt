@@ -1,7 +1,6 @@
 package application
 
-import database.DataPool
-import database.LocalDatabase
+import database.LocalDataService
 import database.facades.DataService
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
@@ -24,7 +23,6 @@ import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
-import org.jetbrains.exposed.sql.Database
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import presenters.LoginPresenter
@@ -38,8 +36,7 @@ import java.time.ZoneId
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
-val dp: DataPool = DataPool()
-val dao: DataService = LocalDatabase(Database.connect(dp.pool))
+val dao: DataService = LocalDataService()
 
 
 @KtorExperimentalAPI
@@ -48,7 +45,6 @@ fun main(args: Array<String>) {
     // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
     log.info("Starting database...")
-    dao.init()
     log.info("Starting server...")
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
@@ -66,9 +62,8 @@ fun main(args: Array<String>) {
 //@JvmOverloads
 fun Application.module() {  //testing: Boolean = false
     log.info("application module starting...")
-
     environment.monitor.subscribe(ApplicationStopped){
-        dp.pool.close()
+        dao.close()
         // try to figure out how to call the /logout route from here
         //it.locations.href(Login())
         it.dispose()

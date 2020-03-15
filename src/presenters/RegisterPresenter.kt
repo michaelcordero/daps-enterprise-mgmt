@@ -32,7 +32,7 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
                     " must include at least one special character: @#$%\n")
         }
         if (!validEmail(email)){
-            message.append("email must be of the form: text@domain.com\n")
+            message.append("email must be of the form: username@domain.com\n")
         }
         return message.toString()
     }
