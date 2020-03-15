@@ -50,7 +50,7 @@ interface UserData {
     /**
      * Fetch all users
      */
-    fun all(): List<User> = db.transaction {
+    fun allUsers(): List<User> = db.transaction {
         UsersTable.selectAll().toMutableList()
     }.map {
         User(

@@ -17,7 +17,7 @@ class Users
 @KtorExperimentalLocationsAPI
 fun Route.users(dao: DataService){
     get<Users>{
-        val users: List<User> = dao.all()
+        val users: List<User> = dao.allUsers()
         call.respond(FreeMarkerContent("users.ftl", mapOf("users" to users), "someetag"))
     }
 }
