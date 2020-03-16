@@ -18,10 +18,10 @@ data class Billing(
         result_set.getInt(BillingTable.counter.name),
         result_set.getInt(BillingTable.client_num.name),
         result_set.getInt(BillingTable.employee_num.name),
-        LocalDateTime.parse(result_set.getString(BillingTable.wdate.name)),
+        LocalDateTime.parse( result_set.getString(BillingTable.wdate.name).replace(" ","T")),
         result_set.getDouble(BillingTable.hours.name),
-        result_set.getString(BillingTable.start_time.name)?.let { LocalDateTime.parse(it)},
-        result_set.getString(BillingTable.end_time.name)?.let { LocalDateTime.parse(it)},
+        result_set.getString(BillingTable.start_time.name)?.let { LocalDateTime.parse(it.replace(" ","T"))},
+        result_set.getString(BillingTable.end_time.name)?.let { LocalDateTime.parse(it.replace(" ","T"))},
         result_set.getDouble(BillingTable.daps_fee.name),
         result_set.getDouble(BillingTable.total_fee.name),
         result_set.getString(BillingTable.worktype.name),
@@ -33,7 +33,7 @@ data class Billing(
         result_set.getDouble(BillingTable.apamt2.name),
         result_set.getString(BillingTable.notesp.name),
         result_set.getBoolean(BillingTable.pending.name),
-        result_set.getString(BillingTable.assign_date.name)?.let { LocalDateTime.parse(it) },
+        result_set.getString(BillingTable.assign_date.name)?.let { LocalDateTime.parse(it.replace(" ","T")) },
         result_set.getString(BillingTable.assigned_by.name),
         result_set.getString(BillingTable.service_category.name)
     )
