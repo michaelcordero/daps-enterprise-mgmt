@@ -1,9 +1,11 @@
 package database.tables
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.datetime
 
 object PermReqNotesTable: Table() {
-    val id = integer("ID").primaryKey()
+    val id = integer("ID")
+    override val primaryKey = PrimaryKey(id, name = "ID")
     val emp_num = integer("Emp#")
     val desired_location = text("DesiredLocation")
     val start_date = datetime("StartDate")

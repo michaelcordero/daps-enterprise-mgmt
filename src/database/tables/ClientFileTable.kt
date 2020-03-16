@@ -1,9 +1,11 @@
 package database.tables
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.datetime
 
 object ClientFileTable : Table(){
-    val client_num = integer("Client#").primaryKey()
+    val client_num = integer("Client#")
+    override val primaryKey = PrimaryKey(client_num, name = "Client#")
     val ofcname = text("OfcName")
     val firstname1 = text("FirstName1")
     val lastname1 = text("LastName1")

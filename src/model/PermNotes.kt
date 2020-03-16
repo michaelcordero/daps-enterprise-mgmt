@@ -1,7 +1,7 @@
 package model
 
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
-data class PermNotes(val id: Int?, val emp_num: Int?, val note_date: DateTime?,
+data class PermNotes(val id: Int?, val emp_num: Int?, val note_date: LocalDateTime?,
                      val initial: String?, val comments: String?,
-                     val follow_update: DateTime?)
+                     val follow_update: LocalDateTime?)

@@ -1,9 +1,11 @@
 package database.tables
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.datetime
 
 object InterviewGuideTable: Table() {
-    val id = integer("ID").primaryKey()
+    val id = integer("ID")
+    override val primaryKey = PrimaryKey(id, name = "ID")
     val client_num = integer("Client#")
     val client_contact = text("ClientContact")
     val employee_num = integer("Emp#")

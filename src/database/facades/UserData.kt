@@ -3,6 +3,7 @@ package database.facades
 import database.tables.UsersTable
 import model.User
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * This interface provides the methods for application users' sql operations. Instead of going with the delegate object
@@ -18,11 +19,12 @@ interface UserData {
      * Attempt to get the user given the [email] and password [hash]
      */
     fun user(email: String, hash: String? = null): User? {
-        return db.transaction {
+        return transaction(db) {
             UsersTable.select { UsersTable.email.eq(email) }
                 .mapNotNull {
                     if (hash == null || it[UsersTable.passwordHash] == hash) {
                         User(
+                            it[UsersTable.id],
                             it[UsersTable.email],
                             it[UsersTable.first_name],
                             it[UsersTable.last_name],
@@ -40,9 +42,9 @@ interface UserData {
      * Attempt to get user by using the [email].
      */
     fun userByEmail(email: String ): User? {
-        return db.transaction {
+        return transaction(db) {
             UsersTable.select { UsersTable.email.eq(email) }
-                .map { User(email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
+                .map { User(it[UsersTable.id], email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
                 .singleOrNull()
         }
     }
@@ -50,10 +52,11 @@ interface UserData {
     /**
      * Fetch all users
      */
-    fun allUsers(): List<User> = db.transaction {
+    fun allUsers(): List<User> = transaction(db) {
         UsersTable.selectAll().toMutableList()
     }.map {
         User(
+            it[UsersTable.id],
             it[UsersTable.email],
             it[UsersTable.first_name],
             it[UsersTable.last_name],
@@ -65,8 +68,9 @@ interface UserData {
      * Creates a new user
      */
     fun addUser(user: User) {
-        db.transaction {
+        transaction(db) {
             UsersTable.insert {
+                it[id] = user.id
                 it[first_name] = user.first_name
                 it[last_name] = user.last_name
                 it[email] = user.email
@@ -79,10 +83,11 @@ interface UserData {
      * Edits a user
      */
     fun editUser(user: User) {
-        db.transaction {
+        transaction(db) {
             UsersTable.update({
-                UsersTable.email.eq(user.email)
+                UsersTable.id.eq(user.id)
             }){
+                it[id] = user.id
                 it[first_name] = user.first_name
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
@@ -94,8 +99,8 @@ interface UserData {
      * Removes user
      */
     fun removeUser( userId: String ) {
-        db.transaction {
-            UsersTable.deleteWhere { UsersTable.email.eq(userId) }
+        transaction(db) {
+            UsersTable.deleteWhere { UsersTable.id.eq(userId) }
         }
     }
 }

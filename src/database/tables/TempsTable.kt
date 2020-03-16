@@ -1,6 +1,7 @@
 package database.tables
 
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.`java-time`.datetime
 
 object TempsTable: Table() {
     val emp_num = integer("Emp#")

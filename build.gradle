@@ -47,11 +47,10 @@ dependencies {
     compile "com.h2database:h2:$h2_version"
     compile "com.mchange:c3p0:0.9.5.2"
     compile 'org.webjars:bootstrap:4.4.1'
-    compile("org.jetbrains.exposed:exposed:0.3.2") {
-        exclude(module: 'log4j')
-        exclude(module: 'slf4j-log4j12')
-        exclude(module: 'kotlin-stdlib')
-    }
+    compile group: 'org.jetbrains.exposed', name: 'exposed-jdbc', version: '0.22.1'
+    compile group: 'org.jetbrains.exposed', name: 'exposed-core', version: '0.22.1'
+    compile group: 'org.jetbrains.exposed', name: 'exposed-java-time', version: '0.22.1'
+    compile group: 'org.jetbrains.exposed', name: 'exposed-dao', version: '0.22.1'
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }
 

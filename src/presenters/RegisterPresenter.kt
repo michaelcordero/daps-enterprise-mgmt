@@ -14,7 +14,8 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
             throw Exception(error)
         } else {
             val new_password: String = hashPassword(password)
-            val newUser = User(email, first_name, last_name, new_password)
+            val new_id: String = hashPassword(email+first_name+last_name).slice(IntRange(0,19))
+            val newUser = User(new_id,email, first_name, last_name, new_password)
             dao.addUser(newUser)
         }
     }

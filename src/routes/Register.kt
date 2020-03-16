@@ -62,9 +62,9 @@ fun Route.register(presenter: RegisterPresenter) {
         if (user != null ){
             call.respond(Welcome(it.email))
         } else {
-            call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User(
+            call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User("",
                 it.email, it.first_name,
-                it.last_name, ""
+                it.last_name,""
             ), "error" to it.error, "validator" to RegisterPresenter.Validator ), "some-etag"))
         }
     }
