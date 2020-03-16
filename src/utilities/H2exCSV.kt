@@ -19,7 +19,7 @@ import kotlin.system.exitProcess
  * app's database. Thus the purpose of this program is to serve as a data processor and batch database updater.
  */
 class H2exCSV {
-    fun process(directory: File): Unit {
+    fun process(directory: File) {
         try {
 //            val dao: LocalDataService = LocalDataService()
             println("Directory passed in: $directory")
@@ -31,10 +31,8 @@ class H2exCSV {
                     val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
                     println("=======================================")
                     while (result_set.next()) {
-                        for (i in 0 until result_set.metaData.columnCount) {
                             when(f.name) {
                                 "Billing.csv" -> println(Billing(result_set)) //application.dao.createBilling(Billing(result_set))
-                            }
                         }
                     }
                 }
