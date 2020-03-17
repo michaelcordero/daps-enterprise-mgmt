@@ -7,8 +7,8 @@ object PermNotesTable: Table() {
     val id = integer("ID")
     override val primaryKey = PrimaryKey(id, name = "ID")
     val emp_num = integer("Emp#")
-    val note_date = datetime("NoteDate")
-    val initial = text("Initl")
-    val comments = text("Comments")
-    val follow_update = datetime("FolUpDate")
+    val note_date = datetime("NoteDate").nullable()
+    val initial = text("Initl").nullable()
+    val comments = text("Comments").nullable()
+    val follow_update = datetime("FolUpDate").nullable()
 }

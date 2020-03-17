@@ -6,11 +6,11 @@ import org.jetbrains.exposed.sql.`java-time`.datetime
 object PermReqNotesTable: Table() {
     val id = integer("ID")
     override val primaryKey = PrimaryKey(id, name = "ID")
-    val emp_num = integer("Emp#")
-    val desired_location = text("DesiredLocation")
-    val start_date = datetime("StartDate")
-    val fulltime = bool("FullTime")
-    val desired_days = text("DesiredDays")
-    val special_requests = text("SpecialRequests")
-    val not_interested = text("NotInterested")
+    val emp_num = integer("Emp#").nullable()
+    val desired_location = text("DesiredLocation").nullable()
+    val start_date = datetime("StartDate").nullable()
+    val fulltime = bool("FullTime").nullable()
+    val desired_days = text("DesiredDays").nullable()
+    val special_requests = text("SpecialRequests").nullable()
+    val not_interested = text("NotInterested").nullable()
 }
