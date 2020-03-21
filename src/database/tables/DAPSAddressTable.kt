@@ -9,6 +9,6 @@ object DAPSAddressTable: Table() {
     val address1 = text("Address1").nullable()
     val address2 = text("Address2").nullable()
     val city = text("City").nullable()
-    val state = text("State").nullable()
+    val state = text("ST").nullable()
     val zipcode = text("Zip").nullable()
 }
