@@ -2,6 +2,7 @@ package utilities
 
 import io.ktor.utils.io.errors.IOException
 import model.Billing
+import model.ClientFile
 import org.h2.tools.Csv
 import java.io.File
 import java.sql.ResultSet
@@ -25,7 +26,7 @@ class H2exCSV {
             println("Directory passed in: $directory")
             val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
             for (f in files){
-                if (f.name.endsWith(".csv") && f.name == "Billing.csv") {
+                if (f.name.endsWith(".csv") && f.name == "ClientFile.csv") {
                     println("=======================================")
                     println("Processing... ${f.name}")
                     val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
@@ -33,6 +34,7 @@ class H2exCSV {
                     while (result_set.next()) {
                             when(f.name) {
                                 "Billing.csv" -> println(Billing(result_set)) //application.dao.createBilling(Billing(result_set))
+                                "ClientFile.csv" -> println(ClientFile(result_set))
                         }
                     }
                 }

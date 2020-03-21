@@ -37,7 +37,7 @@ object ClientFileTable : Table(){
     val dislikes = text("Dislikes").nullable()
     val temphyg = bool("TempHyg?").nullable()
     val daps_dollar = double("DAPS$").nullable()
-    val daps_dollar_two = double("DAPS$").nullable()
+    val daps_dollar_two = double("DAPS2$").nullable()
     val needs = text("Needs").nullable()
     val startdate = datetime("StartDate").nullable()
     val endate = datetime("EndDate").nullable()
