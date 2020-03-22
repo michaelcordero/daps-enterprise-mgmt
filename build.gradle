@@ -56,20 +56,30 @@ dependencies {
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
-// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
 jar {
     manifest {
         attributes 'Main-Class' : 'application.ApplicationKt'
-//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
-// To run from command line:
-// ./gradlew csv --args=/Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
-task csv(type: JavaExec) {
-    group = "Execution"
-    description = "Run the H2exCSVKt main class"
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'utilities.H2exCSVKt'
-}
+// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
+//jar {
+//    manifest {
+//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+//    }
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//}
+
+/**
+ * To run from command line:
+ * ./gradlew csv --args=/Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
+ * UPDATE: No longer using this because {@link JavaExec} does not support backslash escape characters, which are used
+ * in the process method for status updates. :/
+  */
+//task csv(type: JavaExec) {
+//    group = "Execution"
+//    description = "Run the H2exCSVKt main class"
+//    classpath = sourceSets.main.runtimeClasspath
+//    main = 'utilities.H2exCSVKt'
+//}

@@ -33,6 +33,7 @@ class H2exCSV {
     }
 
     fun process(directory: File) {
+        val start: Long = System.currentTimeMillis()
         try {
 //            val dao: LocalDataService = LocalDataService()
             println("Directory passed in: $directory")
@@ -138,6 +139,8 @@ class H2exCSV {
             println("Error occurred during migration:")
             println(e)
         } finally {
+            val end: Long = System.currentTimeMillis()
+            println("Total Processing Time: ${(end - start)/1000}/seconds")
 //            dao.close()
         }
     }
