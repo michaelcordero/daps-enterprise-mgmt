@@ -32,12 +32,14 @@ class H2exCSV {
                     println("=======================================")
                     while (result_set.next()) {
                             when(f.name) {
+                                "AccountRepDropDown.csv" -> println(AccountRepDropDown(result_set))
+                                "BillTypeDropDown.csv" -> println(BillType(result_set))
                                 "Billing.csv" -> println(Billing(result_set)) //application.dao.createBilling(Billing(result_set))
                                 "ClientFile.csv" -> println(ClientFile(result_set))
                                 "ClientNotes.csv" -> println(ClientNotes(result_set))
                                 "ClientPermNotes.csv" -> println(ClientPermNotes(result_set))
-                                "DAPSaddress.csv" -> println(DAPSAddress(result_set))
                                 "DAPS Staff Messages.csv" -> println(DAPSStaffMessages(result_set))
+                                "DAPSaddress.csv" -> println(DAPSAddress(result_set))
                                 "DAPSstaff.csv" -> println(DAPSStaff(result_set))
                                 "InterviewGuide.csv" -> println(InterviewGuide(result_set))
                                 "JobFunctionDropDown.csv" -> println(JobFunction(result_set))

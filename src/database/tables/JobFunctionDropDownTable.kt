@@ -2,7 +2,7 @@ package database.tables
 
 import org.jetbrains.exposed.sql.Table
 
-object JobFunctionTable: Table() {
+object JobFunctionDropDownTable: Table() {
     val dentist = text("Dentist").nullable()
     val hygienist = text("Hygienist").nullable()
     val assistant = text("Assistant").nullable()

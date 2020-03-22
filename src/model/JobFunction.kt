@@ -1,6 +1,6 @@
 package model
 
-import database.tables.JobFunctionTable
+import database.tables.JobFunctionDropDownTable
 import java.io.Serializable
 import java.sql.ResultSet
 
@@ -9,13 +9,13 @@ data class JobFunction(val dentist: String?, val hygienist: String?,
                        val ofcmanager: String?, val receptionist: String?,
                        val sales: String?, val other: String? ) : Serializable {
     constructor(resultSet: ResultSet) : this (
-        resultSet.getString(JobFunctionTable.dentist.name),
-        resultSet.getString(JobFunctionTable.hygienist.name),
-        resultSet.getString(JobFunctionTable.assistant.name),
-        resultSet.getString(JobFunctionTable.technician.name),
-        resultSet.getString(JobFunctionTable.ofcmanager.name),
-        resultSet.getString(JobFunctionTable.receptionist.name),
-        resultSet.getString(JobFunctionTable.sales.name),
-        resultSet.getString(JobFunctionTable.other.name)
+        resultSet.getString(JobFunctionDropDownTable.dentist.name),
+        resultSet.getString(JobFunctionDropDownTable.hygienist.name),
+        resultSet.getString(JobFunctionDropDownTable.assistant.name),
+        resultSet.getString(JobFunctionDropDownTable.technician.name),
+        resultSet.getString(JobFunctionDropDownTable.ofcmanager.name),
+        resultSet.getString(JobFunctionDropDownTable.receptionist.name),
+        resultSet.getString(JobFunctionDropDownTable.sales.name),
+        resultSet.getString(JobFunctionDropDownTable.other.name)
     )
 }
