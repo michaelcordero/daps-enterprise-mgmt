@@ -25,7 +25,7 @@ class H2exCSV {
             println("Directory passed in: $directory")
             val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
             for (f in files){
-                if (f.name.endsWith(".csv") && f.name == "Temps.csv") {
+                if (f.name.endsWith(".csv")) {
                     println("=======================================")
                     println("Processing... ${f.name}")
                     val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
@@ -47,6 +47,9 @@ class H2exCSV {
                                 "PermReqNotes.csv" -> println(PermReqNotes(result_set))
                                 "TempNotes.csv" -> println(TempNotes(result_set))
                                 "Temps.csv" -> println(Temps(result_set))
+                                "TempsAvail4Work.csv" -> println(TempsAvail4Work(result_set))
+                                "WOnotes.csv" -> println(WONotes(result_set))
+                                "WorkOrder.csv" -> println(WorkOrder(result_set))
                         }
                     }
                 }
