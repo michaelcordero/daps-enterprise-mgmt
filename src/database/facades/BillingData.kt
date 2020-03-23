@@ -4,6 +4,7 @@ import database.tables.BillingTable
 import model.Billing
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.sql.Timestamp
 
 interface BillingData {
     // Abstract property intended to be overridden
@@ -18,10 +19,10 @@ interface BillingData {
                 it[counter] = billing.counter
                 it[client_num] = billing.client_num
                 it[employee_num] = billing.employee_num
-                it[wdate] = billing.wdate
+                it[wdate] = billing.wdate?.toInstant()
                 it[hours] = billing.hours
-                it[start_time] = billing.start_time
-                it[end_time] = billing.end_time
+                it[start_time] = billing.start_time?.toInstant()
+                it[end_time] = billing.end_time?.toInstant()
                 it[daps_fee] = billing.daps_fee
                 it[total_fee] = billing.total_fee
                 it[worktype] = billing.worktype
@@ -33,7 +34,7 @@ interface BillingData {
                 it[apamt2] = billing.apamt2
                 it[notesp] = billing.notesp
                 it[pending] = billing.pending
-                it[assign_date] = billing.assigned_date
+                it[assign_date] = billing.assigned_date?.toInstant()
                 it[assigned_by] = billing.assigned_by
                 it[service_category] = billing.service_category
             }
@@ -83,10 +84,10 @@ interface BillingData {
                 it[counter] = billing.counter
                 it[client_num] = billing.client_num
                 it[employee_num] = billing.employee_num
-                it[wdate] = billing.wdate
+                it[wdate] = billing.wdate?.toInstant()
                 it[hours] = billing.hours
-                it[start_time] = billing.start_time
-                it[end_time] = billing.end_time
+                it[start_time] = billing.start_time?.toInstant()
+                it[end_time] = billing.end_time?.toInstant()
                 it[daps_fee] = billing.daps_fee
                 it[total_fee] = billing.total_fee
                 it[worktype] = billing.worktype
@@ -98,7 +99,7 @@ interface BillingData {
                 it[apamt2] = billing.apamt2
                 it[notesp] = billing.notesp
                 it[pending] = billing.pending
-                it[assign_date] = billing.assigned_date
+                it[assign_date] = billing.assigned_date?.toInstant()
                 it[assigned_by] = billing.assigned_by
                 it[service_category] = billing.service_category
             }
@@ -121,10 +122,10 @@ interface BillingData {
             it[BillingTable.counter],
             it[BillingTable.client_num],
             it[BillingTable.employee_num],
-            it[BillingTable.wdate],
+            Timestamp.from(it[BillingTable.wdate]),
             it[BillingTable.hours],
-            it[BillingTable.start_time],
-            it[BillingTable.end_time],
+            Timestamp.from(it[BillingTable.start_time]),
+            Timestamp.from(it[BillingTable.end_time]),
             it[BillingTable.daps_fee],
             it[BillingTable.total_fee],
             it[BillingTable.worktype],
@@ -136,7 +137,7 @@ interface BillingData {
             it[BillingTable.apamt2],
             it[BillingTable.notesp],
             it[BillingTable.pending],
-            it[BillingTable.assign_date],
+            Timestamp.from(it[BillingTable.assign_date]),
             it[BillingTable.assigned_by],
             it[BillingTable.service_category]
         )

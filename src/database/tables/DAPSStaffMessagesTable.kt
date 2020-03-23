@@ -1,10 +1,10 @@
 package database.tables
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object DAPSStaffMessagesTable : Table(){
-    val memo_date = datetime("Memo Date").nullable()
+    val memo_date = timestamp("Memo Date").nullable()
     val entered_by = text("Entered By").nullable()
     val intended_for = text("Intended For").nullable()
     val message = text("Message").nullable()

@@ -1,7 +1,7 @@
 package database.tables
 
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.datetime
+import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object WorkOrderTable: Table() {
     val wo_number = integer("WO Number")
@@ -9,11 +9,11 @@ object WorkOrderTable: Table() {
     val client_num = integer("Client#").nullable()
     val emp_num = integer("Emp#").nullable()
     val temp_perm = text("TempPerm").nullable()
-    val filled_date = datetime("Filled Date").nullable()
+    val filled_date = timestamp("Filled Date").nullable()
     val filled_rate = double("Filled Rate").nullable()
-    val start_date = datetime("StartDate").nullable()
-    val start_time = datetime("StartTime").nullable()
-    val end_time = datetime("EndTime").nullable()
+    val start_date = timestamp("StartDate").nullable()
+    val start_time = timestamp("StartTime").nullable()
+    val end_time = timestamp("EndTime").nullable()
     val services_category = text("ServiceCategory").nullable()
     val job_description = text("JobDescription").nullable()
     val skills_required = text("SkillsRequired").nullable()
@@ -24,9 +24,9 @@ object WorkOrderTable: Table() {
     val fees_discussed = bool("FeesDiscussed").nullable()
     val note = text("Note").nullable()
     val entered_by = text("EntrdBy").nullable()
-    val entered_date = datetime("EntrdDate").nullable()
+    val entered_date = timestamp("EntrdDate").nullable()
     val post = bool("Post").nullable()
     val active = bool("Active").nullable()
-    val left_message = datetime("LeftMessage").nullable()
+    val left_message = timestamp("LeftMessage").nullable()
     val confirmed = bool("Confirmed").nullable()
 }
