@@ -47,30 +47,30 @@ class H2exCSV {
                     val total_rows: Int = count_rows(counter_set)
                     counter_set.close()
                     if (total_rows == 0 ) continue // no rows to process  ¯\_(ツ)_/¯
-                    ProgressBar("Processing...${f.name}",total_rows.toLong(), ProgressBarStyle.ASCII).use { p ->
+                    ProgressBar("Processing...${f.name}",total_rows.toLong(), ProgressBarStyle.ASCII).use { pb ->
                         val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
                         while (result_set.next()) {
                             when (f.name) {
-                                "AccountRepDropDown.csv" -> doSomething(AccountRep(result_set)).also { p.step() }
-                                "BillTypeDropDown.csv" -> doSomething(BillType(result_set)).also { p.step() }
-                                "Billing.csv" -> doSomething(Billing(result_set)).also { p.step() }
-                                "ClientFile.csv" -> doSomething(ClientFile(result_set)).also { p.step() }
-                                "ClientNotes.csv" -> doSomething(ClientNotes(result_set)).also { p.step() }
-                                "ClientPermNotes.csv" -> doSomething(ClientPermNotes(result_set)).also { p.step() }
-                                "DAPS Staff Messages.csv" -> doSomething(DAPSStaffMessages(result_set)).also { p.step() }
-                                "DAPSaddress.csv" -> doSomething(DAPSAddress(result_set)).also { p.step() }
-                                "DAPSstaff.csv" -> doSomething(DAPSStaff(result_set)).also { p.step() }
-                                "InterviewGuide.csv" -> doSomething(InterviewGuide(result_set)).also { p.step() }
-                                "JobFunctionDropDown.csv" -> doSomething(JobFunction(result_set)).also { p.step() }
-                                "Paste Errors.csv" -> doSomething(PasteErrors(result_set)).also { p.step() }
-                                "Payment.csv" -> doSomething(Payment(result_set)).also { p.step() }
-                                "PermNotes.csv" -> doSomething(PermNotes(result_set)).also { p.step() }
-                                "PermReqNotes.csv" -> doSomething(PermReqNotes(result_set)).also { p.step() }
-                                "TempNotes.csv" -> doSomething(TempNotes(result_set)).also { p.step() }
-                                "Temps.csv" -> doSomething(Temps(result_set)).also { p.step() }
-                                "TempsAvail4Work.csv" -> doSomething(TempsAvail4Work(result_set)).also { p.step() }
-                                "WOnotes.csv" -> doSomething(WONotes(result_set)).also { p.step() }
-                                "WorkOrder.csv" -> doSomething(WorkOrder(result_set)).also { p.step() }
+                                "AccountRepDropDown.csv" -> doSomething(AccountRep(result_set)).also { pb.step() }
+                                "BillTypeDropDown.csv" -> doSomething(BillType(result_set)).also { pb.step() }
+                                "Billing.csv" -> doSomething(Billing(result_set)).also { pb.step() }
+                                "ClientFile.csv" -> doSomething(ClientFile(result_set)).also { pb.step() }
+                                "ClientNotes.csv" -> doSomething(ClientNotes(result_set)).also { pb.step() }
+                                "ClientPermNotes.csv" -> doSomething(ClientPermNotes(result_set)).also { pb.step() }
+                                "DAPS Staff Messages.csv" -> doSomething(DAPSStaffMessages(result_set)).also { pb.step() }
+                                "DAPSaddress.csv" -> doSomething(DAPSAddress(result_set)).also { pb.step() }
+                                "DAPSstaff.csv" -> doSomething(DAPSStaff(result_set)).also { pb.step() }
+                                "InterviewGuide.csv" -> doSomething(InterviewGuide(result_set)).also { pb.step() }
+                                "JobFunctionDropDown.csv" -> doSomething(JobFunction(result_set)).also { pb.step() }
+                                "Paste Errors.csv" -> doSomething(PasteErrors(result_set)).also { pb.step() }
+                                "Payment.csv" -> doSomething(Payment(result_set)).also { pb.step() }
+                                "PermNotes.csv" -> doSomething(PermNotes(result_set)).also { pb.step() }
+                                "PermReqNotes.csv" -> doSomething(PermReqNotes(result_set)).also { pb.step() }
+                                "TempNotes.csv" -> doSomething(TempNotes(result_set)).also { pb.step() }
+                                "Temps.csv" -> doSomething(Temps(result_set)).also { pb.step() }
+                                "TempsAvail4Work.csv" -> doSomething(TempsAvail4Work(result_set)).also { pb.step() }
+                                "WOnotes.csv" -> doSomething(WONotes(result_set)).also { pb.step() }
+                                "WorkOrder.csv" -> doSomething(WorkOrder(result_set)).also { pb.step() }
                             }
                         }
                     }
