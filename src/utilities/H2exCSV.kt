@@ -1,6 +1,8 @@
 package utilities
 
 import io.ktor.utils.io.errors.IOException
+import me.tongfei.progressbar.ProgressBar
+import me.tongfei.progressbar.ProgressBarStyle
 import model.*
 import org.h2.tools.Csv
 import java.io.File
@@ -37,99 +39,38 @@ class H2exCSV {
         try {
 //            val dao: LocalDataService = LocalDataService()
             println("Directory passed in: $directory")
+            println("=======================================")
             val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
             for (f in files) {
                 if (f.name.endsWith(".csv")) {
-                    println("=======================================")
-                    println("Processing: ${f.name}...")
                     val counter_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
                     val total_rows: Int = count_rows(counter_set)
                     counter_set.close()
-                    val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
-                    var cursor = 0
-                    println("=======================================")
-                    while (result_set.next()) {
-                        when (f.name) {
-                            "AccountRepDropDown.csv" -> doSomething(AccountRep(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "BillTypeDropDown.csv" -> doSomething(BillType(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "Billing.csv" -> doSomething(Billing(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "ClientFile.csv" -> doSomething(ClientFile(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "ClientNotes.csv" -> doSomething(ClientNotes(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "ClientPermNotes.csv" -> doSomething(ClientPermNotes(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "DAPS Staff Messages.csv" -> doSomething(DAPSStaffMessages(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "DAPSaddress.csv" -> doSomething(DAPSAddress(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "DAPSstaff.csv" -> doSomething(DAPSStaff(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "InterviewGuide.csv" -> doSomething(InterviewGuide(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "JobFunctionDropDown.csv" -> doSomething(JobFunction(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-
-                            }
-                            "Paste Errors.csv" -> doSomething(PasteErrors(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "Payment.csv" -> doSomething(Payment(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "PermNotes.csv" -> doSomething(PermNotes(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "PermReqNotes.csv" -> doSomething(PermReqNotes(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "TempNotes.csv" -> doSomething(TempNotes(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "Temps.csv" -> doSomething(Temps(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "TempsAvail4Work.csv" -> doSomething(TempsAvail4Work(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "WOnotes.csv" -> doSomething(WONotes(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
-                            }
-                            "WorkOrder.csv" -> doSomething(WorkOrder(result_set)).also {
-                                cursor++
-                                print("${cursor}/${total_rows}\r")
+                    if (total_rows == 0 ) continue // no rows to process  ¯\_(ツ)_/¯
+                    ProgressBar("Processing...${f.name}",total_rows.toLong(), ProgressBarStyle.ASCII).use { p ->
+                        val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
+                        while (result_set.next()) {
+                            when (f.name) {
+                                "AccountRepDropDown.csv" -> doSomething(AccountRep(result_set)).also { p.step() }
+                                "BillTypeDropDown.csv" -> doSomething(BillType(result_set)).also { p.step() }
+                                "Billing.csv" -> doSomething(Billing(result_set)).also { p.step() }
+                                "ClientFile.csv" -> doSomething(ClientFile(result_set)).also { p.step() }
+                                "ClientNotes.csv" -> doSomething(ClientNotes(result_set)).also { p.step() }
+                                "ClientPermNotes.csv" -> doSomething(ClientPermNotes(result_set)).also { p.step() }
+                                "DAPS Staff Messages.csv" -> doSomething(DAPSStaffMessages(result_set)).also { p.step() }
+                                "DAPSaddress.csv" -> doSomething(DAPSAddress(result_set)).also { p.step() }
+                                "DAPSstaff.csv" -> doSomething(DAPSStaff(result_set)).also { p.step() }
+                                "InterviewGuide.csv" -> doSomething(InterviewGuide(result_set)).also { p.step() }
+                                "JobFunctionDropDown.csv" -> doSomething(JobFunction(result_set)).also { p.step() }
+                                "Paste Errors.csv" -> doSomething(PasteErrors(result_set)).also { p.step() }
+                                "Payment.csv" -> doSomething(Payment(result_set)).also { p.step() }
+                                "PermNotes.csv" -> doSomething(PermNotes(result_set)).also { p.step() }
+                                "PermReqNotes.csv" -> doSomething(PermReqNotes(result_set)).also { p.step() }
+                                "TempNotes.csv" -> doSomething(TempNotes(result_set)).also { p.step() }
+                                "Temps.csv" -> doSomething(Temps(result_set)).also { p.step() }
+                                "TempsAvail4Work.csv" -> doSomething(TempsAvail4Work(result_set)).also { p.step() }
+                                "WOnotes.csv" -> doSomething(WONotes(result_set)).also { p.step() }
+                                "WorkOrder.csv" -> doSomething(WorkOrder(result_set)).also { p.step() }
                             }
                         }
                     }
@@ -140,6 +81,7 @@ class H2exCSV {
             println(e)
         } finally {
             val end: Long = System.currentTimeMillis()
+            println("=======================================")
             println("Total Processing Time: ${(end - start)/1000}/seconds")
 //            dao.close()
         }

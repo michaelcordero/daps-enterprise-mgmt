@@ -51,25 +51,26 @@ dependencies {
     compile group: 'org.jetbrains.exposed', name: 'exposed-core', version: '0.22.1'
     compile group: 'org.jetbrains.exposed', name: 'exposed-java-time', version: '0.22.1'
     compile group: 'org.jetbrains.exposed', name: 'exposed-dao', version: '0.22.1'
+    compile 'me.tongfei:progressbar:0.8.1'
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
-jar {
-    manifest {
-        attributes 'Main-Class' : 'application.ApplicationKt'
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-
-// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
 //jar {
 //    manifest {
-//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+//        attributes 'Main-Class' : 'application.ApplicationKt'
 //    }
 //    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 //}
+
+// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
+jar {
+    manifest {
+        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
 
 /**
  * To run from command line:
