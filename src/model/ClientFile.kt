@@ -21,7 +21,7 @@ data class ClientFile(val client_num: Int, val ofcname: String?,
                       val agreement_perm: Timestamp?, val pktsent: Timestamp?,
                       val refdby: String?, val preferences: String?,
                       val dislikes: String?, val temphyg: Boolean?,
-                      val daps_dollar: Double, val daps_dollar_two: Double,
+                      val daps_dollar: Double?, val daps_dollar_two: Double?,
                       val needs: String?, val start_date: Timestamp?,
                       val end_date: Timestamp?, val days: String?,
                       val permconf: Boolean?, val tempconf: Boolean?,
@@ -30,7 +30,7 @@ data class ClientFile(val client_num: Int, val ofcname: String?,
                       val warndate2: Timestamp?, val warndate3: Timestamp?,
                       val cnotes: String?, val multioffice: String?,
                       val payperiods: Int?, val yeslist: Boolean?,
-                      val filler: Timestamp?, val filler2: Double
+                      val filler: Timestamp?, val filler2: Double?
                       ) : Serializable {
     constructor(result_set: ResultSet) : this (
         result_set.getInt(ClientFileTable.client_num.name),
