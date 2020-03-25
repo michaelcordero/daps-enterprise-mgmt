@@ -1,7 +1,7 @@
 package database.tables
 
+import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object ClientFileTable : Table(){
     val client_num = integer("Client#")
@@ -24,14 +24,14 @@ object ClientFileTable : Table(){
     val hphone = text("HPhone").nullable()
     val cellphone = text("CellPhone").nullable()
     val carphone = text("CarPhone").nullable()
-    val estdate = timestamp("EstDate").nullable()
+    val estdate = realtimestamp("EstDate").nullable()
     val speciality = text("Speciality").nullable()
     val ofchrs = text("OfcHrs").nullable()
     val ofcmanager = text("OfcManager").nullable()
     val rateconfirm = bool("RateCnfrm?").nullable()
-    val agreement = timestamp("Agrmt?").nullable()
-    val agreement_perm = timestamp("AgrmtPerm").nullable()
-    val pktsent = timestamp("PktSent?").nullable()
+    val agreement = realtimestamp("Agrmt?").nullable()
+    val agreement_perm = realtimestamp("AgrmtPerm").nullable()
+    val pktsent = realtimestamp("PktSent?").nullable()
     val refdby = text("RefdBy").nullable()
     val preferences = text("Preferences").nullable()
     val dislikes = text("Dislikes").nullable()
@@ -39,21 +39,21 @@ object ClientFileTable : Table(){
     val daps_dollar = double("DAPS$").nullable()
     val daps_dollar_two = double("DAPS2$").nullable()
     val needs = text("Needs").nullable()
-    val startdate = timestamp("StartDate").nullable()
-    val endate = timestamp("EndDate").nullable()
+    val startdate = realtimestamp("StartDate").nullable()
+    val endate = realtimestamp("EndDate").nullable()
     val days = text("Days").nullable()
     val permconf = bool("PermConf?").nullable()
     val tempconf = bool("TempConf?").nullable()
     val mlplcmnt = bool("MLPlcmnt").nullable()
     val lofaplcmnt = bool("LofAPlcmnt").nullable()
     val patnttime = text("PatntTime").nullable()
-    val warndate1 = timestamp("WarnDate1").nullable()
-    val warndate2 = timestamp("WarnDate2").nullable()
-    val warndate3 = timestamp("WarnDate3").nullable()
+    val warndate1 = realtimestamp("WarnDate1").nullable()
+    val warndate2 = realtimestamp("WarnDate2").nullable()
+    val warndate3 = realtimestamp("WarnDate3").nullable()
     val cnotes = text("CNotes").nullable()
     val multioffice = text("MultiOffice?").nullable()
     val payperiods = integer("PayPeriods").nullable()
     val yeslist = bool("YesList").nullable()
-    val filler = timestamp("Filler").nullable()
+    val filler = realtimestamp("Filler").nullable()
     val filler2 = double("Filler-2").nullable()
 }

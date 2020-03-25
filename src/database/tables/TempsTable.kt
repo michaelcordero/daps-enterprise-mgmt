@@ -1,7 +1,7 @@
 package database.tables
 
+import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object TempsTable: Table() {
     val emp_num = integer("Emp#")
@@ -24,16 +24,16 @@ object TempsTable: Table() {
     val fax = text("Fax").nullable()
     val cellphone = text("CellPhone").nullable()
     val social_sec_num = text("SS#").nullable()
-    val daps_start = timestamp("DAPSstart").nullable()
+    val daps_start = realtimestamp("DAPSstart").nullable()
     val daps_dollar = double("DAPS$").nullable()
     val hourly_rate = text("HourlyRate").nullable()
     val chart_complete = bool("ChartComplete").nullable()
     val license_file = bool("LicenseFile").nullable()
     val license = text("License").nullable()
-    val license_date = timestamp("LicDate").nullable()
+    val license_date = realtimestamp("LicDate").nullable()
     val malp_ins = bool("MALPins?").nullable()
     val mapl_info = text("MAPLinfo").nullable()
-    val exper_since = timestamp("ExperSince").nullable()
+    val exper_since = realtimestamp("ExperSince").nullable()
     val photo_id = bool("PhotoId").nullable()
     val work_auth = bool("WorkAuth").nullable()
     val ref_check = bool("RefCheck").nullable()
@@ -61,11 +61,11 @@ object TempsTable: Table() {
     val ref_by = text("RefBy").nullable()
     val notes = text("Notes").nullable()
     val account_rep = text("AccountRep").nullable()
-    val account_rep_enddate = timestamp("AccountRepEndDate").nullable()
+    val account_rep_enddate = realtimestamp("AccountRepEndDate").nullable()
     val perm_notes = text("PermNotes").nullable()
     val set_flag = bool("SetFlag").nullable()
     val yes_list = bool("YesList").nullable()
     val resident_alien = bool("Resident Alien").nullable()
-    val resident_alien_exp = timestamp("Resident Alien Exp").nullable()
+    val resident_alien_exp = realtimestamp("Resident Alien Exp").nullable()
     val filler_two = double("Filler-2").nullable()
 }

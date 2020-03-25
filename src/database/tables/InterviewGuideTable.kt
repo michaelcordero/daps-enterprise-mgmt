@@ -1,7 +1,7 @@
 package database.tables
 
+import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
 
 object InterviewGuideTable: Table() {
     val id = integer("ID")
@@ -10,7 +10,7 @@ object InterviewGuideTable: Table() {
     val client_contact = text("ClientContact").nullable()
     val employee_num = integer("Emp#")
     val employee_name = text("Employee Name").nullable()
-    val referral_date = timestamp("ReferralDate").nullable()
+    val referral_date = realtimestamp("ReferralDate").nullable()
     val referral_notes = text("ReferralNotes").nullable()
     val interview_complete = bool("InterviewComplete").nullable()
     val interview_notes = text("InterviewNotes").nullable()
