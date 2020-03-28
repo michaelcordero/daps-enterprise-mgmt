@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface BillingData {
-    // Abstract property intended to be overridden
+    // Abstract property initialized by LocalDataService
     val db: Database
 
     /**
@@ -15,7 +15,7 @@ interface BillingData {
     fun createBilling(billing: Billing){
         transaction(db) {
             BillingTable.insert {
-                it[counter] = billing.counter
+//                it[counter] = billing.counter auto-increment
                 it[client_num] = billing.client_num
                 it[employee_num] = billing.employee_num
                 it[wdate] = billing.wdate

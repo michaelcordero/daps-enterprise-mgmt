@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface AccountRepData {
-    // Abstract property intended to be overridden
+    // Abstract property initialized by LocalDataService
     val db: Database
 
     /**

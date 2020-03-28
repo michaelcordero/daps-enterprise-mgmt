@@ -6,8 +6,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface ClientNotesData {
-    // Abstract property intended to be overridden
-    val db: Database
+    // Abstract property initialized by LocalDataService
+val db: Database
     /**
      * Create
      */

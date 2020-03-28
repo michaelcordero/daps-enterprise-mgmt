@@ -4,7 +4,7 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 object ClientNotesTable: Table() {
-    val clientnotekey = integer("ClientNoteKey")
+    val clientnotekey = integer("ClientNoteKey").autoIncrement()
     override val primaryKey = PrimaryKey(clientnotekey, name = "ClientNoteKey")
     val client_num = integer("Client#")
     val notedate = realtimestamp("NoteDate").nullable()

@@ -8,6 +8,6 @@ object TempNotesTable: Table() {
     val note_date = realtimestamp("NoteDate").nullable()
     val initial = text("Initl").nullable()
     val emp_note = text("EmpNote").nullable()
-    val temp_note_key = integer("TempNoteKey")
+    val temp_note_key = integer("TempNoteKey").autoIncrement()
     override val primaryKey = PrimaryKey(temp_note_key, name = "TempNoteKey")
 }

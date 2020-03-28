@@ -8,5 +8,5 @@ object PasteErrorsTable: Table() {
     val pmt_type = text("PmtType").nullable()
     val ref_num = text("Ref#").nullable()
     val pmt_date = realtimestamp("PmtDate").nullable()
-    val amount = double("Amount")
+    val amount = double("Amount").nullable()
 }

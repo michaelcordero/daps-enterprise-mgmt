@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 
 object BillingTable: Table() {
-    val counter = integer("Counter")
+    val counter = integer("Counter").autoIncrement()
     val client_num = integer("Client#")
     val employee_num = integer("Emp#")
     val wdate = realtimestamp("WDate").nullable()

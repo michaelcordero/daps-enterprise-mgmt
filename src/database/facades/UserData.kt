@@ -70,7 +70,6 @@ interface UserData {
     fun addUser(user: User) {
         transaction(db) {
             UsersTable.insert {
-                it[id] = user.id
                 it[first_name] = user.first_name
                 it[last_name] = user.last_name
                 it[email] = user.email
@@ -98,7 +97,7 @@ interface UserData {
     /**
      * Removes user
      */
-    fun removeUser( userId: String ) {
+    fun removeUser( userId: Long ) {
         transaction(db) {
             UsersTable.deleteWhere { UsersTable.id.eq(userId) }
         }

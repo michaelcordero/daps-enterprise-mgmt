@@ -6,8 +6,8 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface ClientFileData {
-    // Abstract property intended to be overridden
-    val db: Database
+    // Abstract property initialized by LocalDataService
+val db: Database
 
     /**
      * Create
@@ -16,7 +16,7 @@ interface ClientFileData {
     fun createClientFile(cf: ClientFile) {
         transaction (db) {
             ClientFileTable.insert {
-                it[client_num] = cf.client_num
+//                it[client_num] = cf.client_num auto-increment
                 it[ofcname] = cf.ofcname
                 it[firstname1] = cf.firstname1
                 it[lastname1] = cf.lastname1

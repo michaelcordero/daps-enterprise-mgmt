@@ -4,7 +4,7 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 object ClientFileTable : Table(){
-    val client_num = integer("Client#")
+    val client_num = integer("Client#").autoIncrement()
     override val primaryKey = PrimaryKey(client_num, name = "Client#")
     val ofcname = text("OfcName").nullable()
     val firstname1 = text("FirstName1").nullable()

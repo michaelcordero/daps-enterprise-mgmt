@@ -8,6 +8,6 @@ object DAPSStaffMessagesTable : Table(){
     val entered_by = text("Entered By").nullable()
     val intended_for = text("Intended For").nullable()
     val message = text("Message").nullable()
-    val staff_messages_key = integer("StaffMessagesKey")
+    val staff_messages_key = integer("StaffMessagesKey").autoIncrement()
     override val primaryKey = PrimaryKey(staff_messages_key, name = "StaffMessagesKey")
 }
