@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class TempNotes(val emp_num: Int, val note_date: Timestamp?,
+data class TempNotes(val emp_num: Int?, val note_date: Timestamp?,
                      val initial: String?, val emp_note: String?,
                      val temp_note_key: Int?) : Serializable {
     constructor(resultSet: ResultSet) : this (

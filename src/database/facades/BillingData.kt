@@ -40,6 +40,34 @@ interface BillingData {
         }
     }
 
+    fun insertBilling(b: Billing) {
+        transaction(db) {
+            BillingTable.insert {
+                it[counter] = b.counter
+                it[client_num] = b.client_num
+                it[employee_num] = b.employee_num
+                it[wdate] = b.wdate
+                it[hours] = b.hours
+                it[start_time] = b.start_time
+                it[end_time] = b.end_time
+                it[daps_fee] = b.daps_fee
+                it[total_fee] = b.total_fee
+                it[worktype] = b.worktype
+                it[work_order_num] = b.work_order_num
+                it[open] = b.open
+                it[pmt1] = b.pmt1
+                it[apamt1] = b.apamt1
+                it[pmt2] = b.pmt2
+                it[apamt2] = b.apamt2
+                it[notesp] = b.notesp
+                it[pending] = b.pending
+                it[assign_date] = b.assigned_date
+                it[assigned_by] = b.assigned_by
+                it[service_category] = b.service_category
+            }
+        }
+    }
+
     /**
      * Read
      */

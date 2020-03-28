@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class PermReqNotes(val id: Int, val emp_num: Int?, val desired_location: String?,
+data class PermReqNotes(val id: Int?, val emp_num: Int?, val desired_location: String?,
                         val start_date: Timestamp?, val fulltime: Boolean?,
                         val desired_days: String?, val special_requests: String?,
                         val not_interested: String? ) : Serializable {

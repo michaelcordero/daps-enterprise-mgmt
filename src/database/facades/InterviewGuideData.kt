@@ -30,6 +30,25 @@ interface InterviewGuideData {
         }
     }
 
+    fun insertInterviewGuide(ig: InterviewGuide) {
+        transaction (db) {
+            InterviewGuideTable.insert {
+                it[id] = ig.id!!
+                it[client_num] = ig.client_num
+                it[client_contact] = ig.client_contact
+                it[employee_num] = ig.employee_num
+                it[employee_name] = ig.employee_name
+                it[referral_date] = ig.referral_date
+                it[referral_notes] = ig.referral_notes
+                it[interview_complete] = ig.interview_complete
+                it[interview_notes] = ig.interview_notes
+                it[wo_number] = ig.wo_number
+                it[emp_notes_id] = ig.emp_notes_id
+                it[client_notes_id] = ig.client_notes_id
+            }
+        }
+    }
+
     /**
      * Read
      */

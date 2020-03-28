@@ -14,7 +14,19 @@ val db: Database
     fun createClientNotes(cn: ClientNotes) {
         transaction (db) {
             ClientNotesTable.insert {
-                it[clientnotekey] = cn.client_note_key
+                // it[clientnotekey] = cn.client_note_key auto-incremented
+                it[client_num] = cn.client_num
+                it[notedate] = cn.notedate
+                it[initial] = cn.initial
+                it[note] = cn.note
+            }
+        }
+    }
+
+    fun insertClientNotes(cn: ClientNotes) {
+        transaction (db) {
+            ClientNotesTable.insert {
+                it[clientnotekey] = cn.client_note_key!!
                 it[client_num] = cn.client_num
                 it[notedate] = cn.notedate
                 it[initial] = cn.initial
@@ -49,13 +61,13 @@ val db: Database
         transaction (db) {
             ClientNotesTable.update({
                 ClientNotesTable.client_num.eq(cn.client_num) and
-                        ClientNotesTable.clientnotekey.eq(cn.client_note_key)
+                        ClientNotesTable.clientnotekey.eq(cn.client_note_key!!)
             }) {
                 it[client_num] = cn.client_num
                 it[notedate] = cn.notedate
                 it[initial] = cn.initial
                 it[note] = cn.note
-                it[clientnotekey] = cn.client_note_key
+                it[clientnotekey] = cn.client_note_key!!
             }
         }
     }
@@ -68,7 +80,7 @@ val db: Database
         transaction (db) {
             ClientNotesTable.deleteWhere {
                 ClientNotesTable.client_num.eq(cn.client_num) and
-                        ClientNotesTable.clientnotekey.eq(cn.client_note_key)
+                        ClientNotesTable.clientnotekey.eq(cn.client_note_key!!)
             }
         }
     }

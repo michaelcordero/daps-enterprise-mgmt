@@ -24,6 +24,18 @@ interface DAPSStaffMessages {
         }
     }
 
+    fun insertDAPSStaffMessages(dsm: DAPSStaffMessages) {
+        transaction (db) {
+            DAPSStaffMessagesTable.insert {
+                it[staff_messages_key] = dsm.staff_messages_key!!
+                it[memo_date] = dsm.memo_date
+                it[entered_by] = dsm.entered_by
+                it[intended_for] = dsm.intended_for
+                it[message] = dsm.message
+            }
+        }
+    }
+
     /**
      * Read
      */

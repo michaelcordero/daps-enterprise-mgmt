@@ -12,10 +12,24 @@ val db: Database
     /**
      * Create
      */
-    fun create(da: DAPSAddress){
+    fun createDAPSAddress(da: DAPSAddress){
         transaction (db) {
             DAPSAddressTable.insert {
 //                it[mailinglist_id] = da.mailing_list_id!! auto-increment handles this
+                it[office] = da.office
+                it[address1] = da.address1
+                it[address2] = da.address2
+                it[city] = da.city
+                it[state] = da.state
+                it[zipcode] = da.zip_code
+            }
+        }
+    }
+
+    fun insertDAPSAddress(da: DAPSAddress){
+        transaction (db) {
+            DAPSAddressTable.insert {
+                it[mailinglist_id] = da.mailing_list_id!!
                 it[office] = da.office
                 it[address1] = da.address1
                 it[address2] = da.address2

@@ -25,6 +25,18 @@ val db: Database
         }
     }
 
+    fun insertClientPermNotes(cpn: ClientPermNotes) {
+        transaction (db) {
+            ClientPermNotesTable.insert {
+                it[id] = cpn.id
+                it[client_num] = cpn.client_num
+                it[wo_num] = cpn.wo_num
+                it[not_interested] = cpn.not_interested
+                it[staffname] = cpn.staff_name
+            }
+        }
+    }
+
     /**
      * Read
      */
