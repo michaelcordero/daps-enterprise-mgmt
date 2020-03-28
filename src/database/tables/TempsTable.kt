@@ -4,7 +4,7 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 object TempsTable: Table() {
-    val emp_num = integer("Emp#")
+    val emp_num = integer("Emp#").autoIncrement()
     val type_a = text("TypeA").nullable()
     val type_b = text("TypeB").nullable()
     val status = bool("Status").nullable()

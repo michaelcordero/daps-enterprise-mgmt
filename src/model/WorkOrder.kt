@@ -5,7 +5,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class WorkOrder(val wo_number: Int, val client_num: Int, val emp_num: Int,
+data class WorkOrder(val wo_number: Int, val client_num: Int, val emp_num: Int?,
                      val temp_perm: String?, val filled_date: Timestamp?,
                      val filled_rate: Double?, val start_date: Timestamp?,
                      val start_time: Timestamp?, val end_time: Timestamp?,

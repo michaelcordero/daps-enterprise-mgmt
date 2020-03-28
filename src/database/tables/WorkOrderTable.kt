@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Table
 object WorkOrderTable: Table() {
     val wo_number = integer("WO Number").autoIncrement()
     override val primaryKey = PrimaryKey(wo_number, name = "WO Number")
-    val client_num = integer("Client#").nullable()
+    val client_num = integer("Client#")
     val emp_num = integer("Emp#").nullable()
     val temp_perm = text("TempPerm").nullable()
     val filled_date = realtimestamp("Filled Date").nullable()

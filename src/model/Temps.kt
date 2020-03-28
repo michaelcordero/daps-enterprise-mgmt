@@ -6,7 +6,7 @@ import java.sql.ResultSet
 import java.sql.Timestamp
 
 data class Temps(val emp_num: Int, val type_a: String?, val type_b: String?,
-                 val status: Boolean, val firstname: String?, val lastname: String?,
+                 val status: Boolean?, val firstname: String?, val lastname: String?,
                  val address1: String?, val address2: String?, val city: String?,
                  val state: String?, val zip: String?, val county: String?,
                  val email: String?, val hphone: String?, val wphone: String?,
