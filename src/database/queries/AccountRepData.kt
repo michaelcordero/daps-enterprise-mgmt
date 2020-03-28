@@ -1,4 +1,4 @@
-package database.facades
+package database.queries
 
 import database.tables.AccountRepDropDownTable
 import model.AccountRep

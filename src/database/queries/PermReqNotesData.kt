@@ -1,4 +1,4 @@
-package database.facades
+package database.queries
 
 import database.tables.PermReqNotesTable
 import model.PermReqNotes

@@ -1,5 +1,5 @@
 package presenters
 
-import database.facades.DataService
+import database.queries.DataService
 
 class WelcomePresenter (dao: DataService) : AbstractPresenter(dao)

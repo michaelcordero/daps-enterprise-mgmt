@@ -1,7 +1,7 @@
 package presenters
 
 import application.dao
-import database.facades.DataService
+import database.queries.DataService
 import io.ktor.util.KtorExperimentalAPI
 import model.User
 import security.DAPSSecurity

@@ -1,4 +1,4 @@
-package database.facades
+package database.queries
 
 import database.tables.UsersTable
 import model.User

@@ -1,6 +1,6 @@
 package routes
 
-import database.facades.DataService
+import database.queries.DataService
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import io.ktor.locations.get

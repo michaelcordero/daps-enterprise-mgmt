@@ -1,5 +1,5 @@
 package database
-import database.facades.DataService
+import database.queries.DataService
 import database.tables.BillingTable
 import database.tables.UsersTable
 import org.jetbrains.exposed.sql.Database

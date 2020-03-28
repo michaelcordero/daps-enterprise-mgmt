@@ -1,4 +1,4 @@
-package database.facades
+package database.queries
 
 import database.tables.BillTypeDropDownTable
 import model.BillType

@@ -1,4 +1,4 @@
-package database.facades
+package database.queries
 
 import database.tables.PasteErrorsTable
 import model.PasteErrors

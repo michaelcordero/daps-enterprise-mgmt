@@ -1,7 +1,7 @@
 package application
 
 import database.LocalDataService
-import database.facades.DataService
+import database.queries.DataService
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.features.*
