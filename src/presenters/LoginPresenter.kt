@@ -1,5 +1,5 @@
-package com.daps.ent.presenters
+package presenters
 
-import com.daps.ent.database.DataService
+import database.queries.DataQuery
 
-class LoginPresenter(dao: DataService) : AbstractPresenter(dao)
+class LoginPresenter(dao: DataQuery) : AbstractPresenter(dao)

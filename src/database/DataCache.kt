@@ -1,5 +1,6 @@
-package com.daps.ent.database
+package database
 
+import database.queries.DataQuery
 import java.io.File
 
-class DataCache(val delegate: DataService, val storage: File)
+class DataCache(val delegate: DataQuery, val storage: File)

@@ -1,12 +1,13 @@
-package com.daps.ent.presenters
+package presenters
 
-import com.daps.ent.dao
-import com.daps.ent.database.DataService
-import com.daps.ent.model.User
+import application.dq
+import database.queries.DataQuery
 import io.ktor.util.KtorExperimentalAPI
+import model.User
+import kotlin.random.Random
 
 @KtorExperimentalAPI
-class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
+class RegisterPresenter (dao: DataQuery) : AbstractPresenter(dao) {
 
     fun createUser(first_name: String, last_name: String, email: String, password: String) {
         val error: String = validate(first_name, last_name, email, password)
@@ -14,8 +15,9 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
             throw Exception(error)
         } else {
             val new_password: String = hashPassword(password)
-            val newUser = User(email, first_name, last_name, new_password)
-            dao.addUser(newUser)
+            val new_id: Long = Random.nextLong(from = 1000000, until = 1999999)
+            val newUser = User(new_id,email, first_name, last_name, new_password)
+            dq.addUser(newUser)
         }
     }
 
@@ -32,7 +34,7 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
                     " must include at least one special character: @#$%\n")
         }
         if (!validEmail(email)){
-            message.append("email must be of the form: text@domain.com\n")
+            message.append("email must be of the form: username@domain.com\n")
         }
         return message.toString()
     }

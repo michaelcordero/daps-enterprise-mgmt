@@ -1,7 +1,5 @@
-package com.daps.ent.presenters
+package presenters
 
-import com.daps.ent.database.DataService
+import database.queries.DataQuery
 
-class WelcomePresenter (dao: DataService) : AbstractPresenter(dao) {
-
-}
+class WelcomePresenter (dao: DataQuery) : AbstractPresenter(dao)

@@ -1,14 +1,14 @@
-package com.daps.ent.presenters
+package presenters
 
-import com.daps.ent.dao
-import com.daps.ent.database.DataService
-import com.daps.ent.model.User
-import com.daps.ent.security.DAPSSecurity
+import application.dq
+import database.queries.DataQuery
 import io.ktor.util.KtorExperimentalAPI
+import model.User
+import security.DAPSSecurity
 
-abstract class AbstractPresenter(dao: DataService) {
+abstract class AbstractPresenter(dao: DataQuery) {
     fun user(email: String): User? {
-        return dao.userByEmail(email)
+        return dq.userByEmail(email)
     }
 
     @KtorExperimentalAPI

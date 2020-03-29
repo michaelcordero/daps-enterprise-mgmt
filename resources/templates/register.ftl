@@ -1,5 +1,5 @@
 <#-- @ftlvariable name="error" type="java.lang.String" -->
-<#-- @ftlvariable name="validator" type="com.daps.ent.presenters.RegisterPresenter.Validator" -->
+<#-- @ftlvariable name="validator" type="presenters.RegisterPresenter.Validator" -->
 <#import "clouds.ftl" as layout />
 
 <@layout.mainLayout title="Register">

@@ -1,4 +1,4 @@
-package com.daps.ent.security
+package security
 
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.hex
