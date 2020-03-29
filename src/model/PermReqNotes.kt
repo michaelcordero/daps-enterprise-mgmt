@@ -10,7 +10,7 @@ data class PermReqNotes(val id: Int?, val emp_num: Int?, val desired_location: S
                         val desired_days: String?, val special_requests: String?,
                         val not_interested: String? ) : Serializable {
     constructor(resultSet: ResultSet) : this (
-        resultSet.getInt(PermReqNotesTable.id.name),
+        resultSet.getInt(PermReqNotesTable.ID.name),
         resultSet.getInt(PermReqNotesTable.emp_num.name),
         resultSet.getString(PermReqNotesTable.desired_location.name),
         resultSet.getString(PermReqNotesTable.start_date.name)?.let { Timestamp.valueOf(it) },

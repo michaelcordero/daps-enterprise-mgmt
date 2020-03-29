@@ -28,7 +28,7 @@ interface WONotesQuery {
     fun insertWONotes(won: WONotes) {
         transaction (db) {
             WONotesTable.insert {
-                it[id] = won.id
+                it[ID] = won.id
                 it[wo_number] = won.wo_number
                 it[note_date] = won.note_date
                 it[initial] = won.initial
@@ -47,7 +47,7 @@ interface WONotesQuery {
             WONotesTable.selectAll().toList()
         }.map {
             WONotes(
-                it[WONotesTable.id],
+                it[WONotesTable.ID],
                 it[WONotesTable.wo_number],
                 it[WONotesTable.note_date],
                 it[WONotesTable.initial],
@@ -60,11 +60,11 @@ interface WONotesQuery {
     fun readWONotes(id: Int): WONotes {
         return transaction (db) {
             WONotesTable.select {
-                WONotesTable.id.eq(id)
+                WONotesTable.ID.eq(id)
             }
         }.map {
             WONotes(
-                it[WONotesTable.id],
+                it[WONotesTable.ID],
                 it[WONotesTable.wo_number],
                 it[WONotesTable.note_date],
                 it[WONotesTable.initial],
@@ -81,9 +81,9 @@ interface WONotesQuery {
     fun updateWONotes(won: WONotes) {
         transaction (db) {
             WONotesTable.update({
-                WONotesTable.id.eq(won.id)
+                WONotesTable.ID.eq(won.id)
             }) {
-                it[id] = won.id
+                it[ID] = won.id
                 it[wo_number] = won.wo_number
                 it[note_date] = won.note_date
                 it[initial] = won.initial
@@ -100,7 +100,7 @@ interface WONotesQuery {
     fun deleteWONote(won: WONotes) {
         transaction (db) {
             WONotesTable.deleteWhere {
-                WONotesTable.id.eq(won.id)
+                WONotesTable.ID.eq(won.id)
             }
         }
     }

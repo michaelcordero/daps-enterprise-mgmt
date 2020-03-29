@@ -4,8 +4,8 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 object PermNotesTable: Table() {
-    val id = integer("ID").autoIncrement()
-    override val primaryKey = PrimaryKey(id, name = "ID")
+    val ID = integer("ID").autoIncrement()
+    override val primaryKey = PrimaryKey(ID)
     val emp_num = integer("Emp#").nullable()
     val note_date = realtimestamp("NoteDate").nullable()
     val initial = text("Initl").nullable()

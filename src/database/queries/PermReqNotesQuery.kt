@@ -30,7 +30,7 @@ interface PermReqNotesQuery {
     fun insertPermReqNotes(prn: PermReqNotes) {
         transaction (db) {
             PermReqNotesTable.insert {
-                it[id] = prn.id!!
+                it[ID] = prn.id!!
                 it[emp_num] = prn.emp_num
                 it[desired_location] = prn.desired_location
                 it[start_date] = prn.start_date
@@ -51,7 +51,7 @@ interface PermReqNotesQuery {
             PermReqNotesTable.selectAll().toList()
         }.map {
             PermReqNotes(
-                it[PermReqNotesTable.id],
+                it[PermReqNotesTable.ID],
                 it[PermReqNotesTable.emp_num],
                 it[PermReqNotesTable.desired_location],
                 it[PermReqNotesTable.start_date],
@@ -70,9 +70,9 @@ interface PermReqNotesQuery {
     fun updatePermReqNote(prn: PermReqNotes) {
         transaction (db) {
             PermReqNotesTable.update({
-                PermReqNotesTable.id.eq(prn.id!!)
+                PermReqNotesTable.ID.eq(prn.id!!)
             }) {
-                it[id] = prn.id!!
+                it[ID] = prn.id!!
                 it[emp_num] = prn.emp_num
                 it[desired_location] = prn.desired_location
                 it[start_date] = prn.start_date
@@ -91,7 +91,7 @@ interface PermReqNotesQuery {
     fun deletePermReqNote(prn: PermReqNotes) {
         transaction (db) {
             PermReqNotesTable.deleteWhere {
-                PermReqNotesTable.id.eq(prn.id!!)
+                PermReqNotesTable.ID.eq(prn.id!!)
             }
         }
     }

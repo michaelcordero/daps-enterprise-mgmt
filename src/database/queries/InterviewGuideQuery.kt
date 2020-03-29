@@ -33,7 +33,7 @@ interface InterviewGuideQuery {
     fun insertInterviewGuide(ig: InterviewGuide) {
         transaction (db) {
             InterviewGuideTable.insert {
-                it[id] = ig.id!!
+                it[ID] = ig.id!!
                 it[client_num] = ig.client_num
                 it[client_contact] = ig.client_contact
                 it[employee_num] = ig.employee_num
@@ -58,7 +58,7 @@ interface InterviewGuideQuery {
             InterviewGuideTable.selectAll().toList()
         }.map {
             InterviewGuide(
-                it[InterviewGuideTable.id],
+                it[InterviewGuideTable.ID],
                 it[InterviewGuideTable.client_num],
                 it[InterviewGuideTable.client_contact],
                 it[InterviewGuideTable.employee_num],
@@ -81,7 +81,7 @@ interface InterviewGuideQuery {
     fun updateInterviewGuide(ig: InterviewGuide) {
         transaction (db) {
             InterviewGuideTable.update({
-                InterviewGuideTable.id.eq(ig.id!!)
+                InterviewGuideTable.ID.eq(ig.id!!)
             }) {
                 it[client_num] = ig.client_num
                 it[client_contact] = ig.client_contact
@@ -105,7 +105,7 @@ interface InterviewGuideQuery {
     fun deleteInterviewGuide(ig: InterviewGuide) {
         transaction (db) {
             InterviewGuideTable.deleteWhere {
-                InterviewGuideTable.id.eq(ig.id!!)
+                InterviewGuideTable.ID.eq(ig.id!!)
             }
         }
     }

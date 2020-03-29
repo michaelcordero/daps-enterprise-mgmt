@@ -4,8 +4,8 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 object InterviewGuideTable: Table() {
-    val id = integer("ID").autoIncrement()
-    override val primaryKey = PrimaryKey(id, name = "ID")
+    val ID = integer("ID").autoIncrement()
+    override val primaryKey = PrimaryKey(ID)
     val client_num = integer("Client#")
     val client_contact = text("ClientContact").nullable()
     val employee_num = integer("Emp#")

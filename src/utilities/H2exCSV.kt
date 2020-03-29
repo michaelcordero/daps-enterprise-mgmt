@@ -103,7 +103,8 @@ fun main(args: Array<String>) {
             throw IOException("File must be a directory.")
         }
         val h2csv = H2exCSV()
-        h2csv.process(file)
+        val dq: DataQuery = LocalDataQuery()
+//        h2csv.process(file)
     } catch (e: Exception) {
         println("Error processing files: ${e.cause}")
     } finally {

@@ -24,7 +24,7 @@ interface UserQuery {
                 .mapNotNull {
                     if (hash == null || it[UsersTable.passwordHash] == hash) {
                         User(
-                            it[UsersTable.id],
+                            it[UsersTable.ID],
                             it[UsersTable.email],
                             it[UsersTable.first_name],
                             it[UsersTable.last_name],
@@ -44,7 +44,7 @@ interface UserQuery {
     fun userByEmail(email: String ): User? {
         return transaction(db) {
             UsersTable.select { UsersTable.email.eq(email) }
-                .map { User(it[UsersTable.id], email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
+                .map { User(it[UsersTable.ID], email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
                 .singleOrNull()
         }
     }
@@ -56,7 +56,7 @@ interface UserQuery {
         UsersTable.selectAll().toMutableList()
     }.map {
         User(
-            it[UsersTable.id],
+            it[UsersTable.ID],
             it[UsersTable.email],
             it[UsersTable.first_name],
             it[UsersTable.last_name],
@@ -70,7 +70,7 @@ interface UserQuery {
     fun addUser(user: User) {
         transaction(db) {
             UsersTable.insert {
-                it[id] = user.id
+                it[ID] = user.id
                 it[first_name] = user.first_name
                 it[last_name] = user.last_name
                 it[email] = user.email
@@ -85,9 +85,9 @@ interface UserQuery {
     fun editUser(user: User) {
         transaction(db) {
             UsersTable.update({
-                UsersTable.id.eq(user.id)
+                UsersTable.ID.eq(user.id)
             }){
-                it[id] = user.id
+                it[ID] = user.id
                 it[first_name] = user.first_name
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
@@ -100,7 +100,7 @@ interface UserQuery {
      */
     fun removeUser( userId: Long ) {
         transaction(db) {
-            UsersTable.deleteWhere { UsersTable.id.eq(userId) }
+            UsersTable.deleteWhere { UsersTable.ID.eq(userId) }
         }
     }
 }

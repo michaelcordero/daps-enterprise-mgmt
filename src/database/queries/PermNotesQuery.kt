@@ -28,7 +28,7 @@ interface PermNotesQuery {
     fun insertPermNotes(pn: PermNotes) {
         transaction (db) {
             PermNotesTable.insert {
-                it[id] = pn.id!!
+                it[ID] = pn.id!!
                 it[emp_num] = pn.emp_num
                 it[note_date] = pn.note_date
                 it[initial] = pn.initial
@@ -47,7 +47,7 @@ interface PermNotesQuery {
             PermNotesTable.selectAll().toList()
         }.map {
            PermNotes(
-               it[PermNotesTable.id],
+               it[PermNotesTable.ID],
                it[PermNotesTable.emp_num],
                it[PermNotesTable.note_date],
                it[PermNotesTable.initial],
@@ -64,9 +64,9 @@ interface PermNotesQuery {
     fun updatePermNotes(pn: PermNotes) {
         transaction (db) {
             PermNotesTable.update({
-                PermNotesTable.id.eq(pn.id!!)
+                PermNotesTable.ID.eq(pn.id!!)
             }) {
-                it[id] = pn.id!!
+                it[ID] = pn.id!!
                 it[emp_num] = pn.emp_num
                 it[note_date] = pn.note_date
                 it[initial] = pn.initial
@@ -84,7 +84,7 @@ interface PermNotesQuery {
     fun deletePermNotes(pn: PermNotes) {
         transaction (db) {
             PermNotesTable.deleteWhere {
-                PermNotesTable.id.eq(pn.id!!)
+                PermNotesTable.ID.eq(pn.id!!)
             }
         }
     }

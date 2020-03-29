@@ -28,7 +28,7 @@ val db: Database
     fun insertClientPermNotes(cpn: ClientPermNotes) {
         transaction (db) {
             ClientPermNotesTable.insert {
-                it[id] = cpn.id
+                it[ID] = cpn.id
                 it[client_num] = cpn.client_num
                 it[wo_num] = cpn.wo_num
                 it[not_interested] = cpn.not_interested
@@ -46,7 +46,7 @@ val db: Database
             ClientNotesTable.selectAll().toList()
         }.map {
             ClientPermNotes(
-                it[ClientPermNotesTable.id],
+                it[ClientPermNotesTable.ID],
                 it[ClientPermNotesTable.client_num],
                 it[ClientPermNotesTable.wo_num],
                 it[ClientPermNotesTable.not_interested],
@@ -62,9 +62,9 @@ val db: Database
     fun updateClientPermNote(cpn: ClientPermNotes) {
         transaction(db) {
             ClientPermNotesTable.update({
-                ClientPermNotesTable.id.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)
+                ClientPermNotesTable.ID.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)
             }) {
-                it[id] = cpn.id
+                it[ID] = cpn.id
                 it[client_num] = cpn.client_num
                 it[wo_num] = cpn.wo_num
                 it[not_interested] = cpn.not_interested
@@ -80,7 +80,7 @@ val db: Database
     fun deleteClientPermNote(cpn: ClientPermNotes) {
         transaction (db) {
             ClientPermNotesTable.deleteWhere {
-                ClientPermNotesTable.id.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)
+                ClientPermNotesTable.ID.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)
             }
         }
     }
