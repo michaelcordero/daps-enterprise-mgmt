@@ -4,17 +4,14 @@
             <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="trace">
+    <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
     <logger name="org.eclipse.jetty" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
-<!--    <logger name="ktor.application" level="DEBUG" />-->
     <logger name="ktor.application" level="INFO" />
     <logger name="com.mchange.v2.c3p0.impl" level="OFF" />
     <logger name="com.mchange" level="OFF" />
-    <logger name="org.jetbrains.exposed.exceptions" level="OFF" />
-    <logger name="org.h2" level="OFF" />
-    <logger name="org.jetbrains.exposed.sql" level="OFF" />
-
+    <logger name="org.jetbrains.exposed" level="DEBUG" />
+    <logger name="org.h2" level="DEBUG" />
 </configuration>
