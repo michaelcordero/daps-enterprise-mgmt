@@ -12,17 +12,6 @@ interface PaymentQuery {
     /**
      * Create
      */
-    fun createPayment(p: Payment) {
-        transaction (db) {
-            PaymentTable.insert {
-                it[client_num] = p.client_num
-                it[pmt_type] = p.pmt_type
-//                it[ref_num] = p.ref_num auto-incremented
-                it[pmt_date] = p.pmt_date
-                it[amount] = p.amount
-            }
-        }
-    }
 
     fun insertPayment(p: Payment) {
         transaction (db) {
