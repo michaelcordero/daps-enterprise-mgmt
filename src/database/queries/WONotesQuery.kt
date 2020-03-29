@@ -5,7 +5,7 @@ import model.WONotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface WONotesData {
+interface WONotesQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

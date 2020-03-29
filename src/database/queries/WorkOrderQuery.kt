@@ -5,7 +5,7 @@ import model.WorkOrder
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface WorkOrderData {
+interface WorkOrderQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

@@ -5,7 +5,7 @@ import model.PasteErrors
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface PasteErrorsData {
+interface PasteErrorsQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

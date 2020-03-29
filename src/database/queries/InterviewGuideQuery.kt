@@ -5,7 +5,7 @@ import model.InterviewGuide
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface InterviewGuideData {
+interface InterviewGuideQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
     /**

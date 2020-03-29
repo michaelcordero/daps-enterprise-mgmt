@@ -5,7 +5,7 @@ import model.AccountRep
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface AccountRepData {
+interface AccountRepQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

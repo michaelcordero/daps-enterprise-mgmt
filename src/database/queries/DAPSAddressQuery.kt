@@ -5,7 +5,7 @@ import model.DAPSAddress
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface DAPSAddressData  {
+interface DAPSAddressQuery  {
     // Abstract property initialized by LocalDataService
 val db: Database
 

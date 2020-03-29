@@ -5,7 +5,7 @@ import model.DAPSStaff
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface DAPSStaffData {
+interface DAPSStaffQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

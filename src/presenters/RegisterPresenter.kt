@@ -4,6 +4,7 @@ import application.dao
 import database.queries.DataService
 import io.ktor.util.KtorExperimentalAPI
 import model.User
+import kotlin.random.Random
 
 @KtorExperimentalAPI
 class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
@@ -14,7 +15,7 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
             throw Exception(error)
         } else {
             val new_password: String = hashPassword(password)
-            val new_id: String = hashPassword(email+first_name+last_name).slice(IntRange(0,19))
+            val new_id: Long = Random.nextLong(from = 1000000, until = 1999999)
             val newUser = User(new_id,email, first_name, last_name, new_password)
             dao.addUser(newUser)
         }

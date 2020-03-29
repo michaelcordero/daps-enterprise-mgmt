@@ -5,7 +5,7 @@ import model.Payment
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface PaymentData {
+interface PaymentQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

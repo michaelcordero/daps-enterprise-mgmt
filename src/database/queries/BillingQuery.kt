@@ -5,7 +5,7 @@ import model.Billing
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface BillingData {
+interface BillingQuery {
     // Abstract property initialized by LocalDataService
     val db: Database
 

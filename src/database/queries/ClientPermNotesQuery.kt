@@ -6,7 +6,7 @@ import model.ClientPermNotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface ClientPermNotesData {
+interface ClientPermNotesQuery {
     // Abstract property initialized by LocalDataService
 val db: Database
 

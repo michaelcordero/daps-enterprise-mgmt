@@ -5,7 +5,7 @@ import model.ClientNotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-interface ClientNotesData {
+interface ClientNotesQuery {
     // Abstract property initialized by LocalDataService
 val db: Database
     /**
