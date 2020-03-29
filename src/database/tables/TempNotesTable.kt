@@ -9,5 +9,5 @@ object TempNotesTable: Table() {
     val initial = text("Initl").nullable()
     val emp_note = text("EmpNote").nullable()
     val temp_note_key = integer("TempNoteKey").autoIncrement()
-    override val primaryKey = PrimaryKey(temp_note_key, name = "TempNoteKey")
+    override val primaryKey = PrimaryKey(temp_note_key)
 }
