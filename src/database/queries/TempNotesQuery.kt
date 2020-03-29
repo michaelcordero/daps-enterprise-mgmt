@@ -31,7 +31,7 @@ interface TempNotesQuery {
                 it[note_date] = tn.note_date
                 it[initial] = tn.initial
                 it[emp_note] = tn.emp_note
-                it[temp_note_key] = temp_note_key
+                it[temp_note_key] = tn.temp_note_key!!
             }
         }
     }

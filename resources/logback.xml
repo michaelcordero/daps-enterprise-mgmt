@@ -13,7 +13,8 @@
     <logger name="ktor.application" level="INFO" />
     <logger name="com.mchange.v2.c3p0.impl" level="OFF" />
     <logger name="com.mchange" level="OFF" />
-    <logger name="org.jetbrains" level="OFF" />
+    <logger name="org.jetbrains.exposed.exceptions" level="OFF" />
     <logger name="org.h2" level="OFF" />
+    <logger name="org.jetbrains.exposed.sql" level="OFF" />
 
 </configuration>
