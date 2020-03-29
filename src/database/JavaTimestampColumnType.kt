@@ -7,11 +7,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import java.sql.Timestamp
 import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
-private val DEFAULT_DATE_TIME_STRING_FORMATTER by lazy { DateTimeFormatter.ISO_LOCAL_DATE_TIME.withLocale(Locale.ROOT).withZone(ZoneId.systemDefault()) }
 
 class JavaTimestampColumnType : ColumnType(), IDateColumnType {
     override fun sqlType(): String {
@@ -25,7 +21,7 @@ class JavaTimestampColumnType : ColumnType(), IDateColumnType {
             is Timestamp -> value.toString()
             else -> error("Unexpected value: $value of ${value::class.qualifiedName}")
         }
-        return "'${DEFAULT_DATE_TIME_STRING_FORMATTER.format(Instant.parse(timestamp))}'"
+        return timestamp
     }
 
     override fun valueFromDB(value: Any): Timestamp = when (value) {
