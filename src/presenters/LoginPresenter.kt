@@ -1,5 +1,5 @@
 package presenters
 
-import database.queries.DataService
+import database.queries.DataQuery
 
-class LoginPresenter(dao: DataService) : AbstractPresenter(dao)
+class LoginPresenter(dao: DataQuery) : AbstractPresenter(dao)

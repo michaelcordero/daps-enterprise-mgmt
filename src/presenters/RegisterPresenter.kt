@@ -1,13 +1,13 @@
 package presenters
 
-import application.dao
-import database.queries.DataService
+import application.dq
+import database.queries.DataQuery
 import io.ktor.util.KtorExperimentalAPI
 import model.User
 import kotlin.random.Random
 
 @KtorExperimentalAPI
-class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
+class RegisterPresenter (dao: DataQuery) : AbstractPresenter(dao) {
 
     fun createUser(first_name: String, last_name: String, email: String, password: String) {
         val error: String = validate(first_name, last_name, email, password)
@@ -17,7 +17,7 @@ class RegisterPresenter (dao: DataService) : AbstractPresenter(dao) {
             val new_password: String = hashPassword(password)
             val new_id: Long = Random.nextLong(from = 1000000, until = 1999999)
             val newUser = User(new_id,email, first_name, last_name, new_password)
-            dao.addUser(newUser)
+            dq.addUser(newUser)
         }
     }
 

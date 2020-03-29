@@ -37,7 +37,7 @@ class H2exCSV {
     fun process(directory: File) {
         val start: Long = System.currentTimeMillis()
         try {
-//            val dao: LocalDataService = LocalDataService()
+//            val dq: LocalDataQuery = LocalDataQuery()
             println("Directory passed in: $directory")
             println("=======================================")
             val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
@@ -83,7 +83,7 @@ class H2exCSV {
             val end: Long = System.currentTimeMillis()
             println("=======================================")
             println("Total Processing Time: ${(end - start)/1000}/seconds")
-//            dao.close()
+//            dq.close()
         }
     }
 }

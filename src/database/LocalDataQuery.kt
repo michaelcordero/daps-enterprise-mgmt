@@ -1,12 +1,12 @@
 package database
-import database.queries.DataService
+import database.queries.DataQuery
 import database.tables.BillingTable
 import database.tables.UsersTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class LocalDataService: DataService {
+class LocalDataQuery: DataQuery {
     private val dp: DataPool = DataPool()
     override val db: Database
 

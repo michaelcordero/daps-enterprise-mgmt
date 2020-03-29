@@ -1,6 +1,6 @@
 package routes
 
-import database.queries.DataService
+import database.queries.DataQuery
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -15,7 +15,7 @@ import model.User
 class Users
 
 @KtorExperimentalLocationsAPI
-fun Route.users(dao: DataService){
+fun Route.users(dao: DataQuery){
     get<Users>{
         val users: List<User> = dao.allUsers()
         call.respond(FreeMarkerContent("users.ftl", mapOf("users" to users), "someetag"))

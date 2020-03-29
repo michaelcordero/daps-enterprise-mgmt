@@ -1,7 +1,7 @@
 package routes
 
 import application.redirect
-import database.queries.DataService
+import database.queries.DataQuery
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -22,7 +22,7 @@ class Index
 Register the index route of the app
  */
 @KtorExperimentalLocationsAPI
-fun Route.index(dao: DataService){
+fun Route.index(dao: DataQuery){
     // If the user has not already been authenticated we want to redirect to the login page otherwise dashboard.
     get<Index> {
         val user: User? = call.sessions.get<DAPSSession>()?.let { dao.user(it.emailId) }

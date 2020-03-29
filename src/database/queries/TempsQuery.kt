@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface TempsQuery {
-    // Abstract property initialized by LocalDataService
+    // Abstract property initialized by LocalDataQuery
     val db: Database
 
     /**

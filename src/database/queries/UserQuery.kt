@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * pattern, via Kotlin's "by" keyword, I decided to go with the default implementation of interface methods. This way
  * the inheritance hierarchy needn't create extra delegate objects, but still gets the power of delegation by declaration.
  * This only works because the db property is abstracted in this class, but overridden and instantiated in the
- * LocalDataService class.
+ * LocalDataQuery class.
  */
 interface UserQuery {
     val db: Database

@@ -1,7 +1,7 @@
 package application
 
-import database.LocalDataService
-import database.queries.DataService
+import database.LocalDataQuery
+import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.features.*
@@ -36,7 +36,7 @@ import java.time.ZoneId
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
-val dao: DataService = LocalDataService()
+val dq: DataQuery = LocalDataQuery()
 
 
 @KtorExperimentalAPI
@@ -63,7 +63,7 @@ fun main(args: Array<String>) {
 fun Application.module() {  //testing: Boolean = false
     log.info("application module starting...")
     environment.monitor.subscribe(ApplicationStopped){
-        dao.close()
+        dq.close()
         // try to figure out how to call the /logout route from here
         //it.locations.href(Login())
         it.dispose()
@@ -98,12 +98,12 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // pages
-        login(LoginPresenter(dao))
-        register(RegisterPresenter(dao))
-        index(dao)
-        welcome(WelcomePresenter(dao))
-        users(dao)
-        table(dao)
+        login(LoginPresenter(dq))
+        register(RegisterPresenter(dq))
+        index(dq)
+        welcome(WelcomePresenter(dq))
+        users(dq)
+        table(dq)
     }
 }
 
