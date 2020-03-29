@@ -1,5 +1,7 @@
 package utilities
 
+import database.LocalDataQuery
+import database.queries.DataQuery
 import io.ktor.utils.io.errors.IOException
 import me.tongfei.progressbar.ProgressBar
 import me.tongfei.progressbar.ProgressBarStyle
@@ -22,10 +24,6 @@ import kotlin.system.exitProcess
  */
 class H2exCSV {
 
-    fun <T> doSomething(data: T) {
-        // pretend like we're processing data...
-    }
-
     fun count_rows(resultSet: ResultSet): Int {
         var counter = 0
         while (resultSet.next()) {
@@ -36,8 +34,8 @@ class H2exCSV {
 
     fun process(directory: File) {
         val start: Long = System.currentTimeMillis()
+        val dq: DataQuery = LocalDataQuery()
         try {
-//            val dq: LocalDataQuery = LocalDataQuery()
             println("Directory passed in: $directory")
             println("=======================================")
             val files: List<File> = directory.listFiles()?.filterNotNull().orEmpty()
@@ -51,26 +49,26 @@ class H2exCSV {
                         val result_set: ResultSet = Csv().read("${directory}/${f.name}", null, null)
                         while (result_set.next()) {
                             when (f.name) {
-                                "AccountRepDropDown.csv" -> doSomething(AccountRep(result_set)).also { pb.step() }
-                                "BillTypeDropDown.csv" -> doSomething(BillType(result_set)).also { pb.step() }
-                                "Billing.csv" -> doSomething(Billing(result_set)).also { pb.step() }
-                                "ClientFile.csv" -> doSomething(ClientFile(result_set)).also { pb.step() }
-                                "ClientNotes.csv" -> doSomething(ClientNotes(result_set)).also { pb.step() }
-                                "ClientPermNotes.csv" -> doSomething(ClientPermNotes(result_set)).also { pb.step() }
-                                "DAPS Staff Messages.csv" -> doSomething(DAPSStaffMessages(result_set)).also { pb.step() }
-                                "DAPSaddress.csv" -> doSomething(DAPSAddress(result_set)).also { pb.step() }
-                                "DAPSstaff.csv" -> doSomething(DAPSStaff(result_set)).also { pb.step() }
-                                "InterviewGuide.csv" -> doSomething(InterviewGuide(result_set)).also { pb.step() }
-                                "JobFunctionDropDown.csv" -> doSomething(JobFunction(result_set)).also { pb.step() }
-                                "Paste Errors.csv" -> doSomething(PasteErrors(result_set)).also { pb.step() }
-                                "Payment.csv" -> doSomething(Payment(result_set)).also { pb.step() }
-                                "PermNotes.csv" -> doSomething(PermNotes(result_set)).also { pb.step() }
-                                "PermReqNotes.csv" -> doSomething(PermReqNotes(result_set)).also { pb.step() }
-                                "TempNotes.csv" -> doSomething(TempNotes(result_set)).also { pb.step() }
-                                "Temps.csv" -> doSomething(Temps(result_set)).also { pb.step() }
-                                "TempsAvail4Work.csv" -> doSomething(TempsAvail4Work(result_set)).also { pb.step() }
-                                "WOnotes.csv" -> doSomething(WONotes(result_set)).also { pb.step() }
-                                "WorkOrder.csv" -> doSomething(WorkOrder(result_set)).also { pb.step() }
+                                "AccountRepDropDown.csv" -> dq.insertAccountRep(AccountRep(result_set)).also { pb.step() }
+                                "BillTypeDropDown.csv" -> (BillType(result_set)).also { pb.step() }
+                                "Billing.csv" -> dq.insertBilling(Billing(result_set)).also { pb.step() }
+                                "ClientFile.csv" -> dq.insertClientFile(ClientFile(result_set)).also { pb.step() }
+                                "ClientNotes.csv" -> dq.insertClientNotes(ClientNotes(result_set)).also { pb.step() }
+                                "ClientPermNotes.csv" -> dq.insertClientPermNotes(ClientPermNotes(result_set)).also { pb.step() }
+                                "DAPS Staff Messages.csv" -> dq.insertDAPSStaffMessages(DAPSStaffMessages(result_set)).also { pb.step() }
+                                "DAPSaddress.csv" -> dq.insertDAPSAddress(DAPSAddress(result_set)).also { pb.step() }
+                                "DAPSstaff.csv" -> dq.insertDAPSStaff(DAPSStaff(result_set)).also { pb.step() }
+                                "InterviewGuide.csv" -> dq.insertInterviewGuide(InterviewGuide(result_set)).also { pb.step() }
+                                "JobFunctionDropDown.csv" -> (JobFunction(result_set)).also { pb.step() }
+                                "Paste Errors.csv" -> dq.insertPasteErrors(PasteErrors(result_set)).also { pb.step() }
+                                "Payment.csv" -> dq.insertPayment(Payment(result_set)).also { pb.step() }
+                                "PermNotes.csv" -> dq.insertPermNotes(PermNotes(result_set)).also { pb.step() }
+                                "PermReqNotes.csv" -> dq.insertPermReqNotes(PermReqNotes(result_set)).also { pb.step() }
+                                "TempNotes.csv" -> dq.insertTempNote(TempNotes(result_set)).also { pb.step() }
+                                "Temps.csv" -> dq.insertTemp(Temps(result_set)).also { pb.step() }
+                                "TempsAvail4Work.csv" -> dq.insertTempAvail4Work(TempsAvail4Work(result_set)).also { pb.step() }
+                                "WOnotes.csv" -> dq.insertWONotes(WONotes(result_set)).also { pb.step() }
+                                "WorkOrder.csv" -> dq.insertWorkOrder(WorkOrder(result_set)).also { pb.step() }
                             }
                         }
                     }
@@ -83,7 +81,7 @@ class H2exCSV {
             val end: Long = System.currentTimeMillis()
             println("=======================================")
             println("Total Processing Time: ${(end - start)/1000}/seconds")
-//            dq.close()
+            dq.close()
         }
     }
 }

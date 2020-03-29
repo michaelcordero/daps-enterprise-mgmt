@@ -12,7 +12,7 @@ interface PasteErrorsQuery {
     /**
      * Create
      */
-    fun createPasteErrors(pe: PasteErrors) {
+    fun insertPasteErrors(pe: PasteErrors) {
         transaction (db) {
             PasteErrorsTable.insert {
                 it[client_num] = pe.client_num

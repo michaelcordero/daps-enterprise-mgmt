@@ -12,7 +12,7 @@ interface DAPSStaffQuery {
     /**
      * Create
      */
-    fun createDAPSStaff(ds: DAPSStaff) {
+    fun insertDAPSStaff(ds: DAPSStaff) {
         transaction (db) {
             DAPSStaffTable.insert {
                 it[initial] = ds.initial!!

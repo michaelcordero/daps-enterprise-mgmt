@@ -12,7 +12,7 @@ interface AccountRepQuery {
     /**
      * Create
      */
-    fun createAccountRep(account: AccountRep) {
+    fun insertAccountRep(account: AccountRep) {
         transaction(db) {
             AccountRepDropDownTable.insert {
                 it[account_rep] = account.accountRep!!
