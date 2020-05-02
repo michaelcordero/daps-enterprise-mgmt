@@ -18,6 +18,7 @@ import io.ktor.locations.locations
 import io.ktor.request.host
 import io.ktor.request.port
 import io.ktor.response.respondRedirect
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -117,7 +118,9 @@ fun Application.module() {  //testing: Boolean = false
         welcome(WelcomePresenter(dq))
         users(dq)
         table(dq)
-        clients(dq)
+        route("/api") {
+            clients(dq)
+        }
     }
 }
 

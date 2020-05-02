@@ -253,9 +253,9 @@ val db: Database
      * Update
      */
 
-    fun updateClientFile(cf: ClientFile) {
-        transaction (db) {
-            ClientFileTable.update({
+    fun updateClientFile(cf: ClientFile): Int {
+        return transaction (db) {
+            return@transaction ClientFileTable.update({
                 ClientFileTable.client_num.eq(cf.client_num)
             }) {
                 it[client_num] = cf.client_num
@@ -316,9 +316,9 @@ val db: Database
     /**
      * Delete
      */
-    fun deleteClientFile(cf: ClientFile) {
-        transaction (db) {
-            ClientFileTable.deleteWhere { ClientFileTable.client_num.eq(cf.client_num) }
+    fun deleteClientFile(cn: Int): Int {
+       return transaction (db) {
+            ClientFileTable.deleteWhere { ClientFileTable.client_num.eq(cn) }
         }
     }
 }
