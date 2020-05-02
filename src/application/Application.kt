@@ -1,13 +1,17 @@
 package application
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
+import io.ktor.http.ContentType
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
+import io.ktor.jackson.JacksonConverter
+import io.ktor.jackson.jackson
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.locations.locations
@@ -32,6 +36,7 @@ import routes.*
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
+import java.text.DateFormat
 import java.time.ZoneId
 
 
@@ -67,6 +72,14 @@ fun Application.module() {  //testing: Boolean = false
         // try to figure out how to call the /logout route from here
         //it.locations.href(Login())
         it.dispose()
+    }
+    // This feature enables the HTTP API to respond with JSON Content
+    install(ContentNegotiation) {
+        jackson {
+            enable(SerializationFeature.INDENT_OUTPUT)
+            dateFormat = DateFormat.getDateInstance()
+            register(ContentType.Application.Json, JacksonConverter())
+        }
     }
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
@@ -104,6 +117,7 @@ fun Application.module() {  //testing: Boolean = false
         welcome(WelcomePresenter(dq))
         users(dq)
         table(dq)
+        clients(dq)
     }
 }
 

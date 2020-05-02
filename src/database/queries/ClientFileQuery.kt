@@ -13,9 +13,9 @@ val db: Database
      * Create
      */
 
-    fun createClientFile(cf: ClientFile) {
-        transaction (db) {
-            ClientFileTable.insert {
+    fun createClientFile(cf: ClientFile): Int {
+        return transaction(db) {
+            return@transaction ClientFileTable.insert {
 //                it[client_num] = cf.client_num auto-increment
                 it[ofcname] = cf.ofcname
                 it[firstname1] = cf.firstname1
@@ -67,7 +67,7 @@ val db: Database
                 it[yeslist] = cf.yeslist
                 it[filler] = cf.filler
                 it[filler2] = cf.filler2
-            }
+            } get ClientFileTable.client_num
         }
     }
 

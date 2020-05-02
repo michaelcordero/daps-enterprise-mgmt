@@ -1,14 +1,17 @@
 package com.daps.ent
 
 import application.module
+import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.locations
+import io.ktor.server.testing.contentType
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import org.junit.Test
+import routes.Clients
 import routes.Index
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -25,6 +28,19 @@ class ApplicationTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 // verifies redirect when no user is logged in
                 assertTrue { response.content!!.contains("Sign In") }
+            }
+        }
+    }
+
+    @KtorExperimentalAPI
+    @KtorExperimentalLocationsAPI
+    @Test
+    fun testClients() {
+        withTestApplication({ module() }) {
+            val path: String = application.locations.href(Clients())
+            handleRequest(HttpMethod.Get, path).apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                assertEquals(response.contentType().contentType, ContentType.Application.Json.contentType)
             }
         }
     }
