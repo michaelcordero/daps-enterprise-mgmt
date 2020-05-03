@@ -37,7 +37,9 @@ import org.slf4j.LoggerFactory
 import presenters.RegisterPresenter
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
-import routes.*
+import routes.api.clients
+import routes.api.login
+import routes.web.*
 import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession

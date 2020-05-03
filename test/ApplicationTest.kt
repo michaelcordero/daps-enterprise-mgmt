@@ -11,8 +11,8 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.withTestApplication
 import io.ktor.util.KtorExperimentalAPI
 import org.junit.Test
-import routes.Clients
-import routes.Index
+import routes.api.Clients
+import routes.web.Index
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

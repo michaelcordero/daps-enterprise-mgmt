@@ -1,4 +1,4 @@
-package routes
+package routes.web
 
 import database.queries.DataQuery
 import io.ktor.locations.KtorExperimentalLocationsAPI

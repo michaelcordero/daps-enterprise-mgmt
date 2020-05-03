@@ -1,4 +1,4 @@
-package routes
+package routes.web
 
 import application.redirect
 import database.queries.DataQuery

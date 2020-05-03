@@ -1,4 +1,4 @@
-package routes
+package routes.web
 
 import application.redirect
 import io.ktor.application.application

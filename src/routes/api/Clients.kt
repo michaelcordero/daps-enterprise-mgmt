@@ -1,4 +1,4 @@
-package routes
+package routes.api
 
 import database.queries.DataQuery
 import io.ktor.application.call

@@ -1,4 +1,4 @@
-package routes
+package routes.web
 
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
