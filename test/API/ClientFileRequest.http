@@ -1,4 +1,4 @@
-POST http://localhost:8080/clients/
+POST http://localhost:8080/api/clients/
 Content-Type: application/json
 
 { "ofcname": "corderosoft tech llc", "firstname1":  "michael", "lastname1":  "cordero", "firstname2": null,
