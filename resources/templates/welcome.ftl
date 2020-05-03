@@ -4,5 +4,5 @@
 <@layout.mainLayout title="Welcome">
     <p> Welcome ${user.first_name} to the first kotlin app! :D </p>
     <#--noinspection HtmlUnknownTarget-->
-    <a href="/logout" class="links">Logout </a>
+    <a href="/weblogout" class="links">Logout </a>
 </@layout.mainLayout>

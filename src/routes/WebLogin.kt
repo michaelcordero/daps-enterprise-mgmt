@@ -21,30 +21,30 @@ import presenters.LoginPresenter
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
-@Location("/login")
-data class Login(val emailId: String = "", val error: String = "")
+@Location("/weblogin")
+data class WebLogin (val emailId: String = "", val error: String = "")
 
 @KtorExperimentalLocationsAPI
-@Location("/logout")
-class Logout
+@Location("/weblogout")
+class WebLogout
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.login(presenter: LoginPresenter) {
-    get<Login> {
+fun Route.weblogin(presenter: LoginPresenter) {
+    get<WebLogin> {
         val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
         if (user != null) {
             call.redirect(Welcome(user.email))
         } else {
-            call.respond(FreeMarkerContent("login.ftl", mapOf("emailId" to it.emailId, "error" to it.error), "someetag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to it.emailId, "error" to it.error), "someeetag"))
         }
     }
 
-    post<Login> {
+    post<WebLogin> {
         val post: Parameters = call.receive()
         val password = post["password"] ?: return@post call.redirect(it)
         val emailId = post["emailId"] ?: return@post call.redirect(it)
-        val error = Login(emailId, "")
+        val error = WebLogin(emailId, "")
         val user: User? = presenter.user(emailId)
 
         if (user == null) {
@@ -57,9 +57,9 @@ fun Route.login(presenter: LoginPresenter) {
         }
     }
 
-    get<Logout> {
+    get<WebLogout> {
         call.sessions.clear<DAPSSession>()
-        call.redirect(Login())
+        call.redirect(Index())
     }
 }
 

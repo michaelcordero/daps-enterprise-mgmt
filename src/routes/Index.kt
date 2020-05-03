@@ -7,6 +7,7 @@ import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
 import io.ktor.locations.get
+import io.ktor.locations.post
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.sessions.get
@@ -27,12 +28,13 @@ fun Route.index(dao: DataQuery){
     get<Index> {
         val user: User? = call.sessions.get<DAPSSession>()?.let { dao.user(it.emailId) }
         if (user != null ) {
-            // this probably needs
-            call.redirect(location = Welcome(user.email))
-//            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "someetag"))
+            call.redirect(Welcome(user.email))
         } else {
-            call.respond(FreeMarkerContent("login.ftl", null, "some-etag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", null, "someetag"))
         }
+    }
 
+    post<Index> {
+        call.redirect(WebLogin())
     }
 }

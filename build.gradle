@@ -40,6 +40,7 @@ dependencies {
 //    runtime group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.3.71'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines"
     implementation "io.ktor:ktor-jackson:$ktor_version"
+    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
 //    compile "io.ktor.features.ContentNegotiation:$ktor_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"

@@ -18,7 +18,6 @@ import io.ktor.locations.locations
 import io.ktor.request.host
 import io.ktor.request.port
 import io.ktor.response.respondRedirect
-import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -34,6 +33,7 @@ import presenters.LoginPresenter
 import presenters.RegisterPresenter
 import presenters.WelcomePresenter
 import routes.*
+import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
@@ -43,8 +43,10 @@ import java.time.ZoneId
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dq: DataQuery = LocalDataQuery()
+val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 
 
+@ExperimentalStdlibApi
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun main(args: Array<String>) {
@@ -71,9 +73,18 @@ fun Application.module() {  //testing: Boolean = false
     environment.monitor.subscribe(ApplicationStopped){
         dq.close()
         // try to figure out how to call the /logout route from here
-        //it.locations.href(Login())
+        //it.locations.href(WebLogin())
         it.dispose()
     }
+    // This feature limits who can make HTTP API requests
+//    install(Authentication){
+//        jwt("jwt") {
+//            verifier(dapsJWT.verifier)
+//            validate {
+//                UserIdPrincipal(it.payload.getClaim("name").asString())
+//            }
+//        }
+//    }
     // This feature enables the HTTP API to respond with JSON Content
     install(ContentNegotiation) {
         jackson {
@@ -112,15 +123,17 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // pages
-        login(LoginPresenter(dq))
+        weblogin(LoginPresenter(dq))
         register(RegisterPresenter(dq))
         index(dq)
         welcome(WelcomePresenter(dq))
         users(dq)
         table(dq)
-        route("/api") {
-            clients(dq)
-        }
+//        authenticate("jwt") {
+//            route("/api") {
+//                clients(dq)
+//            }
+//        }
     }
 }
 
