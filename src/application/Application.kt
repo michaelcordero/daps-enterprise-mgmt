@@ -5,6 +5,10 @@ import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
+import io.ktor.auth.Authentication
+import io.ktor.auth.UserIdPrincipal
+import io.ktor.auth.authenticate
+import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.ContentType
@@ -18,6 +22,7 @@ import io.ktor.locations.locations
 import io.ktor.request.host
 import io.ktor.request.port
 import io.ktor.response.respondRedirect
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -29,8 +34,8 @@ import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import presenters.LoginPresenter
 import presenters.RegisterPresenter
+import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
 import routes.*
 import security.DAPSJWT
@@ -77,14 +82,14 @@ fun Application.module() {  //testing: Boolean = false
         it.dispose()
     }
     // This feature limits who can make HTTP API requests
-//    install(Authentication){
-//        jwt("jwt") {
-//            verifier(dapsJWT.verifier)
-//            validate {
-//                UserIdPrincipal(it.payload.getClaim("name").asString())
-//            }
-//        }
-//    }
+    install(Authentication){
+        jwt("jwt") {
+            verifier(dapsJWT.verifier)
+            validate {
+                UserIdPrincipal(it.payload.getClaim("name").asString())
+            }
+        }
+    }
     // This feature enables the HTTP API to respond with JSON Content
     install(ContentNegotiation) {
         jackson {
@@ -123,17 +128,21 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // pages
-        weblogin(LoginPresenter(dq))
+        weblogin(WebLoginPresenter(dq))
         register(RegisterPresenter(dq))
         index(dq)
         welcome(WelcomePresenter(dq))
         users(dq)
         table(dq)
-//        authenticate("jwt") {
-//            route("/api") {
-//                clients(dq)
-//            }
-//        }
+        // API
+        route("/api") {
+            login(dq, dapsJWT)
+        }
+        authenticate("jwt") {
+            route("/api") {
+                clients(dq)
+            }
+        }
     }
 }
 

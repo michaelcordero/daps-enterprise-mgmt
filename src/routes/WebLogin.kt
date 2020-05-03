@@ -17,7 +17,7 @@ import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
 import model.User
-import presenters.LoginPresenter
+import presenters.WebLoginPresenter
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
@@ -30,7 +30,7 @@ class WebLogout
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.weblogin(presenter: LoginPresenter) {
+fun Route.weblogin(presenter: WebLoginPresenter) {
     get<WebLogin> {
         val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
         if (user != null) {
