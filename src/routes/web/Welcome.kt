@@ -10,7 +10,6 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
-import model.User
 import presenters.WelcomePresenter
 import security.DAPSSession
 
@@ -25,12 +24,11 @@ data class Welcome(val emailId: String)
 @KtorExperimentalLocationsAPI
 fun Route.welcome(presenter: WelcomePresenter) {
     get<Welcome> {
-        // replace with db call obviously
-        val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
-        if ( user == null ) {
-            call.respond(HttpStatusCode.Unauthorized, "Unauthenticated Session Request")
+        val session: DAPSSession? = call.sessions.get<DAPSSession>()
+        if ( session?.token != null ) {
+            call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId ), "someetag"))
         } else {
-            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user ), "someetag"))
+            call.respond(HttpStatusCode.Unauthorized, "Unauthenticated Session Request")
         }
     }
 }

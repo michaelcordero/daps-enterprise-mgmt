@@ -85,7 +85,7 @@ fun Application.module() {  //testing: Boolean = false
     }
     // This feature limits who can make HTTP API requests
     install(Authentication){
-        jwt("jwt") {
+        jwt("api") {
             verifier(dapsJWT.verifier)
             validate {
                 UserIdPrincipal(it.payload.getClaim("name").asString())
@@ -129,10 +129,10 @@ fun Application.module() {  //testing: Boolean = false
             // css, javascript & images served here
             resources("static")
         }
-        // pages
-        weblogin(WebLoginPresenter(dq))
-        register(RegisterPresenter(dq))
-        index(dq)
+        // web pages
+        weblogin(WebLoginPresenter(dq, dapsJWT))
+        register(RegisterPresenter(dq, dapsJWT))
+        index()
         welcome(WelcomePresenter(dq))
         users(dq)
         table(dq)
@@ -140,7 +140,7 @@ fun Application.module() {  //testing: Boolean = false
         route("/api") {
             login(dq, dapsJWT)
         }
-        authenticate("jwt") {
+        authenticate("api") {
             route("/api") {
                 clients(dq)
             }

@@ -35,8 +35,8 @@ data class Register(
 fun Route.register(presenter: RegisterPresenter) {
     post<Register>{
         // get current user from session data if any
-        val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
-        if (user != null ) return@post call.redirect(Welcome(it.email))
+        val session: DAPSSession? = call.sessions.get<DAPSSession>()
+        if (session?.token != null ) return@post call.redirect(Welcome(it.email))
 
         // get post data
         val registration = call.receive<Parameters>()
@@ -48,7 +48,8 @@ fun Route.register(presenter: RegisterPresenter) {
         // do biz work
         try {
             presenter.createUser(first_name, last_name, email, password)
-            call.sessions.set(DAPSSession(email))
+            val token = presenter.dapsjwt.sign(email)
+            call.sessions.set(DAPSSession(email,token))
             call.redirect(Welcome(email))
         } catch (e: Exception) {
             val error = Register(last_name, email, password)
@@ -58,8 +59,8 @@ fun Route.register(presenter: RegisterPresenter) {
     }
 
     get<Register> {
-        val user = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
-        if (user != null ){
+        val session: DAPSSession? = call.sessions.get<DAPSSession>()
+        if (session?.token != null ){
             call.respond(Welcome(it.email))
         } else {
             call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User(0L,

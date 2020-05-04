@@ -32,9 +32,9 @@ class WebLogout
 @KtorExperimentalLocationsAPI
 fun Route.weblogin(presenter: WebLoginPresenter) {
     get<WebLogin> {
-        val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
-        if (user != null) {
-            call.redirect(Welcome(user.email))
+        val session: DAPSSession? = call.sessions.get<DAPSSession>()
+        if (session?.token != null) {
+            call.redirect(Welcome(session.emailId))
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to it.emailId, "error" to it.error), "someeetag"))
         }
@@ -52,7 +52,8 @@ fun Route.weblogin(presenter: WebLoginPresenter) {
         } else if (user.passwordHash != presenter.hashPassword(password)){
             call.redirect(error.copy(error = "Invalid password"))
         } else {
-            call.sessions.set(DAPSSession(user.email))
+            val token = presenter.dapsjwt.sign(user.email)
+            call.sessions.set(DAPSSession(user.email,token))
             call.redirect(Welcome(user.email))
         }
     }
