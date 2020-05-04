@@ -1,4 +1,4 @@
-package com.daps.ent
+package com.daps.ent.web
 
 import application.module
 import io.ktor.http.ContentType
