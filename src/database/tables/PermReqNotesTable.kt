@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Table
 object PermReqNotesTable: Table() {
     val ID = integer("ID").autoIncrement()
     override val primaryKey = PrimaryKey(ID)
-    val emp_num = integer("Emp#").nullable()
+    val emp_num = integer("Emp#")
     val desired_location = text("DesiredLocation").nullable()
     val start_date = realtimestamp("StartDate").nullable()
     val fulltime = bool("FullTime").nullable()

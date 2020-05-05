@@ -1,12 +1,16 @@
 package model
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import database.tables.BillingTable
 import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class Billing(
-    val counter: Int, val client_num: Int, val employee_num: Int,
+data class Billing @JsonCreator constructor(
+    @JsonProperty(value = "counter", required = true) val counter: Int,
+    @JsonProperty(value = "client_num", required = true) val client_num: Int,
+    @JsonProperty(value = "employee_num", required = true) val employee_num: Int,
     val wdate: Timestamp?, val hours: Double, val start_time: Timestamp?,
     val end_time: Timestamp?, val daps_fee: Double?, val total_fee: Double?,
     val worktype: String?, val work_order_num: Int?, val open: Boolean?,
@@ -20,8 +24,8 @@ data class Billing(
         result_set.getInt(BillingTable.employee_num.name),
         result_set.getString(BillingTable.wdate.name)?.let { Timestamp.valueOf(it) },
         result_set.getDouble(BillingTable.hours.name),
-        result_set.getString(BillingTable.start_time.name)?.let { Timestamp.valueOf(it)},
-        result_set.getString(BillingTable.end_time.name)?.let { Timestamp.valueOf(it)},
+        result_set.getString(BillingTable.start_time.name)?.let { Timestamp.valueOf(it) },
+        result_set.getString(BillingTable.end_time.name)?.let { Timestamp.valueOf(it) },
         result_set.getDouble(BillingTable.daps_fee.name),
         result_set.getDouble(BillingTable.total_fee.name),
         result_set.getString(BillingTable.worktype.name),
