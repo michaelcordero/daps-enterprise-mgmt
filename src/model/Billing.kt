@@ -11,7 +11,7 @@ data class Billing @JsonCreator constructor(
     @JsonProperty(value = "counter", required = true) val counter: Int,
     @JsonProperty(value = "client_num", required = true) val client_num: Int,
     @JsonProperty(value = "employee_num", required = true) val employee_num: Int,
-    val wdate: Timestamp?, val hours: Double?, val start_time: Timestamp?,
+    val wdate: Timestamp?, val hours: Double, val start_time: Timestamp?,
     val end_time: Timestamp?, val daps_fee: Double?, val total_fee: Double?,
     val worktype: String?, val work_order_num: Int?, val open: Boolean?,
     val pmt1: String?, val apamt1: Double?, val pmt2: String?, val apamt2: Double?,
