@@ -16,8 +16,8 @@ import security.DAPSSession
 Register the welcome route of the app
  */
 @KtorExperimentalLocationsAPI
-@Location("/welcome/{emailId}")
-data class Welcome(val emailId: String)
+@Location("/welcome")
+class Welcome
 
 @KtorExperimentalLocationsAPI
 fun Route.welcome(presenter: WelcomePresenter) {

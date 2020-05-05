@@ -36,7 +36,7 @@ fun Route.register(presenter: RegisterPresenter) {
     post<Register>{
         // get current user from session data if any
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session?.token != null ) return@post call.redirect(Welcome(it.email))
+        if (session?.token != null ) return@post call.redirect(Welcome())
 
         // get post data
         val registration = call.receive<Parameters>()
@@ -50,7 +50,7 @@ fun Route.register(presenter: RegisterPresenter) {
             presenter.createUser(first_name, last_name, email, password)
             val token = presenter.dapsjwt.sign(email)
             call.sessions.set(DAPSSession(email,token))
-            call.redirect(Welcome(email))
+            call.redirect(Welcome())
         } catch (e: Exception) {
             val error = Register(last_name, email, password)
             application.log.error("failed to register user", e)
