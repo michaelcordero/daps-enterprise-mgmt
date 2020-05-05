@@ -59,15 +59,10 @@ fun Route.register(presenter: RegisterPresenter) {
     }
 
     get<Register> {
-        val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session?.token != null ){
-            call.respond(Welcome(it.email))
-        } else {
             call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User(0L,
                 it.email, it.first_name,
                 it.last_name,""
             ), "error" to it.error, "validator" to RegisterPresenter.Validator ), "some-etag"))
-        }
     }
 }
 

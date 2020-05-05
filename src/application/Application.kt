@@ -5,9 +5,7 @@ import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
-import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.authenticate
+import io.ktor.auth.*
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
@@ -27,11 +25,13 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
-import io.ktor.sessions.SessionTransportTransformerMessageAuthentication
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
+import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import presenters.RegisterPresenter
@@ -83,8 +83,25 @@ fun Application.module() {  //testing: Boolean = false
         //it.locations.href(WebLogin())
         it.dispose()
     }
-    // This feature limits who can make HTTP API requests
+    // This feature handles the authentication for Web & HTTP API Requests
     install(Authentication){
+        basic ("web"){
+            skipWhen { call ->
+                call.sessions.get<DAPSSession>()?.token != null
+            }
+        }
+        form("form") {
+            userParamName = "emailId"
+            passwordParamName = "password"
+            validate {
+                val user: User? = dq.user(it.name, DAPSSecurity.hash(it.password))
+                if ( user != null) { // sessions.get<DAPSSession>()?.token != null
+                    UserIdPrincipal(it.name)
+                } else {
+                    null
+                }
+            }
+        }
         jwt("api") {
             verifier(dapsJWT.verifier)
             validate {
@@ -111,7 +128,7 @@ fun Application.module() {  //testing: Boolean = false
     // SESSION cookie
     install( Sessions ) {
         cookie<DAPSSession>("SESSION") {
-            transform(SessionTransportTransformerMessageAuthentication(DAPSSecurity.hash_key))
+            cookie.path = "/"
         }
     }
     install(StatusPages) { statuses(this) }
@@ -129,14 +146,21 @@ fun Application.module() {  //testing: Boolean = false
             // css, javascript & images served here
             resources("static")
         }
-        // web pages
-        weblogin(WebLoginPresenter(dq, dapsJWT))
+        // None authentication
         register(RegisterPresenter(dq, dapsJWT))
         index()
-        welcome(WelcomePresenter(dq))
-        users(dq)
-        table(dq)
-        // API
+        weblogout()
+        // Initial authentication
+        authenticate("form") {
+            weblogin(WebLoginPresenter(dq, dapsJWT))
+        }
+        // Web authentication
+        authenticate("web") {
+            welcome(WelcomePresenter(dq))
+            users(dq)
+            table(dq)
+        }
+        // API authentication
         route("/api") {
             login(dq, dapsJWT)
         }

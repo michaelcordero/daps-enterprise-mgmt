@@ -1,6 +1,5 @@
 package routes.web
 
-import database.queries.DataQuery
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -8,16 +7,19 @@ import io.ktor.locations.Location
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import model.User
+import io.ktor.sessions.clear
+import io.ktor.sessions.sessions
+import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
-@Location("/users")
-class Users
+@Location("/weblogout")
+class WebLogout
+
 
 @KtorExperimentalLocationsAPI
-fun Route.users(dao: DataQuery){
-    get<Users>{
-        val users: List<User> = dao.allUsers()
-        call.respond(FreeMarkerContent("users.ftl", mapOf("users" to users), "someetag"))
+fun Route.weblogout(){
+    get<WebLogout> {
+        call.sessions.clear<DAPSSession>()
+        call.respond(FreeMarkerContent("weblogin.ftl", null, "someetag"))
     }
 }
