@@ -26,7 +26,7 @@ fun Route.clients(dao: DataQuery) {
             val clients: List<ClientFile> = Collections.synchronizedList(dao.allClientFiles())
             call.respond(mapOf("clients" to synchronized(clients) { clients.toList()} ))
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = e.toString())
+            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
         }
     }
 
@@ -35,7 +35,7 @@ fun Route.clients(dao: DataQuery) {
             val client: ClientFile? = dao.readClientFile(it.client_num.toInt()).firstOrNull()
             call.respond(mapOf("client" to client))
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = e.toString())
+            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
         }
     }
 
