@@ -36,7 +36,7 @@ interface BillingQuery {
                 it[assign_date] = billing.assigned_date
                 it[assigned_by] = billing.assigned_by
                 it[service_category] = billing.service_category
-            } get BillingTable.counter ?: 0
+            } get BillingTable.counter
         }
     }
 
@@ -86,6 +86,16 @@ interface BillingQuery {
         return transaction(db) {
             BillingTable.select {
                 BillingTable.employee_num.eq(emp_num)
+            }.mapNotNull {
+                read(it)
+            }
+        }
+    }
+
+    fun billingByCounter(counter: Int) : List<Billing> {
+        return transaction (db) {
+            BillingTable.select {
+                BillingTable.counter.eq(counter)
             }.mapNotNull {
                 read(it)
             }
