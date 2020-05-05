@@ -1,3 +1,15 @@
+### To run from curl # curl request GET --header "Content-Type: application/json" http://localhost:8080/clients
+GET http://localhost:8080/api/clients
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/clients/8155
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
 POST http://localhost:8080/api/clients/
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
@@ -53,17 +65,6 @@ Authorization: Bearer {{auth_token}}
   "filler": null,
   "filler2": null
 }
-
-### To run from curl # curl request GET --header "Content-Type: application/json" http://localhost:8080/clients
-GET http://localhost:8080/api/clients
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-
-###
-GET http://localhost:8080/api/clients/8155
-Accept: application/json
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
 
 
 ###
