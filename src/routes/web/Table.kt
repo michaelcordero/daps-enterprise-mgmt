@@ -7,10 +7,10 @@ import io.ktor.locations.get
 import io.ktor.routing.Route
 
 @KtorExperimentalLocationsAPI
-@Location("/table/{id}")
-data class Table(val id: String )
+@Location("/table")
+class Table
 
 @KtorExperimentalLocationsAPI
-fun Route.table(dao: DataQuery) {
-    get<Table> { id -> }
+fun Route.table(dq: DataQuery) {
+    get<Table> {}
 }
