@@ -70,6 +70,31 @@ jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
+//task concert(type: JavaExec) {
+//    group = "Execution"
+//    description = "run both the ui & backend"
+//    classpath = sourceSets.main.runtimeClasspath
+//    main = 'application.ApplicationKt'
+//}
+
+//task npm(type: Exec) {
+////    commandLine "$projectDir/react-ui/node_modules/.bin/webpack", "app/index.js", "$buildDir/js/bundle.js"
+//    workingDir "$projectDir/react-ui"
+//    commandLine("npm")
+//    args("start")
+//    standardOutput = new ByteArrayOutputStream()
+//
+////    startScripts
+//}
+
+//WorkQueue workQueue = workerExecutor.processIsolation() {
+//    ProcessWorkerSpec spec ->
+//        forkOptions {
+//            JavaForkOptions options ->
+//                options.maxHeapSize = "512m"
+//        }
+//}
+
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
 //jar {
 //    manifest {
