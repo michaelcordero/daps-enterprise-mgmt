@@ -1,6 +1,7 @@
 package routes.web
 
 import io.ktor.application.call
+import io.ktor.auth.UserPasswordCredential
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Location
@@ -21,8 +22,7 @@ class WebLogout
 fun Route.weblogout(){
     get<WebLogout> {
         val session = call.sessions.get<DAPSSession>()
-        session?.token = null
-        call.sessions.clear<DAPSSession>()
+        session?.token = null // call.sessions.clear<DAPSSession>()
         call.respond(FreeMarkerContent("weblogin.ftl", null, "someetag"))
     }
 }

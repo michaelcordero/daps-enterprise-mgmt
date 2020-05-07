@@ -26,7 +26,7 @@ fun Route.index() {
         if (session?.token != null ) {
             call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId), "someetag"))
         } else {
-            call.respond(FreeMarkerContent("weblogin.ftl", null, "someetag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null), "someetag"))
         }
     }
 }
