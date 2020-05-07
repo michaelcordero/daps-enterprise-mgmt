@@ -8,6 +8,7 @@ import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.sessions.clear
+import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import security.DAPSSession
 
@@ -19,6 +20,8 @@ class WebLogout
 @KtorExperimentalLocationsAPI
 fun Route.weblogout(){
     get<WebLogout> {
+        val session = call.sessions.get<DAPSSession>()
+        session?.token = null
         call.sessions.clear<DAPSSession>()
         call.respond(FreeMarkerContent("weblogin.ftl", null, "someetag"))
     }

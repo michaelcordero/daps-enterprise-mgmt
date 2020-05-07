@@ -91,7 +91,12 @@ dependencies {
 //
 ////    startScripts
 //}
-
+// This background stuff is being tracked at https://github.com/gradle/gradle/issues/1367
+//task background(type: Exec) {
+//    workingDir "$projectDir"
+//    commandLine "./gradlew", "run", "&"
+//    standardOutput = new ByteArrayOutputStream()
+//}
 //WorkQueue workQueue = workerExecutor.processIsolation() {
 //    ProcessWorkerSpec spec ->
 //        forkOptions {
