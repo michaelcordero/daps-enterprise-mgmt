@@ -11,6 +11,6 @@
     <logger name="io.netty" level="INFO"/>
     <logger name="ktor.application" level="INFO" />
     <logger name="com.mchange" level="WARN" />
-    <logger name="org.jetbrains.exposed" level="DEBUG" />
-    <logger name="org.h2" level="DEBUG" />
+    <logger name="org.jetbrains.exposed" level="INFO" />
+    <logger name="org.h2" level="INFO" />
 </configuration>

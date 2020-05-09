@@ -53,7 +53,9 @@ val db: Database
         }
     }
 
-    fun readOneClientsNotes(client_num: Int): List<ClientNotes> = transaction(db) {
+    // DOES NOT WORK!
+    // Traced the bug to ThreadLocalTransactionManager.kt::163. Deferred to Slack channel.
+    fun readClientsNotesByClientNum(client_num: Int): List<ClientNotes?> = transaction(db) {
             ClientNotesTable.select {
                 ClientNotesTable.client_num.eq(client_num)
             }
@@ -67,7 +69,7 @@ val db: Database
             )
         }
 
-    fun readClientNote(clientNoteKey: Int): ClientNotes? {
+    fun readClientNoteByKey(clientNoteKey: Int): ClientNotes? {
         return transaction (db) {
             ClientNotesTable.select {
                 ClientNotesTable.clientnotekey.eq(clientNoteKey)
@@ -79,7 +81,23 @@ val db: Database
                     it[ClientNotesTable.note],
                     it[ClientNotesTable.clientnotekey]
                 )
-            }.firstOrNull()
+            }.singleOrNull()
+        }
+    }
+
+    fun readClientNotesByInitial(initial: String): List<ClientNotes> {
+        return transaction (db) {
+            ClientNotesTable.select {
+                ClientNotesTable.initial.eq(initial)
+            }.mapNotNull {
+                ClientNotes(
+                        it[ClientNotesTable.client_num],
+                        it[ClientNotesTable.notedate],
+                        it[ClientNotesTable.initial],
+                        it[ClientNotesTable.note],
+                        it[ClientNotesTable.clientnotekey]
+                )
+            }
         }
     }
 

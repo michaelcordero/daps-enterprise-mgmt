@@ -7,7 +7,7 @@ Authorization: Bearer {{auth_token}}
 
 
 ###
-# Test fetch all notes for one client
+# Test fetch all notes for one client. Does not work! :/
 GET http://localhost:8080/api/client_notes/one_client/876
 Accept: application/json
 Content-Type: application/json
@@ -21,5 +21,9 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 ###
-# Test create a client a client note
+# Test create a client a client note initial
+GET http://localhost:8080/api/client_notes/initial/ka
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 

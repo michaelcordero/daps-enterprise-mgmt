@@ -21,6 +21,8 @@ class ClientNotesRoute {
     data class OneClientsNoteRoute(val client_num: String, val clients: ClientNotesRoute)
     @Location("/one_note/{client_note_key}")
     data class ClientNote( val clients: ClientNotesRoute, val client_note_key: String)
+    @Location("initial/{initial}")
+    data class Initial(val clients: ClientNotesRoute, val initial: String)
 }
 
 @KtorExperimentalLocationsAPI
@@ -35,9 +37,10 @@ fun Route.clientNotes(dq: DataQuery) {
         }
     }
 
+    // Warning! This route does not work.
     get<ClientNotesRoute.OneClientsNoteRoute> {
         try {
-            val one_client_notes: List<ClientNotes> = dq.readOneClientsNotes(it.client_num.toInt())
+            val one_client_notes: List<ClientNotes?> = dq.readClientsNotesByClientNum(it.client_num.toInt())
             call.respond(mapOf("one_clients_notes" to one_client_notes))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
@@ -47,9 +50,18 @@ fun Route.clientNotes(dq: DataQuery) {
 
     get<ClientNotesRoute.ClientNote> {
         try {
-            val client_note: ClientNotes? = dq.readClientNote(it.client_note_key.toInt())
+            val client_note: ClientNotes? = dq.readClientNoteByKey(it.client_note_key.toInt())
             call.respond(mapOf("client_note" to client_note))
         } catch (e: Exception) {
+            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+        }
+    }
+
+    get<ClientNotesRoute.Initial> {
+        try {
+            val client_notes: List<ClientNotes> = dq.readClientNotesByInitial(it.initial)
+            call.respond(mapOf("client_notes" to client_notes))
+        } catch(e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
         }
     }
