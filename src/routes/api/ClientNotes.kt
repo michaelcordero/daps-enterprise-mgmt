@@ -37,8 +37,8 @@ fun Route.clientNotes(dq: DataQuery) {
 
     get<ClientNotesRoute.OneClientsNoteRoute> {
         try {
-            val one_client_notes: List<ClientNotes> = Collections.synchronizedList(dq.readOneClientsNotes(it.client_num.toInt()))
-            call.respond(mapOf("one_clients_notes" to synchronized(one_client_notes) {one_client_notes.toList()}))
+            val one_client_notes: List<ClientNotes> = dq.readOneClientsNotes(it.client_num.toInt())
+            call.respond(mapOf("one_clients_notes" to one_client_notes))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
             e.printStackTrace()
