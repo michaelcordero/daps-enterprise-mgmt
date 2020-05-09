@@ -34,6 +34,7 @@ import io.ktor.webjars.Webjars
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import presenters.DashboardPresenter
 import presenters.RegisterPresenter
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
@@ -159,6 +160,7 @@ fun Application.module() {  //testing: Boolean = false
         // Web authentication
         authenticate("web") {
             welcome(WelcomePresenter(dq))
+            dashboard(DashboardPresenter(dq))
             users(dq)
             table(dq)
         }
