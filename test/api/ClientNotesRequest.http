@@ -1,0 +1,67 @@
+###
+# Test All
+GET http://localhost:8080/api/client_notes
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
+###
+# Test fetch all notes for one client. Does not work! :/
+GET http://localhost:8080/api/client_notes/client/876
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+# Test fetch one note with client note key
+GET http://localhost:8080/api/client_notes/note/73222
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+# Test create a client a client note initial
+GET http://localhost:8080/api/client_notes/initial/mpc
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+# Test creating a new note
+###
+POST http://localhost:8080/api/client_notes/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "client_num": 876,
+  "notedate": 1557233046021,
+  "initial": "mpc",
+  "note": "who mans is this2"
+}
+
+###
+# Test Updating
+###
+PUT http://localhost:8080/api/client_notes/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "client_note_key": 94145,
+  "client_num": 876,
+  "notedate": 1567233046021,
+  "initial": "mpc",
+  "note": "who mans is this3"
+}
+
+###
+# Test Delete
+###
+DELETE http://localhost:8080/api/client_notes/note/94143
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+Authorization: Bearer {{auth_token}}

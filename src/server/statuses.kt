@@ -3,13 +3,17 @@ package server
 import io.ktor.application.call
 import io.ktor.content.TextContent
 import io.ktor.features.StatusPages
+import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
+import io.ktor.locations.KtorExperimentalLocationsAPI
+import io.ktor.request.contentType
 import io.ktor.response.respond
 import io.ktor.response.respondText
 
 // This extracts the 404 and 500 errors away from the application.kt file...
+@KtorExperimentalLocationsAPI
 fun statuses(configuration: StatusPages.Configuration ) {
     // 404 Error
     configuration.status(HttpStatusCode.NotFound) {
@@ -20,5 +24,13 @@ fun statuses(configuration: StatusPages.Configuration ) {
     configuration.status(HttpStatusCode.InternalServerError){
         call.respondText { "${it.value} ${it.description}" }
     }
-    //val status_pages: StatusPages = StatusPages(configuration)
+    // 401
+    configuration.status(HttpStatusCode.Unauthorized) {
+        // We need to know if this request originates from the Web or the API
+        if (call.request.contentType() != ContentType.Application.Json){
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to "unknown", "error" to it.description), "someeetag"))
+        } else {
+            call.respondText { "${it.value} ${it.description}" }
+        }
+    }
 }

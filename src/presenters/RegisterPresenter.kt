@@ -4,10 +4,11 @@ import application.dq
 import database.queries.DataQuery
 import io.ktor.util.KtorExperimentalAPI
 import model.User
+import security.DAPSJWT
 import kotlin.random.Random
 
 @KtorExperimentalAPI
-class RegisterPresenter (dao: DataQuery) : AbstractPresenter(dao) {
+data class RegisterPresenter (val dao: DataQuery, val dapsjwt: DAPSJWT) : AbstractPresenter(dao) {
 
     fun createUser(first_name: String, last_name: String, email: String, password: String) {
         val error: String = validate(first_name, last_name, email, password)

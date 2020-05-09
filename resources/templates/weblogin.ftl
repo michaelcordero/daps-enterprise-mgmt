@@ -1,11 +1,11 @@
 <#-- @ftlvariable name="error" type="java.lang.String" -->
 <#import "clouds.ftl" as layout />
 
-<@layout.mainLayout title="Login">
+<@layout.mainLayout title="WebLogin">
     <body class="text-center">
     <link rel="stylesheet" href="/static/css/main.css">
     <#--noinspection HtmlUnknownTarget-->
-    <form class="form-login" action="/login" method="post" enctype="application/x-www-form-urlencoded">
+    <form class="form-login" action="/weblogin" method="post" enctype="application/x-www-form-urlencoded">
         <#--noinspection CheckImageSize-->
         <img class="mb-4" src="/static/images/daps_logo.png" width="80" height="80" alt="logo">
         <h3 class="h3 mb-3 font-weight-normal">DAPS Enterprise</h3>

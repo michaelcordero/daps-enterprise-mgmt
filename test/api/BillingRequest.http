@@ -1,0 +1,19 @@
+GET http://localhost:8080/api/billings
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/billings/client/6881
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/billings/employee/13482
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/billings/counter/99036
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}

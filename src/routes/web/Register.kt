@@ -1,4 +1,4 @@
-package routes
+package routes.web
 
 import application.redirect
 import io.ktor.application.application
@@ -35,8 +35,8 @@ data class Register(
 fun Route.register(presenter: RegisterPresenter) {
     post<Register>{
         // get current user from session data if any
-        val user: User? = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
-        if (user != null ) return@post call.redirect(Welcome(it.email))
+        val session: DAPSSession? = call.sessions.get<DAPSSession>()
+        if (session?.token != null ) return@post call.redirect(Welcome())
 
         // get post data
         val registration = call.receive<Parameters>()
@@ -48,8 +48,9 @@ fun Route.register(presenter: RegisterPresenter) {
         // do biz work
         try {
             presenter.createUser(first_name, last_name, email, password)
-            call.sessions.set(DAPSSession(email))
-            call.redirect(Welcome(email))
+            val token = presenter.dapsjwt.sign(email)
+            call.sessions.set(DAPSSession(email,token))
+            call.redirect(Welcome())
         } catch (e: Exception) {
             val error = Register(last_name, email, password)
             application.log.error("failed to register user", e)
@@ -58,15 +59,10 @@ fun Route.register(presenter: RegisterPresenter) {
     }
 
     get<Register> {
-        val user = call.sessions.get<DAPSSession>()?.let { presenter.user(it.emailId) }
-        if (user != null ){
-            call.respond(Welcome(it.email))
-        } else {
             call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User(0L,
                 it.email, it.first_name,
                 it.last_name,""
             ), "error" to it.error, "validator" to RegisterPresenter.Validator ), "some-etag"))
-        }
     }
 }
 

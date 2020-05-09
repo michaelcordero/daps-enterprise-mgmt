@@ -1,0 +1,129 @@
+### To run from curl # curl request GET --header "Content-Type: application/json" http://localhost:8080/clients
+GET http://localhost:8080/api/clients
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8080/api/clients/8155
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:8080/api/clients/
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "client_num": "0",
+  "ofcname": "corderosoft tech llc",
+  "firstname1": "michael",
+  "lastname1": "cordero",
+  "firstname2": null,
+  "lastname2": null,
+  "address1": "1920 E Amber LN 107",
+  "address2": null,
+  "city": "Urbana",
+  "state": "IL",
+  "zip": "61802",
+  "county": "Champaign",
+  "email": "corderosoft@gmail.com",
+  "ophone": "2172811644",
+  "hphone": null,
+  "cellphone": null,
+  "carphone": null,
+  "estdate": null,
+  "specialty": "computers",
+  "ofchrs": null,
+  "ofcmanager": null,
+  "rate_confirm": null,
+  "agreement": null,
+  "agreement_perm": null,
+  "pktsent": null,
+  "refdby": null,
+  "preferences": null,
+  "dislikes": null,
+  "temphyg": null,
+  "daps_dollar": "100.00",
+  "daps_dollar_two": "1000.00",
+  "needs": null,
+  "start_date": null,
+  "end_date": null,
+  "days": null,
+  "permconf": null,
+  "tempconf": null,
+  "mlplcmnt": null,
+  "lofaplcmnt": null,
+  "patnttime": null,
+  "warndate1": null,
+  "warndate2": null,
+  "warndate3": null,
+  "cnotes": null,
+  "multioffice": null,
+  "payperiods": null,
+  "yeslist": null,
+  "filler": null,
+  "filler2": null
+}
+
+
+###
+PUT http://localhost:8080/api/clients/8155
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "client_num": "8155",
+  "ofcname": "corderosoft tech llc",
+  "firstname1": "michael",
+  "lastname1": "cordero",
+  "firstname2": null,
+  "lastname2": null,
+  "address1": "1920 E Amber LN 107",
+  "address2": null,
+  "city": "Urbana",
+  "state": "IL",
+  "zip": "61802",
+  "county": "Champaign",
+  "email": "corderosoft@gmail.com",
+  "ophone": "2172811644",
+  "hphone": null,
+  "cellphone": "2172811644",
+  "carphone": null,
+  "estdate": null,
+  "specialty": "computers",
+  "ofchrs": null,
+  "ofcmanager": "mike",
+  "rate_confirm": null,
+  "agreement": null,
+  "agreement_perm": null,
+  "pktsent": null,
+  "refdby": null,
+  "preferences": null,
+  "dislikes": null,
+  "temphyg": null,
+  "daps_dollar": "100.00",
+  "daps_dollar_two": "1000.00",
+  "needs": null,
+  "start_date": "2020-01-01",
+  "end_date": "2020-01-01",
+  "days": null,
+  "permconf": null,
+  "tempconf": null,
+  "mlplcmnt": null,
+  "lofaplcmnt": null,
+  "patnttime": null,
+  "warndate1": null,
+  "warndate2": null,
+  "warndate3": null,
+  "cnotes": null,
+  "multioffice": null,
+  "payperiods": null,
+  "yeslist": null,
+  "filler": null,
+  "filler2": null
+}
+
+###
+DELETE http://localhost:8080/api/clients/8155
+Authorization: Bearer {{auth_token}}

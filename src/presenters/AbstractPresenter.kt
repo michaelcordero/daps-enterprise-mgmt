@@ -6,7 +6,7 @@ import io.ktor.util.KtorExperimentalAPI
 import model.User
 import security.DAPSSecurity
 
-abstract class AbstractPresenter(dao: DataQuery) {
+abstract class AbstractPresenter(dq: DataQuery) {
     fun user(email: String): User? {
         return dq.userByEmail(email)
     }

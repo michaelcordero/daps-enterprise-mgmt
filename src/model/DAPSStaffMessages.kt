@@ -1,12 +1,14 @@
 package model
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import database.tables.DAPSStaffMessagesTable
 import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
 
-data class DAPSStaffMessages(val memo_date: Timestamp?, val entered_by: String?,
+data class DAPSStaffMessages
+    @JsonCreator constructor(val memo_date: Timestamp?, val entered_by: String?,
                              val intended_for: String?, val message: String?,
                              val staff_messages_key: Int?) : Serializable {
     constructor(resultSet: ResultSet) : this (

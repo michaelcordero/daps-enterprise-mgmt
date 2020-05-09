@@ -13,9 +13,14 @@ apply plugin: 'application'
 
 group 'com.daps.ent'
 version '0.0.1'
-/* To run with gradle...
+/*
+ To run with gradle...
     1. cd [ root project directory]
-   2. ./gradlew run */
+    2. ./gradlew run
+    3. to send to background: ./gradlew run &
+    4. to check on processes in the background `jobs -p` to get the pid
+    https://www.unix.com/man-page/linux/1/jobs/
+*/
 mainClassName = 'application.ApplicationKt'
 /* In fact Kotlin is building a class to encapsulate your main function,
    named with the same name of your file - with Title Case. */
@@ -39,6 +44,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
 //    runtime group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.3.71'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines"
+    implementation "io.ktor:ktor-jackson:$ktor_version"
+    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
+//    compile "io.ktor.features.ContentNegotiation:$ktor_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "io.ktor:ktor-server-core:$ktor_version"
@@ -49,37 +57,68 @@ dependencies {
     compile "com.h2database:h2:$h2_version"
     compile "com.mchange:c3p0:0.9.5.2"
     compile 'org.webjars:bootstrap:4.4.1'
-    compile group: 'org.jetbrains.exposed', name: 'exposed-jdbc', version: '0.22.1'
-    compile group: 'org.jetbrains.exposed', name: 'exposed-core', version: '0.22.1'
-    compile group: 'org.jetbrains.exposed', name: 'exposed-java-time', version: '0.22.1'
-    compile group: 'org.jetbrains.exposed', name: 'exposed-dao', version: '0.22.1'
+    compile "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
+    compile "org.jetbrains.exposed:exposed-core:$exposed_version"
+    compile "org.jetbrains.exposed:exposed-java-time:$exposed_version"
+    compile "org.jetbrains.exposed:exposed-dao:$exposed_version"
     compile 'me.tongfei:progressbar:0.8.1'
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit5', version: '1.3.72'
 }
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
-jar {
-    manifest {
-        attributes 'Main-Class' : 'application.ApplicationKt'
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-
-// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
 //jar {
 //    manifest {
-//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+//        attributes 'Main-Class': 'application.ApplicationKt'
 //    }
 //    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 //}
+
+//task concert(type: JavaExec) {
+//    group = "Execution"
+//    description = "run both the ui & backend"
+//    classpath = sourceSets.main.runtimeClasspath
+//    main = 'application.ApplicationKt'
+//}
+
+//task npm(type: Exec) {
+////    commandLine "$projectDir/react-ui/node_modules/.bin/webpack", "app/index.js", "$buildDir/js/bundle.js"
+//    workingDir "$projectDir/react-ui"
+//    commandLine("npm")
+//    args("start")
+//    standardOutput = new ByteArrayOutputStream()
+//
+////    startScripts
+//}
+// This background stuff is being tracked at https://github.com/gradle/gradle/issues/1367
+//task background(type: Exec) {
+//    workingDir "$projectDir"
+//    commandLine "./gradlew", "run", "&"
+//    standardOutput = new ByteArrayOutputStream()
+//}
+//WorkQueue workQueue = workerExecutor.processIsolation() {
+//    ProcessWorkerSpec spec ->
+//        forkOptions {
+//            JavaForkOptions options ->
+//                options.maxHeapSize = "512m"
+//        }
+//}
+
+// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
+jar {
+    manifest {
+        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
 
 /**
  * To run from command line:
  * ./gradlew csv --args=/Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
  * UPDATE: No longer using this because {@link JavaExec} does not support backslash escape characters, which are used
  * in the process method for status updates. :/
-  */
+ */
 //task csv(type: JavaExec) {
 //    group = "Execution"
 //    description = "Run the H2exCSVKt main class"

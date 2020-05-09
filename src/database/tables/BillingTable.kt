@@ -4,8 +4,9 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 
-object BillingTable: Table() {
+object BillingTable: Table("Billing") {
     val counter = integer("Counter").autoIncrement()
+    override val primaryKey: PrimaryKey = PrimaryKey(counter, name = "Counter")
     val client_num = integer("Client#")
     val employee_num = integer("Emp#")
     val wdate = realtimestamp("WDate").nullable()

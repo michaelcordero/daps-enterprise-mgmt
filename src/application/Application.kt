@@ -1,44 +1,61 @@
 package application
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
+import io.ktor.http.ContentType
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
+import io.ktor.jackson.JacksonConverter
+import io.ktor.jackson.jackson
 import io.ktor.locations.KtorExperimentalLocationsAPI
 import io.ktor.locations.Locations
 import io.ktor.locations.locations
 import io.ktor.request.host
 import io.ktor.request.port
 import io.ktor.response.respondRedirect
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
-import io.ktor.sessions.SessionTransportTransformerMessageAuthentication
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
+import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import presenters.LoginPresenter
 import presenters.RegisterPresenter
+import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
-import routes.*
+import routes.api.billings
+import routes.api.clientNotes
+import routes.api.clients
+import routes.api.login
+import routes.web.*
+import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
+import java.text.DateFormat
 import java.time.ZoneId
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dq: DataQuery = LocalDataQuery()
+val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 
 
+@ExperimentalStdlibApi
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun main(args: Array<String>) {
@@ -65,8 +82,42 @@ fun Application.module() {  //testing: Boolean = false
     environment.monitor.subscribe(ApplicationStopped){
         dq.close()
         // try to figure out how to call the /logout route from here
-        //it.locations.href(Login())
+        //it.locations.href(WebLogin())
         it.dispose()
+    }
+    // This feature handles the authentication for Web & HTTP API Requests
+    install(Authentication){
+        basic ("web"){
+            skipWhen { call ->
+                call.sessions.get<DAPSSession>()?.token != null
+            }
+        }
+        form("form") {
+            userParamName = "emailId"
+            passwordParamName = "password"
+            validate {
+                val user: User? = dq.user(it.name, DAPSSecurity.hash(it.password))
+                if ( user != null) { // sessions.get<DAPSSession>()?.token != null
+                    UserIdPrincipal(it.name)
+                } else {
+                    null
+                }
+            }
+        }
+        jwt("api") {
+            verifier(dapsJWT.verifier)
+            validate {
+                UserIdPrincipal(it.payload.getClaim("name").asString())
+            }
+        }
+    }
+    // This feature enables the HTTP API to respond with JSON Content
+    install(ContentNegotiation) {
+        jackson {
+            enable(SerializationFeature.INDENT_OUTPUT)
+            dateFormat = DateFormat.getDateInstance()
+            register(ContentType.Application.Json, JacksonConverter())
+        }
     }
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
@@ -79,7 +130,7 @@ fun Application.module() {  //testing: Boolean = false
     // SESSION cookie
     install( Sessions ) {
         cookie<DAPSSession>("SESSION") {
-            transform(SessionTransportTransformerMessageAuthentication(DAPSSecurity.hash_key))
+            cookie.path = "/"
         }
     }
     install(StatusPages) { statuses(this) }
@@ -97,13 +148,31 @@ fun Application.module() {  //testing: Boolean = false
             // css, javascript & images served here
             resources("static")
         }
-        // pages
-        login(LoginPresenter(dq))
-        register(RegisterPresenter(dq))
-        index(dq)
-        welcome(WelcomePresenter(dq))
-        users(dq)
-        table(dq)
+        // None authentication
+        register(RegisterPresenter(dq, dapsJWT))
+        index()
+        weblogout()
+        // Initial web authentication
+        authenticate("form") {
+            weblogin(WebLoginPresenter(dq, dapsJWT))
+        }
+        // Web authentication
+        authenticate("web") {
+            welcome(WelcomePresenter(dq))
+            users(dq)
+            table(dq)
+        }
+        // API authentication
+        route("/api") {
+            login(dq, dapsJWT)
+        }
+        authenticate("api") {
+            route("/api") {
+                clients(dq)
+                billings(dq)
+                clientNotes(dq)
+            }
+        }
     }
 }
 

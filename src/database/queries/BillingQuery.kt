@@ -12,8 +12,8 @@ interface BillingQuery {
     /**
      * Create
      */
-    fun createBilling(billing: Billing){
-        transaction(db) {
+    fun createBilling(billing: Billing): Int {
+        return transaction(db) {
             BillingTable.insert {
 //                it[counter] = billing.counter auto-increment
                 it[client_num] = billing.client_num
@@ -36,7 +36,7 @@ interface BillingQuery {
                 it[assign_date] = billing.assigned_date
                 it[assigned_by] = billing.assigned_by
                 it[service_category] = billing.service_category
-            }
+            } get BillingTable.counter
         }
     }
 
@@ -92,9 +92,19 @@ interface BillingQuery {
         }
     }
 
+    fun billingByCounter(counter: Int) : List<Billing> {
+        return transaction (db) {
+            BillingTable.select {
+                BillingTable.counter.eq(counter)
+            }.mapNotNull {
+                read(it)
+            }
+        }
+    }
+
     fun allBilling(): List<Billing> = transaction(db) {
-        BillingTable.selectAll().toMutableList()
-    }.map {
+            BillingTable.selectAll().toMutableList()
+        }.map {
         read(it)
     }
 
@@ -102,8 +112,8 @@ interface BillingQuery {
      * Update
      */
 
-    fun updateBilling(billing: Billing) {
-        transaction(db) {
+    fun updateBilling(billing: Billing): Int {
+        return transaction(db) {
             BillingTable.update({
                 (BillingTable.client_num.eq(billing.client_num) and BillingTable.employee_num.eq(billing.employee_num)) and
                         BillingTable.counter.eq(billing.counter)
@@ -137,10 +147,9 @@ interface BillingQuery {
      * Delete
      */
 
-    fun deleteBilling(billing: Billing) {
-        transaction(db) {
-            BillingTable.deleteWhere { (BillingTable.client_num.eq(billing.client_num) and BillingTable.employee_num.eq(billing.employee_num)) and
-                    BillingTable.counter.eq(billing.counter) }
+    fun deleteBilling(counter: Int): Int {
+        return transaction(db) {
+            BillingTable.deleteWhere { BillingTable.counter.eq(counter) }
         }
     }
 

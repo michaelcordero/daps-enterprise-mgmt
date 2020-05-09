@@ -5,6 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object TempsTable: Table() {
     val emp_num = integer("Emp#").autoIncrement()
+    override val primaryKey: PrimaryKey = PrimaryKey(emp_num, name = "Emp#")
     val type_a = text("TypeA").nullable()
     val type_b = text("TypeB").nullable()
     val status = bool("Status").nullable()

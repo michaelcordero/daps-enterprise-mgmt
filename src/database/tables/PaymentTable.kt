@@ -4,7 +4,7 @@ import database.realtimestamp
 import org.jetbrains.exposed.sql.Table
 
 object PaymentTable: Table() {
-    val client_num = integer("Client#").nullable()
+    val client_num = integer("Client#")
     val pmt_type = text("PmtType").nullable()
     val ref_num = varchar("Ref#", 20).nullable()
     override val primaryKey = PrimaryKey(client_num, ref_num)
