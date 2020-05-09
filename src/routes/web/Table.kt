@@ -16,6 +16,6 @@ class Table
 @KtorExperimentalLocationsAPI
 fun Route.table(dq: DataQuery) {
     get<Table> {
-        call.respond(FreeMarkerContent("table.ftl", mapOf("test" to "nothing"), "someeetag"))
+        call.respond(FreeMarkerContent("table.ftl", mapOf("test" to "nothing"), "tableetag"))
     }
 }
