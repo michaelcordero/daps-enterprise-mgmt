@@ -17,12 +17,12 @@ import java.util.*
 @KtorExperimentalLocationsAPI
 @Location("/client_notes")
 class ClientNotesRoute {
-    @Location("/one_client/{client_num}")
-    data class OneClientsNoteRoute(val client_num: String, val clients: ClientNotesRoute)
-    @Location("/one_note/{client_note_key}")
-    data class ClientNote( val clients: ClientNotesRoute, val client_note_key: String)
+    @Location("/client/{client_num}")
+    data class ClientsNoteRouteByClientNum(val client_num: String, val clients: ClientNotesRoute)
+    @Location("/note/{client_note_key}")
+    data class ClientNoteByKey(val clients: ClientNotesRoute, val client_note_key: String)
     @Location("initial/{initial}")
-    data class Initial(val clients: ClientNotesRoute, val initial: String)
+    data class ClientNotesByInitial(val clients: ClientNotesRoute, val initial: String)
 }
 
 @KtorExperimentalLocationsAPI
@@ -38,7 +38,7 @@ fun Route.clientNotes(dq: DataQuery) {
     }
 
     // Warning! This route does not work.
-    get<ClientNotesRoute.OneClientsNoteRoute> {
+    get<ClientNotesRoute.ClientsNoteRouteByClientNum> {
         try {
             val one_client_notes: List<ClientNotes?> = dq.readClientsNotesByClientNum(it.client_num.toInt())
             call.respond(mapOf("one_clients_notes" to one_client_notes))
@@ -48,7 +48,7 @@ fun Route.clientNotes(dq: DataQuery) {
         }
     }
 
-    get<ClientNotesRoute.ClientNote> {
+    get<ClientNotesRoute.ClientNoteByKey> {
         try {
             val client_note: ClientNotes? = dq.readClientNoteByKey(it.client_note_key.toInt())
             call.respond(mapOf("client_note" to client_note))
@@ -57,7 +57,7 @@ fun Route.clientNotes(dq: DataQuery) {
         }
     }
 
-    get<ClientNotesRoute.Initial> {
+    get<ClientNotesRoute.ClientNotesByInitial> {
         try {
             val client_notes: List<ClientNotes> = dq.readClientNotesByInitial(it.initial)
             call.respond(mapOf("client_notes" to client_notes))
@@ -66,7 +66,7 @@ fun Route.clientNotes(dq: DataQuery) {
         }
     }
 
-    post<ClientNotesRoute.ClientNote> {
+    post<ClientNotesRoute> {
         try {
             val clientNote: ClientNotes = call.receive(type = ClientNotes::class)
             val result: Int = dq.createClientNotes(clientNote)
@@ -76,7 +76,7 @@ fun Route.clientNotes(dq: DataQuery) {
         }
     }
 
-    put<ClientNotesRoute.ClientNote> {
+    put<ClientNotesRoute> {
         try {
             val clientNote: ClientNotes = call.receive(type = ClientNotes::class)
             val result: Int = dq.updateClientNotes(clientNote)
@@ -86,7 +86,7 @@ fun Route.clientNotes(dq: DataQuery) {
         }
     }
 
-    delete<ClientNotesRoute.ClientNote> {
+    delete<ClientNotesRoute.ClientNoteByKey> {
         try {
             val result: Int = dq.deleteClientNote(it.client_note_key.toInt())
             call.respond(status = HttpStatusCode.OK, message = mapOf("delete client note" to true, "key" to result))
