@@ -20,10 +20,10 @@ class Clients {
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.clients(dao: DataQuery) {
+fun Route.clients(dq: DataQuery) {
     get<Clients> {
         try {
-            val clients: List<ClientFile> = Collections.synchronizedList(dao.allClientFiles())
+            val clients: List<ClientFile> = Collections.synchronizedList(dq.allClientFiles())
             call.respond(mapOf("clients" to synchronized(clients) { clients.toList()} ))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
@@ -32,7 +32,7 @@ fun Route.clients(dao: DataQuery) {
 
     get<Clients.Client> {
         try {
-            val client: ClientFile? = dao.readClientFile(it.client_num.toInt()).firstOrNull()
+            val client: ClientFile? = dq.readClientFile(it.client_num.toInt()).firstOrNull()
             call.respond(mapOf("client" to client))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
@@ -42,7 +42,7 @@ fun Route.clients(dao: DataQuery) {
     post<Clients> {
         try {
             val clientFile: ClientFile = call.receive()
-            val result: Int = dao.createClientFile(clientFile)
+            val result: Int = dq.createClientFile(clientFile)
             call.respond(status = HttpStatusCode.OK, message = mapOf("added client" to true, "client_num" to result))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
@@ -52,7 +52,7 @@ fun Route.clients(dao: DataQuery) {
     put<Clients.Client> {
         try {
             val clientFile: ClientFile = call.receive()
-            val result: Int = dao.updateClientFile(clientFile)
+            val result: Int = dq.updateClientFile(clientFile)
             call.respond(status = HttpStatusCode.OK, message = mapOf("updated client" to true, "result" to result))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
@@ -61,7 +61,7 @@ fun Route.clients(dao: DataQuery) {
 
     delete<Clients.Client> {
         try {
-            val result: Int = dao.deleteClientFile(it.client_num.toInt())
+            val result: Int = dq.deleteClientFile(it.client_num.toInt())
             call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client" to true, "result" to result))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
