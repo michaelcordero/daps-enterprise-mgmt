@@ -1,0 +1,25 @@
+###
+# Test All
+GET http://localhost:8080/api/client_notes
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+
+###
+# Test fetch all notes for one client
+GET http://localhost:8080/api/client_notes/one_client/876
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+# Test fetch one note with client note key
+GET http://localhost:8080/api/client_notes/one_note/73222
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+# Test create a client a client note
+

@@ -38,6 +38,7 @@ import presenters.RegisterPresenter
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
 import routes.api.billings
+import routes.api.clientNotes
 import routes.api.clients
 import routes.api.login
 import routes.web.*
@@ -151,7 +152,7 @@ fun Application.module() {  //testing: Boolean = false
         register(RegisterPresenter(dq, dapsJWT))
         index()
         weblogout()
-        // Initial authentication
+        // Initial web authentication
         authenticate("form") {
             weblogin(WebLoginPresenter(dq, dapsJWT))
         }
@@ -169,6 +170,7 @@ fun Application.module() {  //testing: Boolean = false
             route("/api") {
                 clients(dq)
                 billings(dq)
+                clientNotes(dq)
             }
         }
     }

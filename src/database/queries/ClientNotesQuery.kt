@@ -11,8 +11,8 @@ val db: Database
     /**
      * Create
      */
-    fun createClientNotes(cn: ClientNotes) {
-        transaction (db) {
+    fun createClientNotes(cn: ClientNotes): Int {
+        return transaction (db) {
             ClientNotesTable.insert {
                 // it[clientnotekey] = cn.client_note_key auto-incremented
                 it[client_num] = cn.client_num
@@ -20,7 +20,7 @@ val db: Database
                 it[initial] = cn.initial
                 it[note] = cn.note
             }
-        }
+        } get ClientNotesTable.clientnotekey
     }
 
     fun insertClientNotes(cn: ClientNotes) {
@@ -53,12 +53,42 @@ val db: Database
         }
     }
 
+    fun readOneClientsNotes(client_num: Int): List<ClientNotes> = transaction(db) {
+            ClientNotesTable.select {
+                ClientNotesTable.client_num.eq(client_num)
+            }
+        }.mapNotNull {
+            ClientNotes(
+                it[ClientNotesTable.client_num],
+                it[ClientNotesTable.notedate],
+                it[ClientNotesTable.initial],
+                it[ClientNotesTable.note],
+                it[ClientNotesTable.clientnotekey]
+            )
+        }
+
+    fun readClientNote(clientNoteKey: Int): ClientNotes? {
+        return transaction (db) {
+            ClientNotesTable.select {
+                ClientNotesTable.clientnotekey.eq(clientNoteKey)
+            }.map {
+                ClientNotes(
+                    it[ClientNotesTable.client_num],
+                    it[ClientNotesTable.notedate],
+                    it[ClientNotesTable.initial],
+                    it[ClientNotesTable.note],
+                    it[ClientNotesTable.clientnotekey]
+                )
+            }.firstOrNull()
+        }
+    }
+
     /**
      * Update
      */
 
-    fun updateClientNotes(cn: ClientNotes) {
-        transaction (db) {
+    fun updateClientNotes(cn: ClientNotes): Int {
+        return transaction (db) {
             ClientNotesTable.update({
                 ClientNotesTable.client_num.eq(cn.client_num) and
                         ClientNotesTable.clientnotekey.eq(cn.client_note_key!!)
@@ -76,11 +106,10 @@ val db: Database
      * Delete
      */
 
-    fun deleteClientNote(cn: ClientNotes) {
-        transaction (db) {
+    fun deleteClientNote(client_note_key: Int): Int {
+        return transaction (db) {
             ClientNotesTable.deleteWhere {
-                ClientNotesTable.client_num.eq(cn.client_num) and
-                        ClientNotesTable.clientnotekey.eq(cn.client_note_key!!)
+                        ClientNotesTable.clientnotekey.eq(client_note_key)
             }
         }
     }
