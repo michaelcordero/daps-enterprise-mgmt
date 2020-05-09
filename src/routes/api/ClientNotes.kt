@@ -89,7 +89,8 @@ fun Route.clientNotes(dq: DataQuery) {
     delete<ClientNotesRoute.ClientNoteByKey> {
         try {
             val result: Int = dq.deleteClientNote(it.client_note_key.toInt())
-            call.respond(status = HttpStatusCode.OK, message = mapOf("delete client note" to true, "key" to result))
+            val display: String = if (result == 1) "deleted" else "already deleted"
+            call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client note" to display))
         } catch(e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
         }
