@@ -12,7 +12,7 @@ import io.ktor.sessions.sessions
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
-@Location("/")
+@Location("")
 class Index
 
 /*
@@ -24,7 +24,7 @@ fun Route.index() {
     get<Index> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
         if (session?.token != null ) {
-            call.respond(FreeMarkerContent("dashboard.ftl", mapOf("emailId" to session.emailId), "someetag"))
+            call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId), "someetag"))
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null), "someetag"))
         }

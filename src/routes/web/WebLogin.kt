@@ -1,6 +1,5 @@
 package routes.web
 
-import application.redirect
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
@@ -26,7 +25,7 @@ data class WebLogin (val emailId: String = "", val error: String = "")
 @KtorExperimentalLocationsAPI
 fun Route.weblogin(presenter: WebLoginPresenter) {
     get<WebLogin> {
-            call.respond(FreeMarkerContent("weblogin.ftl", null, "someeetag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("test" to "result"), "someeetag"))
     }
 
     post<WebLogin> {
@@ -34,8 +33,7 @@ fun Route.weblogin(presenter: WebLoginPresenter) {
             if (principal != null) {
                 val token = presenter.dapsjwt.sign(principal.name)
                 call.sessions.set(DAPSSession(principal.name, token))
-                call.redirect(Dashboard())
-//                call.respond(FreeMarkerContent("dashboard.ftl", mapOf("emailId" to principal.name), "someetag"))
+                call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to principal.name), "someetag"))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "unauthorized!")
             }
