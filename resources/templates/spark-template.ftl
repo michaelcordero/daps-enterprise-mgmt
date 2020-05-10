@@ -9,13 +9,13 @@
     <meta name="description" content="Responsive Bootstrap 4 Admin &amp; Dashboard Template">
     <meta name="author" content="Bootlab">
 
-    <title>Spark - Responsive Admin &amp; Dashboard Template</title>
+    <title>Dental Auxiliary Placement Services</title>
 
     <!-- PICK ONE OF THE STYLES BELOW -->
-    <link href="/static/css/modern.css" rel="stylesheet">
-    <!-- <link href="css/classic.css" rel="stylesheet"> -->
-    <!-- <link href="css/dark.css" rel="stylesheet"> -->
-    <!-- <link href="css/light.css" rel="stylesheet"> -->
+<#--    <link href="/static/css/modern.css" rel="stylesheet">-->
+<#--<link href="/static/css/classic.css" rel="stylesheet">-->
+<link href="/static/css/dark.css" rel="stylesheet">
+<#--    <link href="/static/css/light.css" rel="stylesheet">-->
 
     <!-- BEGIN SETTINGS -->
     <!-- You can remove this after picking a style -->

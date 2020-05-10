@@ -1,6 +1,6 @@
 package routes.web
 
-import database.queries.DataQuery
+import application.redirect
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -21,6 +21,10 @@ class Dashboard
 fun Route.dashboard(presenter: DashboardPresenter) {
     get<Dashboard> {
         val session = call.sessions.get<DAPSSession>()
-        call.respond(FreeMarkerContent("dashboard.ftl", mapOf("user" to session?.emailId), "dashboard_etag"))
+        if (session != null) {
+            call.respond(FreeMarkerContent("dashboard.ftl", mapOf("user" to presenter.user(session.emailId), "presenter" to presenter), "dashboard_etag"))
+        } else {
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "dashboard_etag"))
+        }
     }
 }

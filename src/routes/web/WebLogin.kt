@@ -1,5 +1,6 @@
 package routes.web
 
+import application.redirect
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
@@ -33,7 +34,8 @@ fun Route.weblogin(presenter: WebLoginPresenter) {
             if (principal != null) {
                 val token = presenter.dapsjwt.sign(principal.name)
                 call.sessions.set(DAPSSession(principal.name, token))
-                call.respond(FreeMarkerContent("dashboard.ftl", mapOf("emailId" to principal.name), "someetag"))
+                call.redirect(Dashboard())
+//                call.respond(FreeMarkerContent("dashboard.ftl", mapOf("emailId" to principal.name), "someetag"))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "unauthorized!")
             }
