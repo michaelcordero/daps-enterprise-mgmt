@@ -23,6 +23,11 @@ class Welcome
 fun Route.welcome(presenter: WelcomePresenter) {
     get<Welcome> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to (session?.emailId ?: "unknown")), "someetag"))
+        if (session != null) {
+//            val user: User = dq.userByEmail(session.emailId)!!
+            call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId), "welcome-e-tag")) //, "user" to user
+        } else {
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null), "welcome-e-tag"))
+        }
     }
 }

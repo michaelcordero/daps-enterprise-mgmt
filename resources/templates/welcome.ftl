@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="user" type="model.User" -->
 <#-- @ftlvariable name="emailId" type="java.lang.String" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Welcome">

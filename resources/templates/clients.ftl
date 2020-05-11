@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="clients" type="java.util.List<model.ClientFile>" -->
+<#-- @ftlvariable name="presenter" type="presenters.WebClientsPresenter" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Clients">
     <link rel="stylesheet" href="/static/css/main.css">
