@@ -2,14 +2,10 @@
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Clients">
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col">
         <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">Clients</h5>
-                <h6 class="card-subtitle text-muted">Data from the Client File Table</h6>
-            </div>
             <div class="card-body">
-                <table id="datatables-basic" class="table table-striped table-bordered table-responsive" style="width:100%">
+                <table id="datatables-basic" class="table table-striped table-bordered table-responsive" style="width: 100%;font-size: small">
                     <thead>
                     <tr>
                         <th>Client#</th>
@@ -29,15 +25,15 @@
                         <th>OExtension</th>
                         <th>OFax</th>
                         <th>HPhone</th>
-                        <th>CPhone</th>
+                        <th>CellPhone</th>
                         <th>CarPhone</th>
                         <th>EstDate</th>
                         <th>Specialty</th>
-                        <th>OHours</th>
+                        <th>OFCHours</th>
                         <th>OManager</th>
                         <th>RateConfirm</th>
                         <th>Agreement</th>
-                        <th>AgreementPerm</th>
+                        <th>Perm</th>
                         <th>PacketSent</th>
                         <th>RefdBy</th>
                         <th>Preferences</th>
@@ -94,6 +90,7 @@
                             <td>${client.ofcmanager!""}</td>
                             <td>${client.rate_confirm?c}</td>
                             <td>${client.agreement!""}</td>
+                            <td>${client.agreement_perm!""}</td>
                             <td>${client.pktsent!""}</td>
                             <td>${client.refdby!""}</td>
                             <td>${client.preferences!""}</td>
@@ -119,7 +116,7 @@
                             <td>${client.yeslist?c}</td>
                             <td>${client.filler!""}</td>
                             <td>${client.filler2!""}</td>
-                            <td class="table-action">
+                            <td>
                                 <a href="#"><i class="align-middle fas fa-fw fa-pen"></i></a>
                                 <a href="#"><i class="align-middle fas fa-fw fa-trash"></i></a>
                             </td>
@@ -132,4 +129,5 @@
             </div>
         </div>
     </div>
+</div>
 </@ui.dashboardUI>

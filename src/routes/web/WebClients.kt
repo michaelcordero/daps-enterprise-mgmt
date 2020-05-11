@@ -22,7 +22,7 @@ class WebClients
 @KtorExperimentalLocationsAPI
 fun Route.webclients(presenter: WebClientsPresenter){
     get<WebClients>{
-        val clients: List<ClientFile> = dq.readClientFile(876) // emptyList()
+        val clients: List<ClientFile> = dq.readClientFile(876)  // emptyList() // dq.allClientFiles()
         call.respond(FreeMarkerContent("clients.ftl", mapOf("clients" to clients, "presenter" to presenter), "clients-e-tag"))
     }
 }

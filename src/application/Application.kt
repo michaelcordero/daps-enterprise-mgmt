@@ -149,7 +149,6 @@ fun Application.module() {  //testing: Boolean = false
         // None authentication
         register(RegisterPresenter(dq, dapsJWT))
         index()
-//        root()
         weblogout()
         // Initial web authentication
         authenticate("form") {
@@ -158,8 +157,6 @@ fun Application.module() {  //testing: Boolean = false
         // Web authentication
         authenticate("web") {
             welcome(WelcomePresenter(dq))
-//            dashboard(DashboardPresenter(dq))
-//            dashboardui(DashboardPresenter(dq))
             users(dq)
             table(dq)
             webclients(WebClientsPresenter(dq))

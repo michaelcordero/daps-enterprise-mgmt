@@ -235,9 +235,9 @@
 <script>
     $(function() {
         // Datatables basic
-        $('#datatables-basic').DataTable({
-            responsive: true
-        });
+        // $('#datatables-basic').DataTable({
+        //     responsive: true
+        // });
         // Datatables with Buttons
         var datatablesButtons = $('#datatables-buttons').DataTable({
             lengthChange: !1,
