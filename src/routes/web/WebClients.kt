@@ -26,12 +26,7 @@ fun Route.webclients(presenter: WebClientsPresenter){
     get<WebClients>{
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
         if (session != null) {
-//            val user: User = dq.userByEmail(session.emailId)!!
-//            val client_future: CompletableFuture<List<ClientFile>> = CompletableFuture.supplyAsync { dq.allClientFiles() }
-            val clients: List<ClientFile> = dq.allClientFiles()
-//            val job = CoroutineScope(Dispatchers.IO).future {
-//                clients = dq.allClientFiles()// dq.readClientFile(876)  // emptyList() // dq.allClientFiles()
-//            }
+            val clients: List<ClientFile> = dq.allClientFiles().toMutableList() // sad :/
             call.respond(FreeMarkerContent("clients.ftl", mapOf("clients" to clients, "presenter" to presenter), "clients-e-tag")) //"user" to user,
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "webclient-e-tag"))
