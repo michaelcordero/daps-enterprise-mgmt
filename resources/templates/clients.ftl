@@ -1,11 +1,12 @@
 <#-- @ftlvariable name="clients" type="java.util.List<model.ClientFile>" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Clients">
-<div class="row">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <div class="row">
     <div class="col">
         <div class="card">
             <div class="card-body">
-                <table id="datatables-basic" class="table table-striped table-bordered table-responsive" style="width: 100%;font-size: small">
+                <table id="datatables-basic" class="table table-striped table-bordered table-responsive " style="width: 100%;">
                     <thead>
                     <tr>
                         <th>Client#</th>
@@ -116,7 +117,7 @@
                             <td>${client.yeslist?c}</td>
                             <td>${client.filler!""}</td>
                             <td>${client.filler2!""}</td>
-                            <td>
+                            <td class="table-action">
                                 <a href="#"><i class="align-middle fas fa-fw fa-pen"></i></a>
                                 <a href="#"><i class="align-middle fas fa-fw fa-trash"></i></a>
                             </td>
