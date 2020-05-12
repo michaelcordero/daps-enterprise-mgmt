@@ -34,7 +34,10 @@ import io.ktor.webjars.Webjars
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import presenters.*
+import presenters.RegisterPresenter
+import presenters.WebClientsPresenter
+import presenters.WebLoginPresenter
+import presenters.WelcomePresenter
 import routes.api.billings
 import routes.api.clientNotes
 import routes.api.clients
@@ -51,6 +54,8 @@ import java.time.ZoneId
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dq: DataQuery = LocalDataQuery()
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
+//val client: RedisClient = RedisClient(RedisURI.create("redis://127.0.0.1:6379"))
+//val cache: RedisConnection<String,String> = client.connect()
 
 
 @ExperimentalStdlibApi
@@ -60,6 +65,7 @@ fun main(args: Array<String>) {
     // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
     log.info("Starting database...")
+    log.info("Starting cache")
     log.info("Starting server...")
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
@@ -82,6 +88,7 @@ fun Application.module() {  //testing: Boolean = false
         // try to figure out how to call the /logout route from here
         //it.locations.href(WebLogin())
         it.dispose()
+//        cache.shutdown(true)
     }
     // This feature handles the authentication for Web & HTTP API Requests
     install(Authentication){

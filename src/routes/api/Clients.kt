@@ -32,7 +32,7 @@ fun Route.clients(dq: DataQuery) {
 
     get<Clients.Client> {
         try {
-            val client: ClientFile? = dq.readClientFile(it.client_num.toInt()).firstOrNull()
+            val client: ClientFile? = dq.readClientFile(it.client_num.toInt())
             call.respond(mapOf("client" to client))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")

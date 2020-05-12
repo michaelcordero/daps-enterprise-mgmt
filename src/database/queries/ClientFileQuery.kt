@@ -132,123 +132,10 @@ val db: Database
     /**
      * Read
      */
-//    fun allClientFiles(): List<ClientFile> = transaction (db) {
-//        return@transaction ClientFileTable.selectAllBatched(1000).iterator().next().map {
-//            ClientFile(it[ClientFileTable.client_num],
-//            it[ClientFileTable.ofcname],
-//            it[ClientFileTable.firstname1],
-//            it[ClientFileTable.lastname1],
-//            it[ClientFileTable.firstname2],
-//            it[ClientFileTable.lastname2],
-//            it[ClientFileTable.address1],
-//            it[ClientFileTable.address2],
-//            it[ClientFileTable.city],
-//            it[ClientFileTable.state],
-//            it[ClientFileTable.zip],
-//            it[ClientFileTable.county],
-//            it[ClientFileTable.email],
-//            it[ClientFileTable.ophone],
-//            it[ClientFileTable.oxtension],
-//            it[ClientFileTable.ofax],
-//            it[ClientFileTable.hphone],
-//            it[ClientFileTable.cellphone],
-//            it[ClientFileTable.carphone],
-//            it[ClientFileTable.estdate],
-//            it[ClientFileTable.speciality],
-//            it[ClientFileTable.ofchrs],
-//            it[ClientFileTable.ofcmanager],
-//            it[ClientFileTable.rateconfirm],
-//            it[ClientFileTable.agreement],
-//            it[ClientFileTable.agreement_perm],
-//            it[ClientFileTable.pktsent],
-//            it[ClientFileTable.refdby],
-//            it[ClientFileTable.preferences],
-//            it[ClientFileTable.dislikes],
-//            it[ClientFileTable.temphyg],
-//            it[ClientFileTable.daps_dollar],
-//            it[ClientFileTable.daps_dollar_two],
-//            it[ClientFileTable.needs],
-//            it[ClientFileTable.startdate],
-//            it[ClientFileTable.endate],
-//            it[ClientFileTable.days],
-//            it[ClientFileTable.permconf],
-//            it[ClientFileTable.tempconf],
-//            it[ClientFileTable.mlplcmnt],
-//            it[ClientFileTable.lofaplcmnt],
-//            it[ClientFileTable.patnttime],
-//            it[ClientFileTable.warndate1],
-//            it[ClientFileTable.warndate2],
-//            it[ClientFileTable.warndate3],
-//            it[ClientFileTable.cnotes],
-//            it[ClientFileTable.multioffice],
-//            it[ClientFileTable.payperiods],
-//            it[ClientFileTable.yeslist],
-//            it[ClientFileTable.filler],
-//            it[ClientFileTable.filler2])
-//        }
-//    }
-//    fun allClientFiles(): List<ClientFile> = transaction (db) {
-//        val to_return: MutableList<ClientFile> = mutableListOf()
-//        for (it in ClientFileTable.selectAll().toList()) {
-//            to_return.add(ClientFile(it[ClientFileTable.client_num],
-//            it[ClientFileTable.ofcname],
-//            it[ClientFileTable.firstname1],
-//            it[ClientFileTable.lastname1],
-//            it[ClientFileTable.firstname2],
-//            it[ClientFileTable.lastname2],
-//            it[ClientFileTable.address1],
-//            it[ClientFileTable.address2],
-//            it[ClientFileTable.city],
-//            it[ClientFileTable.state],
-//            it[ClientFileTable.zip],
-//            it[ClientFileTable.county],
-//            it[ClientFileTable.email],
-//            it[ClientFileTable.ophone],
-//            it[ClientFileTable.oxtension],
-//            it[ClientFileTable.ofax],
-//            it[ClientFileTable.hphone],
-//            it[ClientFileTable.cellphone],
-//            it[ClientFileTable.carphone],
-//            it[ClientFileTable.estdate],
-//            it[ClientFileTable.speciality],
-//            it[ClientFileTable.ofchrs],
-//            it[ClientFileTable.ofcmanager],
-//            it[ClientFileTable.rateconfirm],
-//            it[ClientFileTable.agreement],
-//            it[ClientFileTable.agreement_perm],
-//            it[ClientFileTable.pktsent],
-//            it[ClientFileTable.refdby],
-//            it[ClientFileTable.preferences],
-//            it[ClientFileTable.dislikes],
-//            it[ClientFileTable.temphyg],
-//            it[ClientFileTable.daps_dollar],
-//            it[ClientFileTable.daps_dollar_two],
-//            it[ClientFileTable.needs],
-//            it[ClientFileTable.startdate],
-//            it[ClientFileTable.endate],
-//            it[ClientFileTable.days],
-//            it[ClientFileTable.permconf],
-//            it[ClientFileTable.tempconf],
-//            it[ClientFileTable.mlplcmnt],
-//            it[ClientFileTable.lofaplcmnt],
-//            it[ClientFileTable.patnttime],
-//            it[ClientFileTable.warndate1],
-//            it[ClientFileTable.warndate2],
-//            it[ClientFileTable.warndate3],
-//            it[ClientFileTable.cnotes],
-//            it[ClientFileTable.multioffice],
-//            it[ClientFileTable.payperiods],
-//            it[ClientFileTable.yeslist],
-//            it[ClientFileTable.filler],
-//            it[ClientFileTable.filler2]))
-//        }
-//        return@transaction to_return
-//    }
-
     fun allClientFiles(): List<ClientFile> = transaction (db) {
-        ClientFileTable.selectAll().toList()
-    }.map {
-        ClientFile(it[ClientFileTable.client_num],
+        val to_return: MutableList<ClientFile> = mutableListOf()
+        for (it in ClientFileTable.selectAll().toList()) {
+            to_return.add(ClientFile(it[ClientFileTable.client_num],
             it[ClientFileTable.ofcname],
             it[ClientFileTable.firstname1],
             it[ClientFileTable.lastname1],
@@ -298,13 +185,15 @@ val db: Database
             it[ClientFileTable.payperiods],
             it[ClientFileTable.yeslist],
             it[ClientFileTable.filler],
-            it[ClientFileTable.filler2])
+            it[ClientFileTable.filler2]))
+        }
+        return@transaction to_return
     }
 
-    fun readClientFile(client_num: Int) : List<ClientFile> = transaction (db) {
+    fun readClientFile(client_num: Int) : ClientFile? = transaction (db) {
         ClientFileTable.select {
             ClientFileTable.client_num.eq(client_num)
-        }.mapNotNull {
+        }.map {
             ClientFile(
                 it[ClientFileTable.client_num],
                 it[ClientFileTable.ofcname],
@@ -358,7 +247,7 @@ val db: Database
                 it[ClientFileTable.filler],
                 it[ClientFileTable.filler2]
             )
-        }
+        }.singleOrNull()
     }
 
     /**
