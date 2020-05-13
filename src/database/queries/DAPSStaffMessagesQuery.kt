@@ -39,7 +39,7 @@ interface DAPSStaffMessagesQuery {
     /**
      * Read
      */
-    fun allDAPSStaffMessagesTable() : List<DAPSStaffMessages> {
+    fun allDAPSStaffMessages() : List<DAPSStaffMessages> {
         return transaction (db) {
             DAPSStaffMessagesTable.selectAll().toList()
         }.map {

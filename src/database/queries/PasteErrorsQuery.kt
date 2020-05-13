@@ -27,7 +27,7 @@ interface PasteErrorsQuery {
     /**
      * Read
      */
-    fun allPasteErrors(pe: PasteErrors): List<PasteErrors> {
+    fun allPasteErrors(): List<PasteErrors> {
         return transaction(db) {
             PasteErrorsTable.selectAll().toList()
         }.map {

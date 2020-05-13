@@ -1,5 +1,6 @@
 package application
 
+import cache.InMemoryCache
 import com.fasterxml.jackson.databind.SerializationFeature
 import database.LocalDataQuery
 import database.queries.DataQuery
@@ -52,8 +53,9 @@ import java.time.ZoneId
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
-val dq: DataQuery = LocalDataQuery()
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
+val dq: DataQuery = LocalDataQuery()
+val cache: InMemoryCache = InMemoryCache(dq)
 //val client: RedisClient = RedisClient(RedisURI.create("redis://127.0.0.1:6379"))
 //val cache: RedisConnection<String,String> = client.connect()
 
@@ -166,7 +168,7 @@ fun Application.module() {  //testing: Boolean = false
             welcome(WelcomePresenter(dq))
             users(dq)
             table(dq)
-            webclients(WebClientsPresenter(dq))
+            webclients(WebClientsPresenter(cache))
         }
         // API authentication
         route("/api") {

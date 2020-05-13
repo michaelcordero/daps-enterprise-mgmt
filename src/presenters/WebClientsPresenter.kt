@@ -1,5 +1,5 @@
 package presenters
 
-import database.queries.DataQuery
+import cache.InMemoryCache
 
-class WebClientsPresenter (dq: DataQuery) : AbstractPresenter(dq)
+class WebClientsPresenter(val cache: InMemoryCache) : AbstractPresenter(cache.dq)

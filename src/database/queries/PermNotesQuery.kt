@@ -42,7 +42,7 @@ interface PermNotesQuery {
      * Read
      */
 
-    fun allPermNotes(pn: PermNotes): List<PermNotes> {
+    fun allPermNotes(): List<PermNotes> {
        return transaction (db) {
             PermNotesTable.selectAll().toList()
         }.map {
