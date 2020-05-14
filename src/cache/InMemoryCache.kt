@@ -3,6 +3,10 @@ package cache
 import database.queries.DataQuery
 import kotlinx.coroutines.*
 import model.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+val log: Logger = LoggerFactory.getLogger(InMemoryCache::class.java)
 
 class InMemoryCache(val dq: DataQuery){
     lateinit var billings: MutableList<Billing>
@@ -25,32 +29,33 @@ class InMemoryCache(val dq: DataQuery){
     lateinit var workOrders: MutableList<WorkOrder>
     init {
         runBlocking {
-            val deferreds: MutableList<Deferred<Unit>> = mutableListOf()
+            val jobs: MutableList<Job> = mutableListOf()
             withContext(Dispatchers.IO) {
-                deferreds.addAll(
+                log.info("Adding data to cache...")
+                jobs.addAll(
                     mutableListOf(
-                        async { billings = dq.allBilling().toMutableList() }.also { println("Loading Billings...") },
-                        async { clientFiles = dq.allClientFiles().toMutableList()}.also { println("Loading Client Files...")},
-                        async { clientNotes = dq.allClientNotes().toMutableList() }.also { println("Loading Client Notes...") },
-//                        async { clientPermNotes= dq.allClientPermNotes().toMutableList() },
-                        async { dapsAddress = dq.allDAPSAddress().toMutableList() }.also { println("Loading DAPS Address...") },
-                        async { dapsStaffMessages = dq.allDAPSStaffMessages().toMutableList() }.also { println("Loading DAPS Staff Messages...") },
-                        async { dapsStaff = dq.allDAPSStaff().toMutableList() }.also { println("Loading DAPS Staff...") },
-                        async { interviewGuides = dq.allInterviewGuides().toMutableList() }.also { println("Loading Interview Guides...") },
-                        async { pasteErrors = dq.allPasteErrors().toMutableList() }.also { println("Loading Paste Errors...") },
-                        async { payments = dq.allPayments().toMutableList() }.also { println("Loading Payments...") },
-                        async { permNotes = dq.allPermNotes().toMutableList() }.also { println("Loading Perm Notes...") },
-                        async { permReqNotes = dq.allPermReqNotes().toMutableList() }.also { println("Loading Perm Req Notes...") },
-                        async { tempNotes = dq.allTempNotes().toMutableList() }.also { println("Loading TempNotes... ") },
-                        async { tempsAvail4Work = dq.allTempsAvail4Work().toMutableList()}.also { println("Loading Temps Avail 4 Work...") },
-                        async { temps = dq.allTemps().toMutableList() }.also { println("Loading all Temps...") },
-                        async { users = dq.allUsers().toMutableList() }.also { println("Loading all Users...") },
-                        async { woNotes = dq.allWONotes().toMutableList() }.also { println("Loading Work Order Notes...") },
-                        async { workOrders = dq.allWorkOrders().toMutableList() }.also { println("Loading Work Orders...") }
+                        launch { billings = dq.allBilling().toMutableList() },
+                        launch { clientFiles = dq.allClientFiles().toMutableList()},
+                        launch { clientNotes = dq.allClientNotes().toMutableList() },
+//                        launch { clientPermNotes= dq.allClientPermNotes().toMutableList() },
+                        launch { dapsAddress = dq.allDAPSAddress().toMutableList() },
+                        launch { dapsStaffMessages = dq.allDAPSStaffMessages().toMutableList() },
+                        launch { dapsStaff = dq.allDAPSStaff().toMutableList() },
+                        launch { interviewGuides = dq.allInterviewGuides().toMutableList() },
+                        launch { pasteErrors = dq.allPasteErrors().toMutableList() },
+                        launch { payments = dq.allPayments().toMutableList() },
+                        launch { permNotes = dq.allPermNotes().toMutableList() },
+                        launch { permReqNotes = dq.allPermReqNotes().toMutableList() },
+                        launch { tempNotes = dq.allTempNotes().toMutableList() },
+                        launch { tempsAvail4Work = dq.allTempsAvail4Work().toMutableList()},
+                        launch { temps = dq.allTemps().toMutableList() },
+                        launch { users = dq.allUsers().toMutableList() },
+                        launch { woNotes = dq.allWONotes().toMutableList() },
+                        launch { workOrders = dq.allWorkOrders().toMutableList() }
                     )
                 )
             }
-            deferreds.awaitAll()
+            jobs.joinAll()
         }
     }
 

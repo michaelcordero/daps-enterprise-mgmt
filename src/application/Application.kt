@@ -63,8 +63,6 @@ val cache: InMemoryCache = InMemoryCache(dq)
 fun main(args: Array<String>) {
     // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
-    log.info("Starting database...")
-    log.info("Starting cache")
     log.info("Starting server...")
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
