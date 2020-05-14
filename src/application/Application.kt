@@ -35,10 +35,7 @@ import io.ktor.webjars.Webjars
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import presenters.RegisterPresenter
-import presenters.WebClientsPresenter
-import presenters.WebLoginPresenter
-import presenters.WelcomePresenter
+import presenters.*
 import routes.api.billings
 import routes.api.clientNotes
 import routes.api.clients
@@ -169,6 +166,7 @@ fun Application.module() {  //testing: Boolean = false
             users(dq)
             table(dq)
             webclients(WebClientsPresenter(cache))
+            webbillings(WebBillingsPresenter((cache)))
         }
         // API authentication
         route("/api") {

@@ -88,6 +88,7 @@
                         <i class="align-middle mr-2 fas fa-fw fa-table"></i> <span class="align-middle">Tables</span>
                     </a>
                     <ul id="tables" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webbillings">Billings</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webclients">Clients</a></li>
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/tables-bootstrap.html">Bootstrap</a></li>-->
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/tables-datatables.html">DataTables</a></li>-->
