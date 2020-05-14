@@ -160,6 +160,9 @@ fun Application.module() {  //testing: Boolean = false
         }
         // Web authentication
         authenticate("web") {
+            route("/api") {
+                clients(dq)
+            }
             welcome(WelcomePresenter(dq))
             users(dq)
             table(dq)

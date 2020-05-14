@@ -1,5 +1,6 @@
 package routes.api
 
+import application.log
 import database.queries.DataQuery
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -24,6 +25,7 @@ fun Route.clients(dq: DataQuery) {
     get<Clients> {
         try {
             val clients: List<ClientFile> = Collections.synchronizedList(dq.allClientFiles())
+            log.info("/api/clients requested")
             call.respond(mapOf("clients" to synchronized(clients) { clients.toList()} ))
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
