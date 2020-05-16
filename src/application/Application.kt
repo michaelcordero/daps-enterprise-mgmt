@@ -80,7 +80,7 @@ fun main(args: Array<String>) {
 //@JvmOverloads
 fun Application.module() {  //testing: Boolean = false
     log.info("application module starting...")
-    environment.monitor.subscribe(ApplicationStopped){
+    environment.monitor.subscribe(ApplicationStopped) {
         dq.close()
         // try to figure out how to call the /logout route from here
         //it.locations.href(WebLogin())
@@ -88,8 +88,8 @@ fun Application.module() {  //testing: Boolean = false
 //        cache.shutdown(true)
     }
     // This feature handles the authentication for Web & HTTP API Requests
-    install(Authentication){
-        basic ("web"){
+    install(Authentication) {
+        basic("web") {
             skipWhen { call ->
                 call.sessions.get<DAPSSession>()?.token != null
             }
@@ -99,7 +99,7 @@ fun Application.module() {  //testing: Boolean = false
             passwordParamName = "password"
             validate {
                 val user: User? = dq.user(it.name, DAPSSecurity.hash(it.password))
-                if ( user != null) { // sessions.get<DAPSSession>()?.token != null
+                if (user != null) { // sessions.get<DAPSSession>()?.token != null
                     UserIdPrincipal(it.name)
                 } else {
                     null
@@ -135,7 +135,7 @@ fun Application.module() {  //testing: Boolean = false
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
     // SESSION cookie
-    install( Sessions ) {
+    install(Sessions) {
         cookie<DAPSSession>("SESSION") {
             cookie.path = "/"
         }
@@ -145,13 +145,13 @@ fun Application.module() {  //testing: Boolean = false
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
-    install( Webjars ) {
+    install(Webjars) {
         path = "/webjars" //defaults to /webjars
         zone = ZoneId.systemDefault() //defaults to ZoneId.systemDefault()
     }
     routing {
         // static content
-        static ("/static/" ) {
+        static("/static/") {
             // css, javascript & images served here
             resources("static")
         }

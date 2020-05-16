@@ -17,8 +17,10 @@ import model.Billing
 class Billings {
     @Location("/client/{client_num}")
     data class BillingsClient(val client_num: String, val billings: Billings)
+
     @Location("/employee/{emp_num}")
     data class BillingsEmployee(val emp_num: String, val billings: Billings)
+
     @Location("/counter/{counter}")
     data class BillingsCounter(val counter: String, val billings: Billings)
 }

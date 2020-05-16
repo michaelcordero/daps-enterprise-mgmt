@@ -5,7 +5,8 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <table id="data-billings" class="table table-striped table-bordered table-responsive table-hover" style="width: 100%;">
+                    <table id="data-billings" class="table table-striped table-bordered table-responsive table-hover"
+                           style="width: 100%;">
                         <thead>
                         <tr>
                             <th>Counter</th>
@@ -42,34 +43,34 @@
     <script>
         // Datatables basic
         $('#data-billings').DataTable({
-              "ajax": {
-                  "url": '/web/billings',
-                  "dataSrc": ''
-              },
-              columns:
-              [
-                  {data: 'counter' },
-                  {data: 'client_num'},
-                  {data: 'employee_num'},
-                  {data: 'wdate'},
-                  {data: 'hours'},
-                  {data: 'start_time'},
-                  {data: 'end_time'},
-                  {data: 'daps_fee'},
-                  {data: 'total_fee'},
-                  {data: 'worktype'},
-                  {data: 'work_order_num'},
-                  {data: 'open'},
-                  {data: 'pmt1'},
-                  {data: 'apamt1'},
-                  {data: 'pmt2'},
-                  {data: 'apamt2'},
-                  {data: 'notesp'},
-                  {data: 'pending'},
-                  {data: 'assigned_date'},
-                  {data: 'assigned_by'},
-                  {data: 'service_category'},
-              ]
-          });
+            "ajax": {
+                "url": '/web/billings',
+                "dataSrc": ''
+            },
+            columns:
+                [
+                    {data: 'counter'},
+                    {data: 'client_num'},
+                    {data: 'employee_num'},
+                    {data: 'wdate'},
+                    {data: 'hours'},
+                    {data: 'start_time'},
+                    {data: 'end_time'},
+                    {data: 'daps_fee'},
+                    {data: 'total_fee'},
+                    {data: 'worktype'},
+                    {data: 'work_order_num'},
+                    {data: 'open'},
+                    {data: 'pmt1'},
+                    {data: 'apamt1'},
+                    {data: 'pmt2'},
+                    {data: 'apamt2'},
+                    {data: 'notesp'},
+                    {data: 'pending'},
+                    {data: 'assigned_date'},
+                    {data: 'assigned_by'},
+                    {data: 'service_category'},
+                ]
+        });
     </script>
 </@ui.dashboardUI>

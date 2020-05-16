@@ -20,11 +20,17 @@ class WebClients
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.webclients(presenter: WebClientsPresenter){
-    get<WebClients>{
+fun Route.webclients(presenter: WebClientsPresenter) {
+    get<WebClients> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
         if (session != null) {
-            call.respond(FreeMarkerContent("clients.ftl", mapOf("presenter" to presenter), "clients-e-tag")) //"user" to user,
+            call.respond(
+                FreeMarkerContent(
+                    "clients.ftl",
+                    mapOf("presenter" to presenter),
+                    "clients-e-tag"
+                )
+            ) //"user" to user,
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "webclient-e-tag"))
         }

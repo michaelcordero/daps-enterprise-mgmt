@@ -21,11 +21,11 @@ class WebBillings
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.webbillings(presenter: WebBillingsPresenter){
-    get<WebBillings>{
+fun Route.webbillings(presenter: WebBillingsPresenter) {
+    get<WebBillings> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
         if (session != null) {
-            call.respond(FreeMarkerContent("billings.ftl", mapOf("presenter" to presenter),"billings-e-tag"))
+            call.respond(FreeMarkerContent("billings.ftl", mapOf("presenter" to presenter), "billings-e-tag"))
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "web-login-e-tag"))
         }
