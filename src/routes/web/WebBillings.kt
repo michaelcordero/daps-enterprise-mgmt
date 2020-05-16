@@ -11,7 +11,6 @@ import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
-import model.Billing
 import presenters.WebBillingsPresenter
 import security.DAPSSession
 
@@ -26,9 +25,7 @@ fun Route.webbillings(presenter: WebBillingsPresenter){
     get<WebBillings>{
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
         if (session != null) {
-            val billings: List<Billing> = presenter.cache.billings
-            call.respond(FreeMarkerContent("billings.ftl", mapOf("billings" to billings,
-                "presenter" to presenter), "billings-e-tag")) //"user" to user,
+            call.respond(FreeMarkerContent("billings.ftl", mapOf("presenter" to presenter),"billings-e-tag"))
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "web-login-e-tag"))
         }

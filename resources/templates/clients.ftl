@@ -1,4 +1,3 @@
-<#-- @ftlvariable name="clients" type="java.util.List<model.ClientFile>" -->
 <#-- @ftlvariable name="presenter" type="presenters.WebClientsPresenter" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Clients">
@@ -6,7 +5,7 @@
     <div class="col">
         <div class="card">
             <div class="card-body">
-                <table id="datatables-basic" class="table table-striped table-bordered table-responsive " style="width: 100%;">
+                <table id="data-clients" class="table table-striped table-bordered table-responsive table-hover" style="width: 100%;">
                     <thead>
                     <tr>
                         <th>Client#</th>
@@ -60,70 +59,17 @@
                         <th>YesList</th>
                         <th>Filler</th>
                         <th>Filler2</th>
-                        <th>Actions</th>
+<#--                        <th>Actions</th>-->
                     </tr>
                     </thead>
-                    <tbody>
-                    <#list clients as client>
-                        <tr>
-                            <td>${client.client_num!""}</td>
-                            <td>${client.ofcname!""}</td>
-                            <td>${client.firstname1!""}</td>
-                            <td>${client.lastname1!""}</td>
-                            <td>${client.firstname2!""}</td>
-                            <td>${client.lastname2!""}</td>
-                            <td>${client.address1!""}</td>
-                            <td>${client.address2!""}</td>
-                            <td>${client.city!""}</td>
-                            <td>${client.state!""}</td>
-                            <td>${client.zip!""}</td>
-                            <td>${client.county!""}</td>
-                            <td>${client.email!""}</td>
-                            <td>${client.ophone!""}</td>
-                            <td>${client.oxtension!""}</td>
-                            <td>${client.ofax!""}</td>
-                            <td>${client.hphone!""}</td>
-                            <td>${client.cellphone!""}</td>
-                            <td>${client.carphone!""}</td>
-                            <td>${client.estdate!""}</td>
-                            <td>${client.specialty!""}</td>
-                            <td>${client.ofchrs!""}</td>
-                            <td>${client.ofcmanager!""}</td>
-                            <td>${client.rate_confirm?c}</td>
-                            <td>${client.agreement!""}</td>
-                            <td>${client.agreement_perm!""}</td>
-                            <td>${client.pktsent!""}</td>
-                            <td>${client.refdby!""}</td>
-                            <td>${client.preferences!""}</td>
-                            <td>${client.dislikes!""}</td>
-                            <td>${client.temphyg?c}</td>
-                            <td>${client.daps_dollar!""}</td>
-                            <td>${client.daps_dollar_two!""}</td>
-                            <td>${client.needs!""}</td>
-                            <td>${client.start_date!""}</td>
-                            <td>${client.end_date!""}</td>
-                            <td>${client.days!""}</td>
-                            <td>${client.permconf?c}</td>
-                            <td>${client.tempconf?c}</td>
-                            <td>${client.mlplcmnt?c}</td>
-                            <td>${client.lofaplcmnt?c}</td>
-                            <td>${client.patnttime!""}</td>
-                            <td>${client.warndate1!""}</td>
-                            <td>${client.warndate2!""}</td>
-                            <td>${client.warndate3!""}</td>
-                            <td>${client.cnotes!""}</td>
-                            <td>${client.multioffice!""}</td>
-                            <td>${client.payperiods!""}</td>
-                            <td>${client.yeslist?c}</td>
-                            <td>${client.filler!""}</td>
-                            <td>${client.filler2!""}</td>
-                            <td class="table-action">
-                                <a href="#"><i class="align-middle fas fa-fw fa-pen"></i></a>
-                                <a href="#"><i class="align-middle fas fa-fw fa-trash"></i></a>
-                            </td>
-                        </tr>
-                    </#list>
-                    </tbody>
+<#--                    <tbody>-->
+<#--                        <tr>-->
+<#--                            <td class="table-action">-->
+<#--                                <a href="#"><i class="align-middle fas fa-fw fa-pen"></i></a>-->
+<#--                                <a href="#"><i class="align-middle fas fa-fw fa-trash"></i></a>-->
+<#--                            </td>-->
+<#--                        </tr>-->
+<#--                    </tbody>-->
                     <tfoot>
                     </tfoot>
                 </table>
@@ -131,4 +77,67 @@
         </div>
     </div>
 </div>
+<#--    <script src="/static/js/app.js"></script>-->
+    <script>
+        // Datatables basic
+            $('#data-clients').DataTable({
+                "ajax": {
+                    "url": '/web/clients',
+                    "dataSrc": ''
+                },
+                columns:
+                    [
+                        {data: 'client_num'},
+                        {data: 'ofcname'},
+                        {data: 'firstname1'},
+                        {data: 'lastname1'},
+                        {data: 'firstname2'},
+                        {data: 'lastname2'},
+                        {data: 'address1'},
+                        {data: 'address2'},
+                        {data: 'city'},
+                        {data: 'state'},
+                        {data: 'zip'},
+                        {data: 'county'},
+                        {data: 'email'},
+                        {data: 'ophone'},
+                        {data: 'oxtension'},
+                        {data: 'ofax'},
+                        {data: 'hphone'},
+                        {data: 'cellphone'},
+                        {data: 'carphone'},
+                        {data: 'estdate'},
+                        {data: 'specialty'},
+                        {data: 'ofchrs'},
+                        {data: 'ofcmanager'},
+                        {data: 'rate_confirm'},
+                        {data: 'agreement'},
+                        {data: 'agreement_perm'},
+                        {data: 'pktsent'},
+                        {data: 'refdby'},
+                        {data: 'preferences'},
+                        {data: 'dislikes'},
+                        {data: 'temphyg'},
+                        {data: 'daps_dollar'},
+                        {data: 'daps_dollar_two'},
+                        {data: 'needs'},
+                        {data: 'start_date'},
+                        {data: 'end_date'},
+                        {data: 'days'},
+                        {data: 'permconf'},
+                        {data: 'tempconf'},
+                        {data: 'mlplcmnt'},
+                        {data: 'lofaplcmnt'},
+                        {data: 'patnttime'},
+                        {data: 'warndate1'},
+                        {data: 'warndate2'},
+                        {data: 'warndate3'},
+                        {data: 'cnotes'},
+                        {data: 'multioffice'},
+                        {data: 'payperiods'},
+                        {data: 'yeslist'},
+                        {data: 'filler'},
+                        {data: 'filler2'}]
+            });
+    </script>
 </@ui.dashboardUI>

@@ -10,12 +10,13 @@
     <meta name="author" content="Bootlab">
     <title>Dental Auxiliary Placement Services</title>
     <!-- PICK ONE OF THE STYLES BELOW -->
-    <#--    <link href="/static/css/modern.css" rel="stylesheet">-->
-    <#--<link href="/static/css/classic.css" rel="stylesheet">-->
-<#--    <link href="/static/css/dark.css" rel="stylesheet">-->
+    <link href="/static/css/modern.css" rel="stylesheet">
+    <link href="/static/css/classic.css" rel="stylesheet">
+    <link href="/static/css/dark.css" rel="stylesheet">
     <link href="/static/css/light.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="/static/js/settings.js"></script>
+    <script src="/static/js/app.js"></script>
 </head>
 <body>
 <div class="splash active">
@@ -222,7 +223,6 @@
         </symbol>
     </defs>
 </svg>
-<script src="/static/js/app.js"></script>
 <script>
     $(function() {
         $('#datatables-dashboard-projects').DataTable({
@@ -233,13 +233,10 @@
         });
     });
 </script>
-
 <script>
     $(function() {
         // Datatables basic
         $('#datatables-basic').DataTable({
-            // responsive: true,
-            // lengthChange: !1
         });
         // Datatables with Buttons
         var datatablesButtons = $('#datatables-buttons').DataTable({

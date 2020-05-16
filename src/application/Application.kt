@@ -123,6 +123,11 @@ fun Application.module() {  //testing: Boolean = false
     }
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
+    // This feature enables truly open access across domain boundaries
+    install(CORS) {
+//        host("localhost:4000") to specify client app
+        anyHost()
+    }
     // This uses use the logger to log every call (request/response)
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
@@ -160,14 +165,15 @@ fun Application.module() {  //testing: Boolean = false
         }
         // Web authentication
         authenticate("web") {
-            route("/api") {
-                clients(dq)
+            route("/web") {
+                clients(cache)
+                billings(cache)
             }
             welcome(WelcomePresenter(dq))
             users(dq)
             table(dq)
-            webclients(WebClientsPresenter(cache))
-            webbillings(WebBillingsPresenter((cache)))
+            webclients(WebClientsPresenter())
+            webbillings(WebBillingsPresenter())
         }
         // API authentication
         route("/api") {
@@ -175,8 +181,8 @@ fun Application.module() {  //testing: Boolean = false
         }
         authenticate("api") {
             route("/api") {
-                clients(dq)
-                billings(dq)
+                clients(cache)
+                billings(cache)
                 clientNotes(dq)
             }
         }
