@@ -10,10 +10,10 @@
     <meta name="author" content="Bootlab">
     <title>Dental Auxiliary Placement Services</title>
     <!-- PICK ONE OF THE STYLES BELOW -->
-    <link href="/static/css/modern.css" rel="stylesheet">
+<#--    <link href="/static/css/modern.css" rel="stylesheet">-->
     <link href="/static/css/classic.css" rel="stylesheet">
-    <link href="/static/css/dark.css" rel="stylesheet">
-    <link href="/static/css/light.css" rel="stylesheet">
+<#--    <link href="/static/css/dark.css" rel="stylesheet">-->
+<#--    <link href="/static/css/light.css" rel="stylesheet">-->
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="/static/js/settings.js"></script>
     <script src="/static/js/app.js"></script>
