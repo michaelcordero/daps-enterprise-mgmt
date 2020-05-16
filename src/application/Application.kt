@@ -36,10 +36,7 @@ import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import presenters.*
-import routes.api.billings
-import routes.api.clientNotes
-import routes.api.clients
-import routes.api.login
+import routes.api.*
 import routes.web.*
 import security.DAPSJWT
 import security.DAPSSecurity
@@ -168,12 +165,13 @@ fun Application.module() {  //testing: Boolean = false
             route("/web") {
                 clients(cache)
                 billings(cache)
+                tempnotes(cache)
             }
             welcome(WelcomePresenter(dq))
             users(dq)
-            table(dq)
             webclients(WebClientsPresenter())
             webbillings(WebBillingsPresenter())
+            webtempnotes(WebTempNotesPresenter())
         }
         // API authentication
         route("/api") {

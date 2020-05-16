@@ -91,6 +91,7 @@
                     <ul id="tables" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="/webbillings">Billings</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webclients">Clients</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/tables-bootstrap.html">Bootstrap</a></li>-->
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/tables-datatables.html">DataTables</a></li>-->
                     </ul>

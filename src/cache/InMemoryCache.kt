@@ -54,8 +54,8 @@ class InMemoryCache(val dq: DataQuery){
                         launch { workOrders = dq.allWorkOrders().toMutableList() }
                     )
                 )
+                jobs.joinAll()
             }
-            jobs.joinAll()
         }
     }
 
