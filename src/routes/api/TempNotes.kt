@@ -10,18 +10,25 @@ import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.util.KtorExperimentalAPI
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 @KtorExperimentalLocationsAPI
 @Location("/tempnotes")
 class TempNotes
 
+@ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.tempnotes(cache: InMemoryCache) {
     get<TempNotes> {
         try {
             log.info("/tempnotes requested")
-            call.respond(status = HttpStatusCode.OK, message = cache.tempNotes)
+            val time: TimedValue<Unit> = measureTimedValue {
+                call.respond(status = HttpStatusCode.OK, message = cache.tempNotes)
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
         }

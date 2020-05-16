@@ -44,6 +44,7 @@ import security.DAPSSession
 import server.statuses
 import java.text.DateFormat
 import java.time.ZoneId
+import kotlin.time.ExperimentalTime
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
@@ -54,6 +55,7 @@ val cache: InMemoryCache = InMemoryCache(dq)
 //val cache: RedisConnection<String,String> = client.connect()
 
 
+@ExperimentalTime
 @ExperimentalStdlibApi
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
@@ -71,6 +73,7 @@ fun main(args: Array<String>) {
     server.start(true)
 }
 
+@ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf

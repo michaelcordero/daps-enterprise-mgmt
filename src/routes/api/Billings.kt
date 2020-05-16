@@ -10,7 +10,9 @@ import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.util.KtorExperimentalAPI
-import model.Billing
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 @KtorExperimentalLocationsAPI
 @Location("/billings")
@@ -25,15 +27,18 @@ class Billings {
     data class BillingsCounter(val counter: String, val billings: Billings)
 }
 
+@ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.billings(cache: InMemoryCache) {
     // Read HTTP Methods
     get<Billings> {
         try {
-            val billings: List<Billing> = cache.billings
             log.info("/billings requested")
-            call.respond(status = HttpStatusCode.OK, message = billings)
+            val time: TimedValue<Unit> = measureTimedValue {
+                call.respond(status = HttpStatusCode.OK, message = cache.billings)
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
         }

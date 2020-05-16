@@ -11,6 +11,9 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.util.KtorExperimentalAPI
 import model.ClientFile
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 @KtorExperimentalLocationsAPI
 @Location("/clients")
@@ -19,6 +22,7 @@ class Clients {
     data class Client(val client_num: String, val clients: Clients)
 }
 
+@ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.clients(cache: InMemoryCache) {
@@ -26,7 +30,10 @@ fun Route.clients(cache: InMemoryCache) {
         try {
             val clients: List<ClientFile> = cache.clientFiles
             log.info("/clients requested")
-            call.respond(status = HttpStatusCode.OK, message = clients)
+            val time: TimedValue<Unit> = measureTimedValue {
+                call.respond(status = HttpStatusCode.OK, message = clients)
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
         }
@@ -34,8 +41,12 @@ fun Route.clients(cache: InMemoryCache) {
 
     get<Clients.Client> {
         try {
-            val client: ClientFile? = cache.clientFiles.find { cf -> cf.client_num.equals(it.client_num.toInt()) }
-            call.respond(mapOf("client" to client))
+            log.info("/clients/{client_num} requested")
+            val time: TimedValue<Unit> = measureTimedValue {
+                val client: ClientFile? = cache.clientFiles.find { cf -> cf.client_num.equals(it.client_num.toInt()) }
+                call.respond(mapOf("client" to client))
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
         }
