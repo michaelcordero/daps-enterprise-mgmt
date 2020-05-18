@@ -25,7 +25,7 @@
 
 <div class="wrapper">
     <nav id="sidebar" class="sidebar">
-        <a class="sidebar-brand" href="/static/docs/index.html">
+        <a class="sidebar-brand" href="#">
             <#--                <svg>-->
             <#--                    <use xlink:href="#ion-ios-pulse-strong"></use>-->
             <#--                </svg>-->
@@ -58,13 +58,13 @@
                         <i class="align-middle mr-2 fas fa-fw fa-file">l</i> <span class="align-middle">Pages</span>
                     </a>
                     <ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-settings.html">Settings</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-clients.html">Clients
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Settings</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Clients
                                 <#--                                    <span class="sidebar-badge badge badge-pill badge-primary"> </span>--></a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-invoice.html">Invoice</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-pricing.html">Pricing</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-tasks.html">Tasks</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-chat.html">Chat
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Invoice</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Pricing</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Tasks</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Chat
                                 <#--                                    <span class="sidebar-badge badge badge-pill badge-primary"> New </a></li></span>--></a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-blank.html">Blank Page</a></li>
                     </ul>
@@ -74,7 +74,7 @@
                     Elements
                 </li>
                 <li class="sidebar-item">
-                    <a href="#charts" data-toggle="collapse" class="sidebar-link collapsed">
+                    <a href="#" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle mr-2 fas fa-fw fa-chart-pie">l</i> <span class="align-middle">Charts</span>
                         <#--                            <span class="sidebar-badge badge badge-pill badge-primary">New</span>-->
                     </a>
