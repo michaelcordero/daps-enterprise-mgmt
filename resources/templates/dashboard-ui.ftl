@@ -14,6 +14,11 @@
     <link href="/static/css/classic.css" rel="stylesheet">
 <#--    <link href="/static/css/dark.css" rel="stylesheet">-->
 <#--    <link href="/static/css/light.css" rel="stylesheet">-->
+    <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="webjars/popper.js/2.0.2/umd/popper.min.js"></script>
+    <script src="webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="webjars/momentjs/2.24.0/min/moment.min.js"></script>
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="/static/js/settings.js"></script>
     <script src="/static/js/app.js"></script>
