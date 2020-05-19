@@ -31,9 +31,9 @@ class JavaLocalTimeColumnType : ColumnType(), IDateColumnType {
         }
         return value;
     }
-
-    /**
-     * A LocalTime column to store only time
-     */
-    fun Table.localtime(name: String): Column<LocalTime> = registerColumn(name, JavaLocalTimeColumnType())
 }
+/**
+ * A LocalTime column to store only time
+ */
+fun Table.localtime(name: String): Column<LocalTime> = registerColumn(name, JavaLocalTimeColumnType())
+
