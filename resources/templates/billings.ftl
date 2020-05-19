@@ -39,7 +39,6 @@
             </div>
         </div>
     </div>
-<#--    <script src="/static/js/app.js"></script>-->
     <script>
         // Datatables basic
         $('#data-billings').DataTable({

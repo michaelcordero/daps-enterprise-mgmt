@@ -61,6 +61,8 @@ dependencies {
     compile "org.webjars:bootstrap:$bootstrap_version"
     compile "org.webjars:popper.js:$popperjs_version"
     compile "org.webjars:datatables:$datatables_version"
+    compile "org.webjars:datatables-plugins:$datatables_version"
+    compile "org.webjars:momentjs:$momentjs_version"
     compile "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
     compile "org.jetbrains.exposed:exposed-core:$exposed_version"
     compile "org.jetbrains.exposed:exposed-java-time:$exposed_version"
