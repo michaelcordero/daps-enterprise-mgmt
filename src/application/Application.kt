@@ -90,7 +90,12 @@ fun Application.module() {  //testing: Boolean = false
     install(Authentication) {
         basic("web") {
             skipWhen { call ->
-                call.sessions.get<DAPSSession>()?.token != null
+                try {
+                    dapsJWT.verifier.verify(call.sessions.get<DAPSSession>()?.token)
+                    return@skipWhen true
+                } catch (e: Exception){
+                    return@skipWhen false
+                }
             }
         }
         form("form") {

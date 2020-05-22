@@ -6,8 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Responsive Bootstrap 4 Admin &amp; Dashboard Template">
-    <meta name="author" content="Bootlab">
+    <meta name="description" content="DAPS Enterprise Management System">
     <title>Dental Auxiliary Placement Services</title>
     <!-- PICK ONE OF THE STYLES BELOW -->
 <#--    <link href="/static/css/modern.css" rel="stylesheet">-->

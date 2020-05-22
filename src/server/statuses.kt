@@ -28,7 +28,7 @@ fun statuses(configuration: StatusPages.Configuration ) {
     configuration.status(HttpStatusCode.Unauthorized) {
         // We need to know if this request originates from the Web or the API
         if (call.request.contentType() != ContentType.Application.Json){
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to "unknown", "error" to it.description), "someeetag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf( "emailId" to null,"error" to it.description), "401-e-tag"))
         } else {
             call.respondText { "${it.value} ${it.description}" }
         }
