@@ -9,11 +9,11 @@
                            style="width: 100%;">
                         <thead>
                         <tr>
-                            <th>Temp Note Key</th>
                             <th>Employee#</th>
                             <th>Note Date</th>
                             <th>Initial</th>
                             <th>Emp Note</th>
+                            <th>Temp Note Key</th>
                         </tr>
                         </thead>
                         <tfoot>
@@ -34,14 +34,12 @@
             "autoWidth": true,
             columns:
                 [
-                    {data: "temp_note_key"},
                     {data: "emp_num"},
                     {data: "note_date"},
                     {data: "initial"},
-                    {data: "emp_note", "width": "75%"}
+                    {data: "emp_note", "width": "75%"},
+                    {data: "temp_note_key"}
                 ],
         });
-        // $('#container').css('display', 'block');
-        // table.columns.adjust().draw();
     </script>
 </@ui.dashboardUI>
