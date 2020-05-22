@@ -2,7 +2,11 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.ClientFileTable
+import model.serializers.BooleanSerializer
+import model.serializers.DoubleSerializer
+import model.serializers.LocalDateSerializer
 import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
@@ -10,32 +14,76 @@ import java.sql.Timestamp
 data class ClientFile @JsonCreator
 constructor(
     @JsonProperty(value = "client_num", required = true)
-    val client_num: Int, val ofcname: String?,
-    val firstname1: String?, val lastname1: String?,
-    val firstname2: String?, val lastname2: String?,
-    val address1: String?, val address2: String?,
-    val city: String?, val state: String?,
+    val client_num: Int,
+    val ofcname: String?,
+    val firstname1: String?,
+    val lastname1: String?,
+    val firstname2: String?,
+    val lastname2: String?,
+    val address1: String?,
+    val address2: String?,
+    val city: String?,
+    val state: String?,
     val zip: String?,
-    val county: String?, val email: String?,
-    val ophone: String?, val oxtension: String?,
-    val ofax: String?, val hphone: String?,
-    val cellphone: String?, val carphone: String?,
-    val estdate: Timestamp?, val specialty: String?,
-    val ofchrs: String?, val ofcmanager: String?,
-    val rate_confirm: Boolean?, val agreement: Timestamp?,
-    val agreement_perm: Timestamp?, val pktsent: Timestamp?,
+    val county: String?,
+    val email: String?,
+    val ophone: String?,
+    val oxtension: String?,
+    val ofax: String?,
+    val hphone: String?,
+    val cellphone: String?,
+    val carphone: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val estdate: Timestamp?,
+    val specialty: String?,
+    val ofchrs: String?,
+    val ofcmanager: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val rate_confirm: Boolean?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val agreement: Timestamp?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val agreement_perm: Timestamp?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val pktsent: Timestamp?,
     val refdby: String?, val preferences: String?,
-    val dislikes: String?, val temphyg: Boolean?,
-    val daps_dollar: Double?, val daps_dollar_two: Double?,
-    val needs: String?, val start_date: Timestamp?,
-    val end_date: Timestamp?, val days: String?,
-    val permconf: Boolean?, val tempconf: Boolean?,
-    val mlplcmnt: Boolean?, val lofaplcmnt: Boolean?,
-    val patnttime: String?, val warndate1: Timestamp?,
-    val warndate2: Timestamp?, val warndate3: Timestamp?,
-    val cnotes: String?, val multioffice: String?,
-    val payperiods: Int?, val yeslist: Boolean?,
-    val filler: Timestamp?, val filler2: Double?
+    val dislikes: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val temphyg: Boolean?,
+    @JsonSerialize(using = DoubleSerializer::class)
+    val daps_dollar: Double?,
+    @JsonSerialize(using = DoubleSerializer::class)
+    val daps_dollar_two: Double?,
+    val needs: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val start_date: Timestamp?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val end_date: Timestamp?,
+    val days: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val permconf: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val tempconf: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val mlplcmnt: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val lofaplcmnt: Boolean?,
+    val patnttime: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val warndate1: Timestamp?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val warndate2: Timestamp?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val warndate3: Timestamp?,
+    val cnotes: String?,
+    val multioffice: String?,
+    val payperiods: Int?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val yeslist: Boolean?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val filler: Timestamp?,
+    @JsonSerialize(using = DoubleSerializer::class)
+    val filler2: Double?
 ) : Serializable {
     constructor(result_set: ResultSet) : this(
         result_set.getInt(ClientFileTable.client_num.name),

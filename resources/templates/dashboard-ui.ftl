@@ -178,7 +178,7 @@
                     <h1 class="header-title">
 <#--                        Welcome back, ${user.first_name + user.last_name}!-->
                     </h1>
-                    <p class="header-subtitle">You have 0 new messages and 0 new notifications.</p>
+<#--                    <p class="header-subtitle">You have 0 new messages and 0 new notifications.</p>-->
                 </div>
             </div>
             <#nested />

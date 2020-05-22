@@ -42,7 +42,6 @@ import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
-import java.text.DateFormat
 import java.time.ZoneId
 import kotlin.time.ExperimentalTime
 
@@ -117,7 +116,8 @@ fun Application.module() {  //testing: Boolean = false
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
-            dateFormat = DateFormat.getDateInstance()
+//            dateFormat = DateFormat.getDateTimeInstance(2,2,Locale.US)
+//            enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             register(ContentType.Application.Json, JacksonConverter())
         }
     }

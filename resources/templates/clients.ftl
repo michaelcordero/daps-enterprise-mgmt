@@ -21,41 +21,41 @@
                             <th>State</th>
                             <th>Zip</th>
                             <th>County</th>
-                            <th>Email</th>
+                            <th>e-Mail</th>
                             <th>OPhone</th>
-                            <th>OExtension</th>
+                            <th>OXtension</th>
                             <th>OFax</th>
                             <th>HPhone</th>
                             <th>CellPhone</th>
                             <th>CarPhone</th>
                             <th>EstDate</th>
                             <th>Specialty</th>
-                            <th>OFCHours</th>
+                            <th>OfcHours</th>
                             <th>OManager</th>
                             <th>RateConfirm</th>
-                            <th>Agreement</th>
-                            <th>Perm</th>
-                            <th>PacketSent</th>
+                            <th>Agrmt?</th>
+                            <th>AgrmtPerm</th>
+                            <th>PktSent?</th>
                             <th>RefdBy</th>
                             <th>Preferences</th>
                             <th>Dislikes</th>
-                            <th>TempHyg</th>
-                            <th>DAPSDollar</th>
-                            <th>DAPSDollarTwo</th>
+                            <th>TempHyg?</th>
+                            <th>DAPS$</th>
+                            <th>DAPS2$</th>
                             <th>Needs</th>
                             <th>StartDate</th>
                             <th>EndDate</th>
                             <th>Days</th>
-                            <th>PermConf</th>
-                            <th>TempConf</th>
-                            <th>Mlplcmnt</th>
-                            <th>Lofaplcmnt</th>
-                            <th>Patnttime</th>
+                            <th>PermConf?</th>
+                            <th>TempConf?</th>
+                            <th>MlPlcmnt</th>
+                            <th>LofAPlcmnt</th>
+                            <th>PatntTime</th>
                             <th>WarnDate1</th>
                             <th>WarnDate2</th>
                             <th>WarnDate3</th>
                             <th>CNotes</th>
-                            <th>MultiOffice</th>
+                            <th>MultiOffice?</th>
                             <th>PayPeriods</th>
                             <th>YesList</th>
                             <th>Filler</th>
