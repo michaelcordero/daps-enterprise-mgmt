@@ -2,15 +2,21 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.TempNotesTable
+import model.serializers.LocalDateSerializer
 import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
 data class TempNotes
 @JsonCreator constructor(
-    @JsonProperty(value = "emp_num", required = true) val emp_num: Int, val note_date: Timestamp?,
-    val initial: String?, val emp_note: String?,
+    @JsonProperty(value = "emp_num", required = true)
+    val emp_num: Int,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val note_date: Timestamp?,
+    val initial: String?,
+    val emp_note: String?,
     val temp_note_key: Int?
 ) : Serializable {
     constructor(resultSet: ResultSet) : this(
