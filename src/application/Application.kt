@@ -1,5 +1,6 @@
 package application
 
+import cache.DataCache
 import cache.InMemoryCache
 import com.fasterxml.jackson.databind.SerializationFeature
 import database.LocalDataQuery
@@ -49,7 +50,7 @@ import kotlin.time.ExperimentalTime
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
-val cache: InMemoryCache = InMemoryCache(dq)
+val cache: DataCache = InMemoryCache(dq)
 //val client: RedisClient = RedisClient(RedisURI.create("redis://127.0.0.1:6379"))
 //val cache: RedisConnection<String,String> = client.connect()
 

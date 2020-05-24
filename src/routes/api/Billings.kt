@@ -1,7 +1,7 @@
 package routes.api
 
 import application.log
-import cache.InMemoryCache
+import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -30,13 +30,13 @@ class Billings {
 @ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.billings(cache: InMemoryCache) {
+fun Route.billings(cache: DataCache) {
     // Read HTTP Methods
     get<Billings> {
         try {
             log.info("/billings requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.billings)
+                call.respond(status = HttpStatusCode.OK, message = cache.allBilling())
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {

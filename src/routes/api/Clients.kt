@@ -1,7 +1,7 @@
 package routes.api
 
 import application.log
-import cache.InMemoryCache
+import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -25,13 +25,12 @@ class Clients {
 @ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.clients(cache: InMemoryCache) {
+fun Route.clients(cache: DataCache) {
     get<Clients> {
         try {
-            val clients: List<ClientFile> = cache.clientFiles
             log.info("/clients requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = clients)
+                call.respond(status = HttpStatusCode.OK, message = cache.allClientFiles())
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -43,7 +42,7 @@ fun Route.clients(cache: InMemoryCache) {
         try {
             log.info("/clients/{client_num} requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                val client: ClientFile? = cache.clientFiles.find { cf -> cf.client_num.equals(it.client_num.toInt()) }
+                val client: ClientFile? = cache.allClientFiles().find { cf -> cf.client_num.equals(it.client_num.toInt()) }
                 call.respond(mapOf("client" to client))
             }
             log.info("Response took: ${time.duration}")

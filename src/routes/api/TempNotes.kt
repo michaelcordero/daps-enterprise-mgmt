@@ -1,7 +1,7 @@
 package routes.api
 
 import application.log
-import cache.InMemoryCache
+import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -21,12 +21,12 @@ class TempNotes
 @ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.tempnotes(cache: InMemoryCache) {
+fun Route.tempnotes(cache: DataCache) {
     get<TempNotes> {
         try {
             log.info("/tempnotes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.tempNotes)
+                call.respond(status = HttpStatusCode.OK, message = cache.allTempNotes())
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
