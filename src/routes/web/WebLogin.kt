@@ -1,5 +1,6 @@
 package routes.web
 
+import application.cache
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
@@ -14,6 +15,7 @@ import io.ktor.routing.Route
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
+import model.User
 import presenters.WebLoginPresenter
 import security.DAPSSession
 
@@ -33,7 +35,8 @@ fun Route.weblogin(presenter: WebLoginPresenter) {
             if (principal != null) {
                 val token = presenter.dapsjwt.sign(principal.name)
                 call.sessions.set(DAPSSession(principal.name, token))
-                call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to principal.name), "someetag"))
+                val user: User = cache.allUsers().find { u -> u.email == principal.name }!!
+                call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "someetag"))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "unauthorized!")
             }
