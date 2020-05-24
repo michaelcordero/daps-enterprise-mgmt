@@ -13,8 +13,8 @@ val db: Database
     /**
      * Create
      */
-    fun createClientPermNotes(cpn: ClientPermNotes) {
-        transaction (db) {
+    fun createClientPermNotes(cpn: ClientPermNotes): Int {
+        return transaction (db) {
             ClientPermNotesTable.insert {
 //                it[id] = cpn.id auto-increment
                 it[client_num] = cpn.client_num
@@ -22,7 +22,7 @@ val db: Database
                 it[not_interested] = cpn.not_interested
                 it[staffname] = cpn.staff_name
             }
-        }
+        } get ClientPermNotesTable.ID
     }
 
     fun insertClientPermNotes(cpn: ClientPermNotes) {

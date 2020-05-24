@@ -12,8 +12,8 @@ interface PermNotesQuery {
      * Create
      */
 
-    fun createPermNotes(pn: PermNotes) {
-        transaction (db) {
+    fun createPermNotes(pn: PermNotes): Int {
+        return transaction (db) {
             PermNotesTable.insert {
                 // id is auto-incremented
                 it[emp_num] = pn.emp_num
@@ -21,7 +21,7 @@ interface PermNotesQuery {
                 it[initial] = pn.initial
                 it[comments] = pn.comments
                 it[follow_update] = pn.follow_update
-            }
+            } get PermNotesTable.ID
         }
     }
 

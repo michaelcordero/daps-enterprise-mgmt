@@ -13,7 +13,7 @@ interface DAPSStaffQuery {
      * Create
      */
     fun insertDAPSStaff(ds: DAPSStaff) {
-        transaction (db) {
+        return transaction (db) {
             DAPSStaffTable.insert {
                 it[initial] = ds.initial!!
                 it[firstname] = ds.firstname

@@ -12,8 +12,8 @@ interface WorkOrderQuery {
     /**
      * Create
      */
-    fun createWorkOrder(wo: WorkOrder){
-        transaction (db) {
+    fun createWorkOrder(wo: WorkOrder): Int {
+        return transaction (db) {
             WorkOrderTable.insert {
                 // wo_number will be auto-incremented
                 it[client_num] = wo.client_num
@@ -39,7 +39,7 @@ interface WorkOrderQuery {
                 it[active] = wo.active
                 it[left_message] = wo.left_message
                 it[confirmed] = wo.confirmed
-            }
+            } get WorkOrderTable.wo_number
         }
     }
 

@@ -12,8 +12,8 @@ interface TempsQuery {
     /**
      * Create
      */
-    fun createTemps(t: Temps) {
-        transaction (db) {
+    fun createTemps(t: Temps): Int {
+        return transaction (db) {
             TempsTable.insert {
                 // emp_num will be auto-incremented
                 it[type_a] = t.type_a
@@ -79,7 +79,7 @@ interface TempsQuery {
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
                 it[filler_two] = t.fillter_two
-            }
+            } get TempsTable.emp_num
         }
     }
 

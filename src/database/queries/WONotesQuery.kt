@@ -12,8 +12,8 @@ interface WONotesQuery {
     /**
      * Create
      */
-    fun createWONotes(won: WONotes) {
-        transaction (db) {
+    fun createWONotes(won: WONotes): Int {
+        return transaction (db) {
             WONotesTable.insert {
                 // id will be auto-incremented
                 it[wo_number] = won.wo_number
@@ -22,7 +22,7 @@ interface WONotesQuery {
                 it[comments] = won.comments
                 it[followup_date] = won.followup_date
             }
-        }
+        } get WONotesTable.ID
     }
 
     fun insertWONotes(won: WONotes) {

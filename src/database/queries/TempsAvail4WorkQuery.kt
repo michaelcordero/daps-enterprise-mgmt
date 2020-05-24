@@ -13,14 +13,14 @@ interface TempsAvail4WorkQuery {
      * Create
      */
 
-    fun createTempAvail4Work(taw: TempsAvail4Work) {
-        transaction (db) {
+    fun createTempAvail4Work(taw: TempsAvail4Work): Int {
+        return transaction (db) {
             TempsAvail4WorkTable.insert {
                 // rec-num will be auto-incremented
                 it[emp_num] = taw.emp_num
                 it[date_can_work] = taw.date_can_work
             }
-        }
+        } get TempsAvail4WorkTable.rec_num
     }
 
     fun insertTempAvail4Work(taw: TempsAvail4Work) {

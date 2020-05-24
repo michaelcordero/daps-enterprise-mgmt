@@ -12,15 +12,15 @@ interface DAPSStaffMessagesQuery {
     /**
      * Create
      */
-    fun createDAPSStaffMessages(dsm: DAPSStaffMessages) {
-        transaction (db) {
+    fun createDAPSStaffMessages(dsm: DAPSStaffMessages): Int {
+        return transaction (db) {
             DAPSStaffMessagesTable.insert {
                 it[memo_date] = dsm.memo_date
                 it[entered_by] = dsm.entered_by
                 it[intended_for] = dsm.intended_for
                 it[message] = dsm.message
                 // staff messagekey auto incremented
-            }
+            } get DAPSStaffMessagesTable.staff_messages_key
         }
     }
 

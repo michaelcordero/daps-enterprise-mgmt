@@ -67,8 +67,8 @@ interface UserQuery {
     /**
      * Creates a new user
      */
-    fun addUser(user: User) {
-        transaction(db) {
+    fun addUser(user: User): Long {
+        return transaction(db) {
             UsersTable.insert {
                 it[ID] = user.id
                 it[first_name] = user.first_name
@@ -76,7 +76,7 @@ interface UserQuery {
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
             }
-        }
+        } get UsersTable.ID
     }
 
     /**
