@@ -1,5 +1,7 @@
 package cache
 
+import model.*
+
 interface DataCache {
     /**
      * All of these methods write to the database and write to the cache, ensuring the app is in a consistent state.
@@ -7,23 +9,23 @@ interface DataCache {
     fun <T> add(obj: T): Int
     fun <T> edit(obj: T): Int
     fun <T> remove(obj: T): Int
-    //    fun allBilling(): MutableList<Billing>
-//    fun allBillTypes(): MutableList<BillType>
-//    fun allClientFiles(): MutableList<ClientFile>
-//    fun allClientNotes(): MutableList<ClientNotes>
-//    fun allClientPermNotes(): MutableList<ClientPermNotes>
-//    fun allDAPSAddress(): MutableList<DAPSAddress>
-//    fun allDAPSStaffMessages(): MutableList<DAPSStaffMessages>
-//    fun allDAPSStaff(): MutableList<DAPSStaff>
-//    fun allInterviewGuides(): MutableList<InterviewGuide>
-//    fun allPasteErrors(): MutableList<PasteErrors>
-//    fun allPayments(): MutableList<Payment>
-//    fun allPermNotes(): MutableList<PermNotes>
-//    fun allPermReqNotes(): MutableList<PermReqNotes>
-//    fun allTempNotes(): MutableList<TempNotes>
-//    fun allTempsAvail4Work(): MutableList<TempsAvail4Work>
-//    fun allTemps(): MutableList<Temps>
-//    fun allUsers(): MutableList<User>
-//    fun allWONotes(): MutableList<WONotes>
-//    fun allWorkOrders(): MutableList<WorkOrder>
+    fun allBilling(): List<Billing>
+    fun allBillTypes(): List<BillType>
+    fun allClientFiles(): List<ClientFile>
+    fun allClientNotes(): List<ClientNotes>
+    fun allClientPermNotes(): List<ClientPermNotes>
+    fun allDAPSAddress(): List<DAPSAddress>
+    fun allDAPSStaffMessages(): List<DAPSStaffMessages>
+    fun allDAPSStaff(): List<DAPSStaff>
+    fun allInterviewGuides(): List<InterviewGuide>
+    fun allPasteErrors(): List<PasteErrors>
+    fun allPayments(): List<Payment>
+    fun allPermNotes(): List<PermNotes>
+    fun allPermReqNotes(): List<PermReqNotes>
+    fun allTempNotes(): List<TempNotes>
+    fun allTempsAvail4Work(): List<TempsAvail4Work>
+    fun allTemps(): List<Temps>
+    fun allUsers(): List<User>
+    fun allWONotes(): List<WONotes>
+    fun allWorkOrders(): List<WorkOrder>
 }

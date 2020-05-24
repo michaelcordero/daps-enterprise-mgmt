@@ -392,4 +392,80 @@ class InMemoryCache(val dq: DataQuery): DataCache {
         throw IllegalArgumentException("Unknown Object")
     }
 
+    override fun allBilling(): List<Billing> {
+        return billings
+    }
+
+    override fun allBillTypes(): List<BillType> {
+        return emptyList()
+    }
+
+    override fun allClientFiles(): List<ClientFile> {
+        return clientFiles
+    }
+
+    override fun allClientNotes(): List<ClientNotes> {
+        return clientNotes
+    }
+
+    override fun allClientPermNotes(): List<ClientPermNotes> {
+return clientPermNotes
+    }
+
+    override fun allDAPSAddress(): List<DAPSAddress> {
+        return dapsAddress
+    }
+
+    override fun allDAPSStaffMessages(): List<DAPSStaffMessages> {
+        return dapsStaffMessages
+    }
+
+    override fun allDAPSStaff(): List<DAPSStaff> {
+        return dapsStaff
+    }
+
+    override fun allInterviewGuides(): List<InterviewGuide> {
+        return interviewGuides
+    }
+
+    override fun allPasteErrors(): List<PasteErrors> {
+        return pasteErrors
+    }
+
+    override fun allPayments(): List<Payment> {
+        return payments
+    }
+
+    override fun allPermNotes(): List<PermNotes> {
+        return permNotes
+    }
+
+    override fun allPermReqNotes(): List<PermReqNotes> {
+        return permReqNotes
+    }
+
+    override fun allTempNotes(): List<TempNotes> {
+        return tempNotes
+    }
+
+    override fun allTempsAvail4Work(): List<TempsAvail4Work> {
+        return tempsAvail4Work
+    }
+
+    override fun allTemps(): List<Temps> {
+        return temps
+    }
+
+    override fun allUsers(): List<User> {
+        return users
+    }
+
+    override fun allWONotes(): List<WONotes> {
+        return woNotes
+    }
+
+    override fun allWorkOrders(): List<WorkOrder> {
+        return workOrders
+    }
+
 }
