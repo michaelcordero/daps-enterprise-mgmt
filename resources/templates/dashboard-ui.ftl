@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="DAPS Enterprise Management System">
-    <title>Dental Auxiliary Placement Services</title>
+    <title>Dental Auxiliary Placement Service</title>
     <!-- PICK ONE OF THE STYLES BELOW -->
 <#--    <link href="/static/css/modern.css" rel="stylesheet">-->
-<#--    <link href="/static/css/classic.css" rel="stylesheet">-->
-    <link href="/static/css/dark.css" rel="stylesheet">
+    <link href="/static/css/classic.css" rel="stylesheet">
+<#--    <link href="/static/css/dark.css" rel="stylesheet">-->
 <#--    <link href="/static/css/light.css" rel="stylesheet">-->
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="/static/js/settings.js"></script>
@@ -29,7 +29,7 @@
             <#--                    <use xlink:href="#ion-ios-pulse-strong"></use>-->
             <#--                </svg>-->
             <#--                <img src="/static/images/daps_logo.png" alt="daps logo">-->
-            DAPS
+            DAPS Enterprise Management
         </a>
         <div class="sidebar-content">
             <div class="sidebar-user">
@@ -42,15 +42,15 @@
                 <li class="sidebar-header">
                     Main
                 </li>
-                <li class="sidebar-item active">
-                    <a href="#dashboards" data-toggle="collapse" class="sidebar-link">
-                        <i class="align-middle mr-2 fas fa-fw fa-home">l</i> <span class="align-middle">Dashboards</span>
+                <li class="sidebar-item">
+                    <a href="/welcome" class="sidebar-link">
+                        <i class="align-middle mr-2 fas fa-fw fa-home">l</i> <span class="align-middle">Home</span>
                     </a>
-                    <ul id="dashboards" class="sidebar-dropdown list-unstyled collapse show" data-parent="#sidebar">
+<#--                    <ul id="dashboards" class="sidebar-dropdown list-unstyled collapse show" data-parent="#sidebar">-->
                         <#--                            <li class="sidebar-item active"><a class="sidebar-link" href="/static/docs/dashboard-default.html">Default</a></li>-->
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/dashboard-analytics.html">Analytics</a></li>-->
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/dashboard-e-commerce.html">E-commerce</a></li>-->
-                    </ul>
+<#--                    </ul>-->
                 </li>
                 <li class="sidebar-item">
                     <a href="#pages" data-toggle="collapse" class="sidebar-link collapsed">
@@ -91,9 +91,12 @@
                         <li class="sidebar-item"><a class="sidebar-link" href="/webbillings">Billings</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webclients">Clients</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
-                        <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/tables-bootstrap.html">Bootstrap</a></li>-->
-                        <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/tables-datatables.html">DataTables</a></li>-->
                     </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/static/docs/calendar.html">
+                        <i class="align-middle mr-2 far fa-fw fa-calendar-alt"></i> <span class="align-middle">Calendar</span>
+                    </a>
                 </li>
 
                 <li class="sidebar-header">
@@ -105,7 +108,7 @@
                     </a>
                     <ul id="documentation" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-getting-started.html">Getting Started</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-plugins.html">Plugins</a></li>
+<#--                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-plugins.html">Plugins</a></li>-->
                         <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-changelog.html">Changelog</a></li>
                     </ul>
                 </li>
@@ -118,9 +121,9 @@
                 <i class="hamburger align-self-center"></i>
             </a>
 
-            <form class="form-inline d-none d-sm-inline-block">
-                <input class="form-control form-control-lite" type="text" placeholder="Search projects...">
-            </form>
+<#--            <form class="form-inline d-none d-sm-inline-block">-->
+<#--                <input class="form-control form-control-lite" type="text" placeholder="Search projects...">-->
+<#--            </form>-->
 
             <div class="navbar-collapse collapse">
                 <ul class="navbar-nav ml-auto">

@@ -176,7 +176,7 @@ fun Application.module() {  //testing: Boolean = false
                 billings(cache)
                 tempnotes(cache)
             }
-            welcome(WelcomePresenter(dq))
+            welcome(WelcomePresenter())
             users(dq)
             webclients(WebClientsPresenter())
             webbillings(WebBillingsPresenter())

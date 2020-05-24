@@ -14,9 +14,9 @@
         <link rel="stylesheet" href="/static/css/clouds.css">
         <link rel="stylesheet" href="/static/css/weblogin.css">
         <link rel="stylesheet" href="/static/css/main.css">
-        <#--    <link href="/static/css/modern.css" rel="stylesheet">-->
-<#--        <link href="/static/css/classic.css" rel="stylesheet">-->
-            <link href="/static/css/dark.css" rel="stylesheet">
+<#--            <link href="/static/css/modern.css" rel="stylesheet">-->
+        <link href="/static/css/classic.css" rel="stylesheet">
+<#--            <link href="/static/css/dark.css" rel="stylesheet">-->
 <#--            <link href="/static/css/light.css" rel="stylesheet">-->
         <script src="/static/js/settings.js"></script>
         <script src="/static/js/app.js"></script>

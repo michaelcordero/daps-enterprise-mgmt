@@ -34,11 +34,11 @@
             "autoWidth": true,
             columns:
                 [
-                    {data: "emp_num", "width": "10%"},
-                    {data: "note_date", "width": "10%"},
-                    {data: "initial", "width": "5%"},
-                    {data: "emp_note", "width": "65%"},
-                    {data: "temp_note_key", "width": "10%"}
+                    {data: "emp_num"},
+                    {data: "note_date"},
+                    {data: "initial"},
+                    {data: "emp_note", "width": "75%"},
+                    {data: "temp_note_key"}
                 ],
         });
     </script>
