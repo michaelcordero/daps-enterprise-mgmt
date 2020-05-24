@@ -67,8 +67,8 @@ interface PermReqNotesQuery {
      * Update
      */
 
-    fun updatePermReqNote(prn: PermReqNotes) {
-        transaction (db) {
+    fun updatePermReqNote(prn: PermReqNotes): Int {
+        return transaction (db) {
             PermReqNotesTable.update({
                 PermReqNotesTable.ID.eq(prn.id!!)
             }) {
@@ -88,10 +88,10 @@ interface PermReqNotesQuery {
      * Delete
      */
 
-    fun deletePermReqNote(prn: PermReqNotes) {
-        transaction (db) {
+    fun deletePermReqNote(id: Int): Int {
+        return transaction (db) {
             PermReqNotesTable.deleteWhere {
-                PermReqNotesTable.ID.eq(prn.id!!)
+                PermReqNotesTable.ID.eq(id)
             }
         }
     }

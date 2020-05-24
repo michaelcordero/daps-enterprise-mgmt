@@ -310,8 +310,8 @@ interface TempsQuery {
      * Update
      */
 
-    fun updateTemp(t: Temps) {
-        transaction (db) {
+    fun updateTemp(t: Temps): Int {
+        return transaction (db) {
             TempsTable.update({
                 TempsTable.emp_num.eq(t.emp_num)
             }) {
@@ -387,10 +387,10 @@ interface TempsQuery {
      * Delete
      */
 
-    fun deleteTemp(t: Temps) {
-        transaction (db) {
+    fun deleteTemp(emp_num: Int): Int {
+        return transaction (db) {
             TempsTable.deleteWhere {
-                TempsTable.emp_num.eq(t.emp_num)
+                TempsTable.emp_num.eq(emp_num)
             }
         }
     }

@@ -149,8 +149,8 @@ interface WorkOrderQuery {
      * Update
      */
 
-    fun updateWorkOrder(wo: WorkOrder) {
-        transaction (db) {
+    fun updateWorkOrder(wo: WorkOrder): Int {
+        return transaction (db) {
             WorkOrderTable.update({
                 WorkOrderTable.wo_number.eq(wo.wo_number)
             }) {
@@ -187,10 +187,10 @@ interface WorkOrderQuery {
      * Delete
      */
 
-    fun deleteWorkOrder(wo: WorkOrder) {
-        transaction (db) {
+    fun deleteWorkOrder(wo_num: Int): Int {
+       return transaction (db) {
             WorkOrderTable.deleteWhere {
-                WorkOrderTable.wo_number.eq(wo.wo_number)
+                WorkOrderTable.wo_number.eq(wo_num)
             }
         }
     }

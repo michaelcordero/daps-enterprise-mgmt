@@ -78,8 +78,8 @@ interface InterviewGuideQuery {
      * Update
      */
 
-    fun updateInterviewGuide(ig: InterviewGuide) {
-        transaction (db) {
+    fun updateInterviewGuide(ig: InterviewGuide): Int {
+        return transaction (db) {
             InterviewGuideTable.update({
                 InterviewGuideTable.ID.eq(ig.id!!)
             }) {
@@ -102,10 +102,10 @@ interface InterviewGuideQuery {
      * Delete
      */
 
-    fun deleteInterviewGuide(ig: InterviewGuide) {
-        transaction (db) {
+    fun deleteInterviewGuide(id: Int): Int {
+        return transaction (db) {
             InterviewGuideTable.deleteWhere {
-                InterviewGuideTable.ID.eq(ig.id!!)
+                InterviewGuideTable.ID.eq(id)
             }
         }
     }

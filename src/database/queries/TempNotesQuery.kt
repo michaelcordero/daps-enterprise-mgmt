@@ -59,8 +59,8 @@ interface TempNotesQuery {
      * Update
      */
 
-    fun updateTempNote(tn: TempNotes) {
-        transaction (db) {
+    fun updateTempNote(tn: TempNotes): Int {
+        return transaction (db) {
             TempNotesTable.update({
                 TempNotesTable.temp_note_key.eq(tn.temp_note_key!!)
             }) {
@@ -77,10 +77,10 @@ interface TempNotesQuery {
      * Delete
      */
 
-    fun deleteTempNote(tn: TempNotes) {
-        transaction (db) {
+    fun deleteTempNote(temp_note_key: Int): Int {
+        return transaction (db) {
             TempNotesTable.deleteWhere {
-                TempNotesTable.temp_note_key.eq(tn.temp_note_key!!)
+                TempNotesTable.temp_note_key.eq(temp_note_key)
             }
         }
     }

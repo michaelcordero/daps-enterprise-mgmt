@@ -46,8 +46,8 @@ interface PaymentQuery {
      * Update
      */
 
-    fun updatePayment(p: Payment) {
-        transaction (db) {
+    fun updatePayment(p: Payment): Int {
+        return transaction (db) {
             PaymentTable.update ({
                 PaymentTable.client_num.eq(p.client_num) and
                         PaymentTable.ref_num.eq(p.ref_num)
@@ -65,8 +65,8 @@ interface PaymentQuery {
      * Delete
      */
 
-    fun deletePayment(p: Payment) {
-        transaction (db) {
+    fun deletePayment(p: Payment): Int {
+        return transaction (db) {
             PaymentTable.deleteWhere {
                 PaymentTable.client_num.eq(p.client_num) and
                         PaymentTable.ref_num.eq(p.ref_num)

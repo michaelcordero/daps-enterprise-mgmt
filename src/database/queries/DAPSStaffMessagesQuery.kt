@@ -57,8 +57,8 @@ interface DAPSStaffMessagesQuery {
      * Update
      */
 
-    fun updateDAPSStaffMessages(dsm: DAPSStaffMessages) {
-        transaction (db) {
+    fun updateDAPSStaffMessages(dsm: DAPSStaffMessages): Int {
+        return transaction (db) {
             DAPSStaffMessagesTable.update({
                 DAPSStaffMessagesTable.staff_messages_key.eq(dsm.staff_messages_key!!)
             })
@@ -76,10 +76,10 @@ interface DAPSStaffMessagesQuery {
      * Delete
      */
 
-    fun deleteDAPSStaffMessages(dsm: DAPSStaffMessages) {
-        transaction (db) {
+    fun deleteDAPSStaffMessages(staff_messages_key: Int): Int {
+        return transaction (db) {
             DAPSStaffMessagesTable.deleteWhere {
-                DAPSStaffMessagesTable.staff_messages_key.eq(dsm.staff_messages_key!!)
+                DAPSStaffMessagesTable.staff_messages_key.eq(staff_messages_key)
             }
         }
     }

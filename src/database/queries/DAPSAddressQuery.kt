@@ -64,8 +64,8 @@ val db: Database
      * Update
      */
 
-    fun updateDAPSAddress(da: DAPSAddress) {
-        transaction (db) {
+    fun updateDAPSAddress(da: DAPSAddress): Int {
+        return transaction (db) {
             DAPSAddressTable.update({ DAPSAddressTable.mailinglist_id.eq(da.mailing_list_id!!)}) {
                 it[office] = da.office
                 it[address1] = da.address1
@@ -81,10 +81,10 @@ val db: Database
      * Delete
      */
 
-    fun deleteDAPSAddress(da: DAPSAddress) {
-        transaction (db) {
+    fun deleteDAPSAddress(mailing_list_id: Int): Int {
+        return transaction (db) {
             DAPSAddressTable.deleteWhere {
-                DAPSAddressTable.mailinglist_id.eq(da.mailing_list_id!!)
+                DAPSAddressTable.mailinglist_id.eq(mailing_list_id)
             }
         }
     }

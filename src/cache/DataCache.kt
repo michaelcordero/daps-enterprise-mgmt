@@ -5,8 +5,8 @@ interface DataCache {
      * All of these methods write to the database and write to the cache, ensuring the app is in a consistent state.
      */
     fun <T> add(obj: T): Int
-    fun <T> edit(obj: T)
-    fun <T> remove(obj: T)
+    fun <T> edit(obj: T): Int
+    fun <T> remove(obj: T): Int
     //    fun allBilling(): MutableList<Billing>
 //    fun allBillTypes(): MutableList<BillType>
 //    fun allClientFiles(): MutableList<ClientFile>
