@@ -1,18 +1,5 @@
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Temps">
-<#--    CSS-->
-<#--    <link rel="stylesheet" type="text/css" href="/static/Editor-1/css/editor.bootstrap.min.css"/>-->
-<#--    <link rel="stylesheet" type="text/css" href="/static/Editor-1/css/editor.bootstrap4.min.css"/>-->
-<#--    <link rel="stylesheet" type="text/css" href="/static/Editor-1/css/editor.dataTables.min.css"/>-->
-<#--    <link rel="stylesheet" type="text/css" href="/static/Editor-1/css/editor.foundation.min.css"/>-->
-<#--    <link rel="stylesheet" type="text/css" href="/static/Editor-1/css/editor.jqueryui.min.css"/>-->
-<#--    <link rel="stylesheet" type="text/css" href="/static/Editor-1/css/editor.semanticui.min.css"/>-->
-<#--JS-->
-<#--    <script type="text/javascript" src="/static/Editor-1/js/dataTables.editor.min.js"></script>-->
-<#--    <script type="text/javascript" src="/static/Editor-1/js/editor.bootstrap4.min.js"></script>-->
-<#--    <script type="text/javascript" src="/static/Editor-1/js/editor.foundation.min.js"></script>-->
-<#--    <script type="text/javascript" src="/static/Editor-1/js/editor.jqueryui.min.js"></script>-->
-<#--    <script type="text/javascript" src="/static/Editor-1/js/editor.semanticui.min.js"></script>-->
 <#--Table Format-->
     <div class="row">
         <div class="col">
@@ -97,6 +84,10 @@
     </div>
 <#--Table Logic-->
     <script>
+        // var editor = new $.fn.dataTable.Editor({
+        //     "ajax": '/web/temps',
+        //     "table": '#data-temps',
+        // });
         $('#data-temps').DataTable({
             "ajax": {
                 "url": '/web/temps',
