@@ -175,12 +175,14 @@ fun Application.module() {  //testing: Boolean = false
                 clients(cache)
                 billings(cache)
                 tempnotes(cache)
+                temps(cache)
             }
             welcome(WelcomePresenter())
             users(dq)
             webclients(WebClientsPresenter())
             webbillings(WebBillingsPresenter())
             webtempnotes(WebTempNotesPresenter())
+            webtemps()
         }
         // API authentication
         route("/api") {
@@ -191,6 +193,7 @@ fun Application.module() {  //testing: Boolean = false
                 clients(cache)
                 billings(cache)
                 clientNotes(dq)
+                temps(cache)
             }
         }
     }

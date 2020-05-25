@@ -78,7 +78,7 @@ interface TempsQuery {
                 it[yes_list] = t.yes_list
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
-                it[filler_two] = t.fillter_two
+                it[filler_two] = t.filler_two
             } get TempsTable.emp_num
         }
     }
@@ -149,7 +149,7 @@ interface TempsQuery {
                 it[yes_list] = t.yes_list
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
-                it[filler_two] = t.fillter_two
+                it[filler_two] = t.filler_two
             }
         }
     }
@@ -378,7 +378,7 @@ interface TempsQuery {
                 it[yes_list] = t.yes_list
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
-                it[filler_two] = t.fillter_two
+                it[filler_two] = t.filler_two
             }
         }
     }

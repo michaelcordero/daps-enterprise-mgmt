@@ -91,6 +91,7 @@
                         <li class="sidebar-item"><a class="sidebar-link" href="/webbillings">Billings</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webclients">Clients</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webtemps">Temps</a></li>
                     </ul>
                 </li>
                 <li class="sidebar-item">

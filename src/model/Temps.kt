@@ -2,36 +2,114 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.TempsTable
+import model.serializers.BooleanSerializer
+import model.serializers.DoubleSerializer
+import model.serializers.LocalDateSerializer
 import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
 data class Temps
-    @JsonCreator constructor(@JsonProperty(value = "emp_num", required = true) val emp_num: Int,
-                             val type_a: String?, val type_b: String?,
-                             val status: Boolean?, val firstname: String?, val lastname: String?,
-                             val address1: String?, val address2: String?, val city: String?,
-                             val state: String?, val zip: String?, val county: String?,
-                             val email: String?, val hphone: String?, val wphone: String?,
-                             val wext: String?, val callwork: Boolean?, val fax: String?,
-                             val cellphone: String?, val social_sec_num: String?, val daps_start: Timestamp?,
-                             val daps_dollar: Double?, val hourly_rate: String?, val chart_complete: Boolean?,
-                             val license_file: Boolean?, val license: String?, val license_date: Timestamp?,
-                             val malp_ins: Boolean?, val mapl_info: String?, val exper_since: Timestamp?,
-                             val photo_id: Boolean?, val work_auth: Boolean?, val ref_check: Boolean?,
-                             val cont_sub_lic: Boolean?, val exper_type: String?, val emergency_contact: String?,
-                             val emergency_phone: String?, val eext: String?, val preferences: String?,
-                             val dislikes: String?, val temp_needs: Boolean?, val perm_needs: Boolean?,
-                             val computer: String?, val oncall: Boolean?, val avail_m: Boolean?,
-                             val avail_t: Boolean?, val avail_w: Boolean?, val avail_r: Boolean?,
-                             val avail_f: Boolean?, val avail_s: Boolean?, val avail_u: Boolean?,
-                             val avail_nos: Boolean?, val pref_loc: String?, val max_miles: String?,
-                             val ref_by: String?, val notes: String?, val account_rep: String?,
-                             val account_rep_enddate: Timestamp?, val perm_notes: String?,
-                             val set_flag: Boolean?, val yes_list: Boolean?, val resident_alien: Boolean?,
-                             val resident_alien_exp: Timestamp?, val fillter_two: Double?) : Serializable {
-    constructor(result_set: ResultSet) : this (
+@JsonCreator constructor(
+    @JsonProperty(value = "emp_num", required = true)
+    val emp_num: Int,
+    val type_a: String?,
+    val type_b: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val status: Boolean?,
+    val firstname: String?,
+    val lastname: String?,
+    val address1: String?,
+    val address2: String?,
+    val city: String?,
+    val state: String?,
+    val zip: String?,
+    val county: String?,
+    val email: String?,
+    val hphone: String?,
+    val wphone: String?,
+    val wext: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val callwork: Boolean?,
+    val fax: String?,
+    val cellphone: String?,
+    val social_sec_num: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val daps_start: Timestamp?,
+    @JsonSerialize(using = DoubleSerializer::class)
+    val daps_dollar: Double?,
+    val hourly_rate: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val chart_complete: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val license_file: Boolean?,
+    val license: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val license_date: Timestamp?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val malp_ins: Boolean?,
+    val mapl_info: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val exper_since: Timestamp?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val photo_id: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val work_auth: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val ref_check: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val cont_sub_lic: Boolean?,
+    val exper_type: String?,
+    val emergency_contact: String?,
+    val emergency_phone: String?,
+    val eext: String?,
+    val preferences: String?,
+    val dislikes: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val temp_needs: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val perm_needs: Boolean?,
+    val computer: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val oncall: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_m: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_t: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_w: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_r: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_f: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_s: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_u: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val avail_nos: Boolean?,
+    val pref_loc: String?,
+    val max_miles: String?,
+    val ref_by: String?,
+    val notes: String?,
+    val account_rep: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val account_rep_enddate: Timestamp?,
+    val perm_notes: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val set_flag: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val yes_list: Boolean?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    val resident_alien: Boolean?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    val resident_alien_exp: Timestamp?,
+    @JsonSerialize(using = DoubleSerializer::class)
+    val filler_two: Double?
+) : Serializable {
+    constructor(result_set: ResultSet) : this(
         result_set.getInt(TempsTable.emp_num.name),
         result_set.getString(TempsTable.type_a.name),
         result_set.getString(TempsTable.type_b.name),
@@ -58,10 +136,10 @@ data class Temps
         result_set.getBoolean(TempsTable.chart_complete.name),
         result_set.getBoolean(TempsTable.license_file.name),
         result_set.getString(TempsTable.license.name),
-        result_set.getString(TempsTable.license_date.name)?.let {Timestamp.valueOf(it)},
+        result_set.getString(TempsTable.license_date.name)?.let { Timestamp.valueOf(it) },
         result_set.getBoolean(TempsTable.malp_ins.name),
         result_set.getString(TempsTable.mapl_info.name),
-        result_set.getString(TempsTable.exper_since.name)?.let {Timestamp.valueOf(it) },
+        result_set.getString(TempsTable.exper_since.name)?.let { Timestamp.valueOf(it) },
         result_set.getBoolean(TempsTable.photo_id.name),
         result_set.getBoolean(TempsTable.work_auth.name),
         result_set.getBoolean(TempsTable.ref_check.name),
@@ -89,7 +167,7 @@ data class Temps
         result_set.getString(TempsTable.ref_by.name),
         result_set.getString(TempsTable.notes.name),
         result_set.getString(TempsTable.account_rep.name),
-        result_set.getString(TempsTable.account_rep_enddate.name)?.let {Timestamp.valueOf(it) },
+        result_set.getString(TempsTable.account_rep_enddate.name)?.let { Timestamp.valueOf(it) },
         result_set.getString(TempsTable.perm_notes.name),
         result_set.getBoolean(TempsTable.set_flag.name),
         result_set.getBoolean(TempsTable.yes_list.name),
