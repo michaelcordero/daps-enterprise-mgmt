@@ -10,8 +10,8 @@
     <title>Dental Auxiliary Placement Service</title>
     <!-- PICK ONE OF THE STYLES BELOW -->
 <#--    <link href="/static/css/modern.css" rel="stylesheet">-->
-    <link href="/static/css/classic.css" rel="stylesheet">
-<#--    <link href="/static/css/dark.css" rel="stylesheet">-->
+<#--    <link href="/static/css/classic.css" rel="stylesheet">-->
+    <link href="/static/css/dark.css" rel="stylesheet">
 <#--    <link href="/static/css/light.css" rel="stylesheet">-->
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="/static/js/settings.js"></script>

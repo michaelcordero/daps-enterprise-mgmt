@@ -51,8 +51,6 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-//val client: RedisClient = RedisClient(RedisURI.create("redis://127.0.0.1:6379"))
-//val cache: RedisConnection<String,String> = client.connect()
 
 
 @ExperimentalTime
@@ -132,7 +130,7 @@ fun Application.module() {  //testing: Boolean = false
     // This feature enables truly open access across domain boundaries
     install(CORS) {
 //        host("localhost:4000") to specify client app
-        anyHost()
+//        anyHost()
     }
     // This uses use the logger to log every call (request/response)
     install(CallLogging)
@@ -165,6 +163,7 @@ fun Application.module() {  //testing: Boolean = false
         register(RegisterPresenter(dq, dapsJWT))
         index()
         weblogout()
+        // clients(cache)  // TODO: leaving this here, so i can continue to experiment with the node.js app
         // Initial web authentication
         authenticate("form") {
             weblogin(WebLoginPresenter(dq, dapsJWT))

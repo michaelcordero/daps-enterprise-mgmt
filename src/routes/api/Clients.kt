@@ -74,7 +74,7 @@ fun Route.clients(cache: DataCache) {
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
+            call.respond(status = HttpStatusCode.BadRequest, message = e.toString())
         }
     }
 
@@ -83,12 +83,12 @@ fun Route.clients(cache: DataCache) {
             log.info("DELETE /clients requested")
             val time: TimedValue<Unit> = measureTimedValue {
                 val cf: ClientFile? = cache.allClientFiles().find { c -> c.client_num == it.client_num.toInt() }
-                val result: Int = cf.let { cache.remove(cf)}
+                val result: Int = cf.let { cache.remove(cf) }
                 call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client" to true, "result" to result))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
+            call.respond(status = HttpStatusCode.BadRequest, message = e.toString())
         }
     }
 }

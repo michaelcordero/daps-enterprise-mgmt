@@ -80,65 +80,83 @@
     </div>
 <#--    <script src="/static/js/app.js"></script>-->
     <script>
-        // Datatables basic
-        $('#data-clients').DataTable({
-            "ajax": {
-                "url": '/web/clients',
-                "dataSrc": ''
-            },
-            columns:
-                [
-                    {data: 'client_num'},
-                    {data: 'ofcname'},
-                    {data: 'firstname1'},
-                    {data: 'lastname1'},
-                    {data: 'firstname2'},
-                    {data: 'lastname2'},
-                    {data: 'address1'},
-                    {data: 'address2'},
-                    {data: 'city'},
-                    {data: 'state'},
-                    {data: 'zip'},
-                    {data: 'county'},
-                    {data: 'email'},
-                    {data: 'ophone'},
-                    {data: 'oxtension'},
-                    {data: 'ofax'},
-                    {data: 'hphone'},
-                    {data: 'cellphone'},
-                    {data: 'carphone'},
-                    {data: 'estdate'},
-                    {data: 'specialty'},
-                    {data: 'ofchrs'},
-                    {data: 'ofcmanager'},
-                    {data: 'rate_confirm'},
-                    {data: 'agreement'},
-                    {data: 'agreement_perm'},
-                    {data: 'pktsent'},
-                    {data: 'refdby'},
-                    {data: 'preferences'},
-                    {data: 'dislikes'},
-                    {data: 'temphyg'},
-                    {data: 'daps_dollar'},
-                    {data: 'daps_dollar_two'},
-                    {data: 'needs'},
-                    {data: 'start_date'},
-                    {data: 'end_date'},
-                    {data: 'days'},
-                    {data: 'permconf'},
-                    {data: 'tempconf'},
-                    {data: 'mlplcmnt'},
-                    {data: 'lofaplcmnt'},
-                    {data: 'patnttime'},
-                    {data: 'warndate1'},
-                    {data: 'warndate2'},
-                    {data: 'warndate3'},
-                    {data: 'cnotes'},
-                    {data: 'multioffice'},
-                    {data: 'payperiods'},
-                    {data: 'yeslist'},
-                    {data: 'filler'},
-                    {data: 'filler2'}]
+        $(document).ready(function() {
+            // var editor = new $.fn.dataTable.Editor({
+            //     ajax: {
+            //         "url": 'http://localhost:8080/clients',
+            //         "dataSrc": ''
+            //     },
+            //     table: '#data-clients',
+            //     idSrc: 'client_num'
+            // });
+            // Datatables basic
+            $('#data-clients').DataTable({
+                "ajax": {
+                    "url": '/web/clients',
+                    "dataSrc": ''
+                },
+                // serverSide: true,
+                // dom: 'Bfrtip',
+                columns:
+                    [
+                        {data: 'client_num'},
+                        {data: 'ofcname'},
+                        {data: 'firstname1'},
+                        {data: 'lastname1'},
+                        {data: 'firstname2'},
+                        {data: 'lastname2'},
+                        {data: 'address1'},
+                        {data: 'address2'},
+                        {data: 'city'},
+                        {data: 'state'},
+                        {data: 'zip'},
+                        {data: 'county'},
+                        {data: 'email'},
+                        {data: 'ophone'},
+                        {data: 'oxtension'},
+                        {data: 'ofax'},
+                        {data: 'hphone'},
+                        {data: 'cellphone'},
+                        {data: 'carphone'},
+                        {data: 'estdate'},
+                        {data: 'specialty'},
+                        {data: 'ofchrs'},
+                        {data: 'ofcmanager'},
+                        {data: 'rate_confirm'},
+                        {data: 'agreement'},
+                        {data: 'agreement_perm'},
+                        {data: 'pktsent'},
+                        {data: 'refdby'},
+                        {data: 'preferences'},
+                        {data: 'dislikes'},
+                        {data: 'temphyg'},
+                        {data: 'daps_dollar'},
+                        {data: 'daps_dollar_two'},
+                        {data: 'needs'},
+                        {data: 'start_date'},
+                        {data: 'end_date'},
+                        {data: 'days'},
+                        {data: 'permconf'},
+                        {data: 'tempconf'},
+                        {data: 'mlplcmnt'},
+                        {data: 'lofaplcmnt'},
+                        {data: 'patnttime'},
+                        {data: 'warndate1'},
+                        {data: 'warndate2'},
+                        {data: 'warndate3'},
+                        {data: 'cnotes'},
+                        {data: 'multioffice'},
+                        {data: 'payperiods'},
+                        {data: 'yeslist'},
+                        {data: 'filler'},
+                        {data: 'filler2'}],
+                select: true,
+                // buttons: [
+                //     { extend: 'create', editor: editor },
+                //     { extend: 'edit',   editor: editor },
+                //     { extend: 'remove', editor: editor }
+                // ]
+            });
         });
     </script>
 </@ui.dashboardUI>
