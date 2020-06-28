@@ -80,23 +80,135 @@
     </div>
 <#--    <script src="/static/js/app.js"></script>-->
     <script>
-        $(document).ready(function() {
-            // var editor = new $.fn.dataTable.Editor({
-            //     ajax: {
-            //         "url": 'http://localhost:8080/clients',
-            //         "dataSrc": ''
-            //     },
-            //     table: '#data-clients',
-            //     idSrc: 'client_num'
-            // });
-            // Datatables basic
+        $(function () {
+            // Datatables Editor
+            var editor = new $.fn.dataTable.Editor({
+                ajax: {
+                    "url": 'http://localhost:8080/clients',
+                    contentType: 'application/json',
+                    data: function ( d ) {
+                        return JSON.stringify( d.data[1] );
+                    },
+                    dataType: "json",
+                },
+                table: '#data-clients',
+                idSrc: 'client_num',
+                fields: [{
+                    name: 'client_num'
+                }, {
+                    name: 'ofcname'
+                }, {
+                    name: 'firstname1'
+                }, {
+                    name: 'lastname1'
+                }, {
+                    name: 'firstname2'
+                }, {
+                    name: 'lastname2'
+                }, {
+                    name: 'address1'
+                }, {
+                    name: 'address2'
+                }, {
+                    name: 'city'
+                }, {
+                    name: 'state'
+                }, {
+                    name: 'zip'
+                }, {
+                    name: 'county'
+                }, {
+                    name: 'email'
+                }, {
+                    name: 'ophone'
+                }, {
+                    name: 'oxtension'
+                }, {
+                    name: 'ofax'
+                }, {
+                    name: 'hphone'
+                }, {
+                    name: 'cellphone'
+                }, {
+                    name: 'carphone'
+                }, {
+                    name: 'estdate'
+                }, {
+                    name: 'specialty'
+                }, {
+                    name: 'ofchrs'
+                }, {
+                    name: 'ofcmanager,'
+                }, {
+                    name: 'rate_confirm'
+                }, {
+                    name: 'agreement'
+                }, {
+                    name: 'agreement_perm'
+                }, {
+                    name: 'pktsent'
+                }, {
+                    name: 'refdby'
+                }, {
+                    name: 'dislikes'
+                }, {
+                    name: 'temphyg'
+                }, {
+                    name: 'daps_dollar'
+                }, {
+                    name: 'daps_dollar_two'
+                }, {
+                    name: 'needs'
+                }, {
+                    name: 'start_date'
+                }, {
+                    name: 'end_date'
+                }, {
+                    name: 'days'
+                }, {
+                    name: 'permconf'
+                }, {
+                    name: 'tempconf'
+                }, {
+                    name: 'mlplcmnt'
+                }, {
+                    name: 'lofaplcmnt'
+                }, {
+                    name: 'patnttime'
+                }, {
+                    name: 'warndate1'
+                }, {
+                    name: 'warndate2'
+                }, {
+                    name: 'warndate3'
+                }, {
+                    name: 'cnotes'
+                }, {
+                    name: 'multioffice'
+                }, {
+                    name: 'payperiods'
+                }, {
+                    name: 'yeslist'
+                }, {
+                    name: 'filler'
+                }, {
+                    name: 'filler2'
+                }]
+            });
+            // Submit if all changed
+            $('#data-clients').on('click', 'tbody td:not(:first-child)', function (e) {
+                editor.inline(this, {
+                    submit: 'all'
+                });
+            });
+            // Data Table
             $('#data-clients').DataTable({
                 "ajax": {
-                    "url": '/web/clients',
-                    "dataSrc": ''
+                    "url": 'http://localhost:8080/clients',
+                    "dataSrc": '',
                 },
                 // serverSide: true,
-                // dom: 'Bfrtip',
+                dom: 'Bfrtip',
                 columns:
                     [
                         {data: 'client_num'},
@@ -151,11 +263,12 @@
                         {data: 'filler'},
                         {data: 'filler2'}],
                 select: true,
-                // buttons: [
-                //     { extend: 'create', editor: editor },
-                //     { extend: 'edit',   editor: editor },
-                //     { extend: 'remove', editor: editor }
-                // ]
+                buttons: [
+                    'pageLength',
+                    {extend: 'create', editor: editor},
+                    {extend: 'edit', editor: editor},
+                    {extend: 'remove', editor: editor}
+                ]
             });
         });
     </script>

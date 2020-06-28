@@ -2,8 +2,11 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.ClientFileTable
+import model.deserializers.BooleanDeserializer
+import model.deserializers.LocalDateDeserializer
 import model.serializers.BooleanSerializer
 import model.serializers.DoubleSerializer
 import model.serializers.LocalDateSerializer
@@ -34,21 +37,27 @@ constructor(
     val cellphone: String?,
     val carphone: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val estdate: Timestamp?,
     val specialty: String?,
     val ofchrs: String?,
     val ofcmanager: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val rate_confirm: Boolean?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val agreement: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
     val agreement_perm: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val pktsent: Timestamp?,
-    val refdby: String?, val preferences: String?,
+    val refdby: String?,
+    val preferences: String?,
     val dislikes: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val temphyg: Boolean?,
     @JsonSerialize(using = DoubleSerializer::class)
     val daps_dollar: Double?,
@@ -56,31 +65,42 @@ constructor(
     val daps_dollar_two: Double?,
     val needs: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val start_date: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val end_date: Timestamp?,
     val days: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val permconf: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val tempconf: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val mlplcmnt: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val lofaplcmnt: Boolean?,
     val patnttime: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val warndate1: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val warndate2: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val warndate3: Timestamp?,
     val cnotes: String?,
     val multioffice: String?,
     val payperiods: Int?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val yeslist: Boolean?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val filler: Timestamp?,
     @JsonSerialize(using = DoubleSerializer::class)
     val filler2: Double?

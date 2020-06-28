@@ -2,7 +2,10 @@ package application
 
 import cache.DataCache
 import cache.InMemoryCache
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker
 import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
@@ -120,9 +123,9 @@ fun Application.module() {  //testing: Boolean = false
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
-//            dateFormat = DateFormat.getDateTimeInstance(2,2,Locale.US)
-//            enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-            register(ContentType.Application.Json, JacksonConverter())
+            this.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY))
+            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            register(ContentType.Application.Json, JacksonConverter(this))
         }
     }
     // This adds automatically Date and Server headers to each response
@@ -138,6 +141,15 @@ fun Application.module() {  //testing: Boolean = false
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
+    // cache control
+//    install(CachingHeaders) {
+//        options {
+//            when(it.contentType?.withoutParameters()) {
+//                ContentType.Text.JavaScript -> CachingOptions(cacheControl = CacheControl)
+//                else -> null
+//            }
+//        }
+//    }
     // SESSION cookie
     install(Sessions) {
         cookie<DAPSSession>("SESSION") {
