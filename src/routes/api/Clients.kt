@@ -55,7 +55,7 @@ fun Route.clients(cache: DataCache) {
             log.info("POST /clients requested")
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = 1 //cache.add(clientFile)
+                val result: Int = cache.add(clientFile)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("added client" to true, "client_num" to result))
             }
             log.info("Response took: ${time.duration}")
@@ -64,7 +64,7 @@ fun Route.clients(cache: DataCache) {
         }
     }
 
-    put<Clients.Client> {
+    put<Clients> {
         try {
             log.info("PUT /clients requested")
             val clientFile: ClientFile = call.receive()
@@ -78,11 +78,12 @@ fun Route.clients(cache: DataCache) {
         }
     }
 
-    delete<Clients.Client> {
+    delete<Clients> {
         try {
             log.info("DELETE /clients requested")
+            val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val cf: ClientFile? = cache.allClientFiles().find { c -> c.client_num == it.client_num.toInt() }
+                val cf: ClientFile? = cache.allClientFiles().find { c -> c.client_num == clientFile.client_num }
                 val result: Int = cf.let { cache.remove(cf) }
                 call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client" to true, "result" to result))
             }

@@ -123,8 +123,10 @@ fun Application.module() {  //testing: Boolean = false
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
-            this.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY))
             disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            this.setVisibility(
+                VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+            )
             register(ContentType.Application.Json, JacksonConverter(this))
         }
     }

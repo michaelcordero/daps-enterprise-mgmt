@@ -60,17 +60,8 @@
                             <th>YesList</th>
                             <th>Filler</th>
                             <th>Filler2</th>
-                            <#--                        <th>Actions</th>-->
                         </tr>
                         </thead>
-                        <#--                    <tbody>-->
-                        <#--                        <tr>-->
-                        <#--                            <td class="table-action">-->
-                        <#--                                <a href="#"><i class="align-middle fas fa-fw fa-pen"></i></a>-->
-                        <#--                                <a href="#"><i class="align-middle fas fa-fw fa-trash"></i></a>-->
-                        <#--                            </td>-->
-                        <#--                        </tr>-->
-                        <#--                    </tbody>-->
                         <tfoot>
                         </tfoot>
                     </table>
@@ -84,12 +75,46 @@
             // Datatables Editor
             var editor = new $.fn.dataTable.Editor({
                 ajax: {
-                    "url": 'http://localhost:8080/clients',
-                    contentType: 'application/json',
-                    data: function ( d ) {
-                        return JSON.stringify( d.data[1] );
+                    // CRUD
+                    create: {
+                        // Defaults
+                        contentType: 'application/json',
+                        dataType: "json",
+                        type: 'POST',
+                        url:'http://localhost:8080/clients',
+                        "data": function ( d ) {
+                            var raw = JSON.stringify(d.data);
+                            // removing row key
+                            var client = raw.substr(raw.indexOf(':')+1)
+                            return client
+                        },
                     },
-                    dataType: "json",
+                    edit: {
+                        // Defaults
+                        contentType: 'application/json',
+                        dataType: "json",
+                        type: 'PUT',
+                        url:'http://localhost:8080/clients',
+                        "data": function ( d ) {
+                            var raw = JSON.stringify(d.data);
+                            // removing row key
+                            var client = raw.substr(raw.indexOf(':')+1)
+                            return client
+                        },
+                    },
+                    remove: {
+                        // Defaults
+                        contentType: 'application/json',
+                        dataType: "json",
+                        type: 'DELETE',
+                        url:'http://localhost:8080/clients',
+                        "data": function ( d ) {
+                            var raw = JSON.stringify(d.data);
+                            // removing row key
+                            var client = raw.substr(raw.indexOf(':')+1)
+                            return client
+                        },
+                    },
                 },
                 table: '#data-clients',
                 idSrc: 'client_num',
@@ -205,6 +230,7 @@
             // Data Table
             $('#data-clients').DataTable({
                 "ajax": {
+                    "type": 'GET',
                     "url": 'http://localhost:8080/clients',
                     "dataSrc": '',
                 },
