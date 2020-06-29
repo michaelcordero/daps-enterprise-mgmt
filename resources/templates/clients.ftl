@@ -94,107 +94,108 @@
                 table: '#data-clients',
                 idSrc: 'client_num',
                 fields: [{
-                    name: 'client_num'
+                    label: 'Client #',name: 'client_num',
                 }, {
-                    name: 'ofcname'
+                    label: 'Office Name', name: 'ofcname'
+                },{
+                    label: 'First Name 1', name: 'firstname1'
                 }, {
-                    name: 'firstname1'
+                    label: 'Last Name 1',name: 'lastname1'
+                },{
+                    label:'First Name 2', name: 'firstname2'
                 }, {
-                    name: 'lastname1'
+                    label: 'Last Name 2',name: 'lastname2'
                 }, {
-                    name: 'firstname2'
+                    label: 'Address 1',name: 'address1'
                 }, {
-                    name: 'lastname2'
+                    label:'Address 2',name: 'address2'
                 }, {
-                    name: 'address1'
+                    label: 'City', name: 'city'
                 }, {
-                    name: 'address2'
+                    label: 'State',name: 'state'
                 }, {
-                    name: 'city'
+                    label:'Zip',name: 'zip'
                 }, {
-                    name: 'state'
+                    label: 'County',name: 'county'
                 }, {
-                    name: 'zip'
+                    label: 'Email', name: 'email'
                 }, {
-                    name: 'county'
+                    label: 'Office Phone',name: 'ophone'
                 }, {
-                    name: 'email'
+                    label: 'Office Extension',name: 'oxtension'
                 }, {
-                    name: 'ophone'
+                    label: 'Office Fax',name: 'ofax'
                 }, {
-                    name: 'oxtension'
+                    label: 'Home Phone',name: 'hphone'
                 }, {
-                    name: 'ofax'
+                    label: 'Cell Phone',name: 'cellphone'
                 }, {
-                    name: 'hphone'
+                    label: 'Car Phone', name: 'carphone'
                 }, {
-                    name: 'cellphone'
+                    label: 'Est Date',name: 'estdate'
                 }, {
-                    name: 'carphone'
+                    label: 'Speciality',name: 'specialty'
                 }, {
-                    name: 'estdate'
+                    label: 'Office Hours',name: 'ofchrs'
                 }, {
-                    name: 'specialty'
+                    label: 'Office Manager',name: 'ofcmanager,'
                 }, {
-                    name: 'ofchrs'
+                    label: 'Rate Confirm',name: 'rate_confirm'
                 }, {
-                    name: 'ofcmanager,'
+                    label: 'Agreement',name: 'agreement'
                 }, {
-                    name: 'rate_confirm'
+                    label: 'Agreement Perm',name: 'agreement_perm'
                 }, {
-                    name: 'agreement'
+                    label: 'Packet Sent',name: 'pktsent'
                 }, {
-                    name: 'agreement_perm'
+                    label: 'RefdBy',name: 'refdby'
                 }, {
-                    name: 'pktsent'
+                    label: 'Dislikes', name: 'dislikes'
                 }, {
-                    name: 'refdby'
+                    label: 'Temp Hyg', name: 'temphyg'
                 }, {
-                    name: 'dislikes'
+                    label: 'DAPS $', name: 'daps_dollar'
                 }, {
-                    name: 'temphyg'
+                    label: 'DAPS $ 2', name: 'daps_dollar_two'
                 }, {
-                    name: 'daps_dollar'
+                    label: 'Needs',name: 'needs'
                 }, {
-                    name: 'daps_dollar_two'
+                    label: 'Start Date',name: 'start_date'
                 }, {
-                    name: 'needs'
+                    label: 'End Date', name: 'end_date'
                 }, {
-                    name: 'start_date'
+                    label: 'Days', name: 'days'
                 }, {
-                    name: 'end_date'
+                    label: 'Perm Conf', name: 'permconf'
                 }, {
-                    name: 'days'
+                    label: 'Temp Conf', name: 'tempconf'
                 }, {
-                    name: 'permconf'
+                    label: 'MlPlCmnt', name: 'mlplcmnt'
                 }, {
-                    name: 'tempconf'
+                    label: 'LofaPlcmnt',name: 'lofaplcmnt'
                 }, {
-                    name: 'mlplcmnt'
+                    label: 'Patnt Time', name: 'patnttime'
                 }, {
-                    name: 'lofaplcmnt'
+                    label: 'Warn Date 1',name: 'warndate1'
                 }, {
-                    name: 'patnttime'
+                    label: 'Warn Date 2', name: 'warndate2'
                 }, {
-                    name: 'warndate1'
+                    label: 'Warn Date 3', name: 'warndate3'
                 }, {
-                    name: 'warndate2'
+                    label: 'C Notes', name: 'cnotes'
                 }, {
-                    name: 'warndate3'
+                    label: 'Multi Office', name: 'multioffice'
                 }, {
-                    name: 'cnotes'
+                    label: 'Pay Periods', name: 'payperiods'
                 }, {
-                    name: 'multioffice'
+                   label: 'Yes List', name: 'yeslist'
                 }, {
-                    name: 'payperiods'
+                   label: 'Filler', name: 'filler'
                 }, {
-                    name: 'yeslist'
-                }, {
-                    name: 'filler'
-                }, {
-                    name: 'filler2'
+                    label: 'Filler 2', name: 'filler2'
                 }]
             });
+            editor.disable('client_num')
             // Submit if all changed
             $('#data-clients').on('click', 'tbody td:not(:first-child)', function (e) {
                 editor.inline(this, {
