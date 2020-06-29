@@ -11,12 +11,12 @@
     <!-- PICK ONE OF THE STYLES BELOW -->
 <#--    <link href="/static/css/modern.css" rel="stylesheet">-->
 <#--    <link href="/static/css/classic.css" rel="stylesheet">-->
-    <link href="/static/css/dark.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/dark.css" >
 <#--    <link href="/static/css/light.css" rel="stylesheet">-->
     <link rel="stylesheet" href="/static/css/main.css">
 <#--    Pre-compiled Datatables Editor CSS -->
-    <link rel="stylesheet" href="/static/css/editor.dataTables.min.css">
-<#--    <link rel="stylesheet" href="/static/css/editor.bootstrap4.min.css">-->
+<#--    <link rel="stylesheet" href="/static/css/editor.dataTables.min.css">-->
+    <link rel="stylesheet" href="/static/css/editor.bootstrap4.min.css">
 <#--    <link rel="stylesheet" href="/static/css/editor.foundation.min.css">-->
 <#--    <link rel="stylesheet" href="/static/css/editor.jqueryui.min.css">-->
 <#--    <link rel="stylesheet" href="/static/css/editor.semanticui.min.css">-->
