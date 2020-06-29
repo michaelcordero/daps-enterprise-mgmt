@@ -59,22 +59,6 @@
                         <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/dashboard-e-commerce.html">E-commerce</a></li>-->
 <#--                    </ul>-->
                 </li>
-                <li class="sidebar-item">
-                    <a href="#pages" data-toggle="collapse" class="sidebar-link collapsed">
-                        <i class="align-middle mr-2 fas fa-fw fa-file">l</i> <span class="align-middle">Pages</span>
-                    </a>
-                    <ul id="pages" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                        <li class="sidebar-item"><a class="sidebar-link" href="#">Settings</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="#">Clients
-                                <#--                                    <span class="sidebar-badge badge badge-pill badge-primary"> </span>--></a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="#">Invoice</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="#">Pricing</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="#">Tasks</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="#">Chat
-                                <#--                                    <span class="sidebar-badge badge badge-pill badge-primary"> New </a></li></span>--></a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/pages-blank.html">Blank Page</a></li>
-                    </ul>
-                </li>
 
                 <li class="sidebar-header">
                     Elements
@@ -102,7 +86,7 @@
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/static/docs/calendar.html">
+                    <a class="sidebar-link" href="#">
                         <i class="align-middle mr-2 far fa-fw fa-calendar-alt"></i> <span class="align-middle">Calendar</span>
                     </a>
                 </li>
@@ -115,9 +99,9 @@
                         <i class="align-middle mr-2 fas fa-fw fa-book"></i> <span class="align-middle">Documentation</span>
                     </a>
                     <ul id="documentation" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-getting-started.html">Getting Started</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Getting Started</a></li>
 <#--                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-plugins.html">Plugins</a></li>-->
-                        <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/docs-changelog.html">Changelog</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="#">Changelog</a></li>
                     </ul>
                 </li>
             </ul>
