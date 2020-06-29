@@ -170,9 +170,7 @@
 
                 <div class="header">
                     <h1 class="header-title">
-<#--                        Welcome back, ${user.first_name + user.last_name}!-->
                     </h1>
-<#--                    <p class="header-subtitle">You have 0 new messages and 0 new notifications.</p>-->
                 </div>
             </div>
             <#nested />
@@ -199,7 +197,6 @@
                     <div class="col-4 text-right">
                         <p class="mb-0">
                             DAPS &copy; 1988 - 2020
-                            <#--                                <a href="/static/docs/dashboard-default.html" class="text-muted">DAPS </a>-->
                         </p>
                     </div>
                 </div>
@@ -218,30 +215,6 @@
         </symbol>
     </defs>
 </svg>
-<script>
-    $(function() {
-        $('#datatables-dashboard-projects').DataTable({
-            pageLength: 6,
-            lengthChange: false,
-            bFilter: false,
-            autoWidth: false
-        });
-    });
-</script>
-<script>
-    $(function() {
-        // Datatables basic
-        $('#datatables-basic').DataTable({
-        });
-        // Datatables with Buttons
-        var datatablesButtons = $('#datatables-buttons').DataTable({
-            lengthChange: !1,
-            buttons: ["copy", "print"],
-            responsive: true
-        });
-        datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)")
-    });
-</script>
 
 </body>
 </#macro>
