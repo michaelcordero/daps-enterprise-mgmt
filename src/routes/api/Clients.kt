@@ -56,7 +56,8 @@ fun Route.clients(cache: DataCache) {
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(clientFile)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("added client" to true, "client_num" to result))
+                val cfr = cache.allClientFiles().find { cf -> cf.client_num == result }
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cfr)))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -70,7 +71,7 @@ fun Route.clients(cache: DataCache) {
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.edit(clientFile)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("updated client" to true, "result" to result))
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(clientFile), "result" to result))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -85,7 +86,7 @@ fun Route.clients(cache: DataCache) {
             val time: TimedValue<Unit> = measureTimedValue {
                 val cf: ClientFile? = cache.allClientFiles().find { c -> c.client_num == clientFile.client_num }
                 val result: Int = cf.let { cache.remove(cf) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client" to true, "result" to result))
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientFile>(), "result" to result))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {

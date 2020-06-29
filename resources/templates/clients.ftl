@@ -88,6 +88,12 @@
                             var client = raw.substr(raw.indexOf(':')+1)
                             return client
                         },
+                        // success: function (json) {
+                        //     alert("OK")
+                        // },
+                        // error: function (xhr, error, thrown) {
+                        //     alert("Save Failed!" + error)
+                        // }
                     },
                     edit: {
                         // Defaults
@@ -108,12 +114,13 @@
                         dataType: "json",
                         type: 'DELETE',
                         url:'http://localhost:8080/clients',
-                        "data": function ( d ) {
-                            var raw = JSON.stringify(d.data);
-                            // removing row key
-                            var client = raw.substr(raw.indexOf(':')+1)
-                            return client
-                        },
+                        // processData: false,
+                        // "data": function ( d ) {
+                        //     var raw = JSON.stringify(d.data);
+                        //     // removing row key
+                        //     var client = raw.substr(raw.indexOf(':')+1)
+                        //     return client
+                        // },
                     },
                 },
                 table: '#data-clients',

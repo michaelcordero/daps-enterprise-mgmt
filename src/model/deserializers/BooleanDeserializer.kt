@@ -9,8 +9,8 @@ class BooleanDeserializer: JsonDeserializer<Boolean>() {
         val truthy: String? = jp?.readValueAs(String::class.java)
         truthy.let {
             return when (truthy) {
-                "Yes" -> true
-                "No" -> false
+                "Y","y","Yes", "yes", "True", "true" -> true
+                "N","n","No", "no", "False","false" -> false
                 else -> null
             }
         }
