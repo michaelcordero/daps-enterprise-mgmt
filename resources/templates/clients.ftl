@@ -182,6 +182,9 @@
                 }, {
                     label: 'RefdBy',name: 'refdby'
                 }, {
+                    label: 'Preferences', name: 'preferences'
+                }
+                , {
                     label: 'Dislikes', name: 'dislikes'
                 }, {
                     label: 'Temp Hyg', name: 'temphyg'
@@ -235,7 +238,7 @@
                 });
             });
             // Data Table
-            $('#data-clients').DataTable({
+            var table = $('#data-clients').DataTable({
                 "ajax": {
                     "type": 'GET',
                     "url": 'http://localhost:8080/web/clients',
@@ -303,6 +306,10 @@
                     {extend: 'edit', editor: editor},
                     {extend: 'remove', editor: editor}
                 ]
+            });
+            // Double click for edit
+            $('#data-clients tbody').on('dblclick', 'tr', function () {
+                table.row(this).edit()
             });
         });
     </script>
