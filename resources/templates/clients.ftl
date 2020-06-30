@@ -81,7 +81,7 @@
                         contentType: 'application/json',
                         dataType: "json",
                         type: 'POST',
-                        url:'http://localhost:8080/clients',
+                        url:'http://localhost:8080/web/clients',
                         "data": function ( d ) {
                             var raw = JSON.stringify(d.data);
                             // removing row key
@@ -100,7 +100,7 @@
                         contentType: 'application/json',
                         dataType: "json",
                         type: 'PUT',
-                        url:'http://localhost:8080/clients',
+                        url:'http://localhost:8080/web/clients',
                         "data": function ( d ) {
                             var raw = JSON.stringify(d.data);
                             // removing row key
@@ -113,7 +113,7 @@
                         contentType: 'application/json',
                         dataType: "json",
                         type: 'DELETE',
-                        url:'http://localhost:8080/clients',
+                        url:'http://localhost:8080/web/clients',
                         // processData: false,
                         // "data": function ( d ) {
                         //     var raw = JSON.stringify(d.data);
@@ -238,7 +238,7 @@
             $('#data-clients').DataTable({
                 "ajax": {
                     "type": 'GET',
-                    "url": 'http://localhost:8080/clients',
+                    "url": 'http://localhost:8080/web/clients',
                     "dataSrc": '',
                 },
                 // serverSide: true,

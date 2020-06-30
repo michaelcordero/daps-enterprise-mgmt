@@ -33,6 +33,7 @@ fun Route.clients(cache: DataCache) {
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
+            log.error(e.message)
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
         }
     }
@@ -46,6 +47,7 @@ fun Route.clients(cache: DataCache) {
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
+            log.error(e.message)
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
         }
     }
@@ -61,6 +63,7 @@ fun Route.clients(cache: DataCache) {
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
+            log.error(e.message)
             call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
         }
     }
@@ -75,6 +78,7 @@ fun Route.clients(cache: DataCache) {
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
+            log.error(e.message)
             call.respond(status = HttpStatusCode.BadRequest, message = e.toString())
         }
     }
@@ -90,6 +94,7 @@ fun Route.clients(cache: DataCache) {
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
+            log.error(e.message)
             call.respond(status = HttpStatusCode.BadRequest, message = e.toString())
         }
     }

@@ -49,6 +49,7 @@ constructor(
     @JsonDeserialize(using = LocalDateDeserializer::class)
     val agreement: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val agreement_perm: Timestamp?,
     @JsonSerialize(using = LocalDateSerializer::class)
     @JsonDeserialize(using = LocalDateDeserializer::class)
