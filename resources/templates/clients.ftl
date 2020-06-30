@@ -170,7 +170,7 @@
                 }, {
                     label: 'Office Hours',name: 'ofchrs'
                 }, {
-                    label: 'Office Manager',name: 'ofcmanager,'
+                    label: 'Office Manager',name: 'ofcmanager'
                 }, {
                     label: 'Rate Confirm',name: 'rate_confirm'
                 }, {

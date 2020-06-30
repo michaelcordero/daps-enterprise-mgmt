@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.ClientFileTable
 import model.deserializers.BooleanDeserializer
+import model.deserializers.DoubleDeserializer
 import model.deserializers.LocalDateDeserializer
 import model.serializers.BooleanSerializer
 import model.serializers.DoubleSerializer
@@ -61,8 +62,10 @@ constructor(
     @JsonDeserialize(using = BooleanDeserializer::class)
     val temphyg: Boolean?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val daps_dollar: Double?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val daps_dollar_two: Double?,
     val needs: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
@@ -104,6 +107,7 @@ constructor(
     @JsonDeserialize(using = LocalDateDeserializer::class)
     val filler: Timestamp?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val filler2: Double?
 ) : Serializable {
     constructor(result_set: ResultSet) : this(
