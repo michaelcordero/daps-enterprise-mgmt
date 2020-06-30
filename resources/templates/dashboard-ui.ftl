@@ -42,7 +42,7 @@
             <div class="sidebar-user">
 <#--                <img src="/static/images/avatars/avatar.jpg" class="img-fluid rounded-circle mb-2" alt="${user.first_name + user.last_name}" />-->
 <#--                <div class="font-weight-bold">${user.first_name + user.last_name}</div>-->
-                <small>CEO</small>
+<#--                <small>CEO</small>-->
             </div>
 
             <ul class="sidebar-nav">
