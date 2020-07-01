@@ -85,8 +85,7 @@
                         "data": function ( d ) {
                             // removing row key
                             var raw = JSON.stringify(d.data);
-                            var client = raw.substr(raw.indexOf(':')+1)
-                            return client
+                            return raw.substr(raw.indexOf(':') + 1)
                         },
                         // success: function (json) {
                         //     alert("OK")
@@ -104,8 +103,7 @@
                         "data": function ( d ) {
                             // removing row key
                             var raw = JSON.stringify(d.data);
-                            var client = raw.substr(raw.indexOf(':')+1)
-                            return client
+                            return raw.substr(raw.indexOf(':') + 1)
                         },
                     },
                     remove: {
@@ -118,8 +116,7 @@
                         "data": function ( d ) {
                             // removing row key
                             var raw = JSON.stringify(d.data);
-                            var client = raw.substr(raw.indexOf(':')+1)
-                            return client
+                            return raw.substr(raw.indexOf(':') + 1)
                         },
                     },
                 },
@@ -244,7 +241,6 @@
                     "url": 'http://localhost:8080/web/clients',
                     "dataSrc": '',
                 },
-                // serverSide: true,
                 dom: 'Bfrtip',
                 columns:
                     [
