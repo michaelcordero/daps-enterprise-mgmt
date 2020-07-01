@@ -12,15 +12,15 @@ interface DAPSStaffMessagesQuery {
     /**
      * Create
      */
-    fun createDAPSStaffMessages(dsm: DAPSStaffMessages) {
-        transaction (db) {
+    fun createDAPSStaffMessages(dsm: DAPSStaffMessages): Int {
+        return transaction (db) {
             DAPSStaffMessagesTable.insert {
                 it[memo_date] = dsm.memo_date
                 it[entered_by] = dsm.entered_by
                 it[intended_for] = dsm.intended_for
                 it[message] = dsm.message
                 // staff messagekey auto incremented
-            }
+            } get DAPSStaffMessagesTable.staff_messages_key
         }
     }
 
@@ -39,7 +39,7 @@ interface DAPSStaffMessagesQuery {
     /**
      * Read
      */
-    fun allDAPSStaffMessagesTable() : List<DAPSStaffMessages> {
+    fun allDAPSStaffMessages() : List<DAPSStaffMessages> {
         return transaction (db) {
             DAPSStaffMessagesTable.selectAll().toList()
         }.map {
@@ -57,8 +57,8 @@ interface DAPSStaffMessagesQuery {
      * Update
      */
 
-    fun updateDAPSStaffMessages(dsm: DAPSStaffMessages) {
-        transaction (db) {
+    fun updateDAPSStaffMessages(dsm: DAPSStaffMessages): Int {
+        return transaction (db) {
             DAPSStaffMessagesTable.update({
                 DAPSStaffMessagesTable.staff_messages_key.eq(dsm.staff_messages_key!!)
             })
@@ -76,10 +76,10 @@ interface DAPSStaffMessagesQuery {
      * Delete
      */
 
-    fun deleteDAPSStaffMessages(dsm: DAPSStaffMessages) {
-        transaction (db) {
+    fun deleteDAPSStaffMessages(staff_messages_key: Int): Int {
+        return transaction (db) {
             DAPSStaffMessagesTable.deleteWhere {
-                DAPSStaffMessagesTable.staff_messages_key.eq(dsm.staff_messages_key!!)
+                DAPSStaffMessagesTable.staff_messages_key.eq(staff_messages_key)
             }
         }
     }

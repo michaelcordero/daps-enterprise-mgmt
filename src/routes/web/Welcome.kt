@@ -9,6 +9,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
+import model.User
 import presenters.WelcomePresenter
 import security.DAPSSession
 
@@ -23,6 +24,11 @@ class Welcome
 fun Route.welcome(presenter: WelcomePresenter) {
     get<Welcome> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to (session?.emailId ?: "unknown")), "someetag"))
+        if (session != null) {
+            val user: User = presenter.user(session.emailId)!!
+            call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "welcome-e-tag")) //, "user" to user
+        } else {
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null), "welcome-e-tag"))
+        }
     }
 }

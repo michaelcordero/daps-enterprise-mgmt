@@ -67,8 +67,8 @@ interface UserQuery {
     /**
      * Creates a new user
      */
-    fun addUser(user: User) {
-        transaction(db) {
+    fun addUser(user: User): Long {
+        return transaction(db) {
             UsersTable.insert {
                 it[ID] = user.id
                 it[first_name] = user.first_name
@@ -76,14 +76,14 @@ interface UserQuery {
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
             }
-        }
+        } get UsersTable.ID
     }
 
     /**
      * Edits a user
      */
-    fun editUser(user: User) {
-        transaction(db) {
+    fun updateUser(user: User): Int {
+        return transaction(db) {
             UsersTable.update({
                 UsersTable.ID.eq(user.id)
             }){
@@ -98,8 +98,8 @@ interface UserQuery {
     /**
      * Removes user
      */
-    fun removeUser( userId: Long ) {
-        transaction(db) {
+    fun deleteUser(userId: Long ): Int {
+        return transaction(db) {
             UsersTable.deleteWhere { UsersTable.ID.eq(userId) }
         }
     }

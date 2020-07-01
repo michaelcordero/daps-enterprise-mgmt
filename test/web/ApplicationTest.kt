@@ -12,8 +12,10 @@ import org.junit.Test
 import routes.web.Index
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.time.ExperimentalTime
 
 class ApplicationTest {
+    @ExperimentalTime
     @KtorExperimentalAPI
     @KtorExperimentalLocationsAPI
     @Test

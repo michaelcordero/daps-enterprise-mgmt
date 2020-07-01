@@ -12,7 +12,7 @@ import io.ktor.sessions.sessions
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
-@Location("/")
+@Location("")
 class Index
 
 /*

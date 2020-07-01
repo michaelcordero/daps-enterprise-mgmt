@@ -1,6 +1,11 @@
 package application
 
+import cache.DataCache
+import cache.InMemoryCache
+import com.fasterxml.jackson.annotation.JsonAutoDetect
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker
 import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
@@ -34,34 +39,30 @@ import io.ktor.webjars.Webjars
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import presenters.RegisterPresenter
-import presenters.WebLoginPresenter
-import presenters.WelcomePresenter
-import routes.api.billings
-import routes.api.clientNotes
-import routes.api.clients
-import routes.api.login
+import presenters.*
+import routes.api.*
 import routes.web.*
 import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
-import java.text.DateFormat
 import java.time.ZoneId
+import kotlin.time.ExperimentalTime
 
 
 val log: Logger = LoggerFactory.getLogger(Application::class.java)
-val dq: DataQuery = LocalDataQuery()
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
+val dq: DataQuery = LocalDataQuery()
+val cache: DataCache = InMemoryCache(dq)
 
 
+@ExperimentalTime
 @ExperimentalStdlibApi
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun main(args: Array<String>) {
     // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
-    log.info("Starting database...")
     log.info("Starting server...")
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
@@ -73,23 +74,30 @@ fun main(args: Array<String>) {
     server.start(true)
 }
 
+@ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf
 //@JvmOverloads
 fun Application.module() {  //testing: Boolean = false
     log.info("application module starting...")
-    environment.monitor.subscribe(ApplicationStopped){
+    environment.monitor.subscribe(ApplicationStopped) {
         dq.close()
         // try to figure out how to call the /logout route from here
         //it.locations.href(WebLogin())
         it.dispose()
+//        cache.shutdown(true)
     }
     // This feature handles the authentication for Web & HTTP API Requests
-    install(Authentication){
-        basic ("web"){
+    install(Authentication) {
+        basic("web") {
             skipWhen { call ->
-                call.sessions.get<DAPSSession>()?.token != null
+                try {
+                    dapsJWT.verifier.verify(call.sessions.get<DAPSSession>()?.token)
+                    return@skipWhen true
+                } catch (e: Exception){
+                    return@skipWhen false
+                }
             }
         }
         form("form") {
@@ -97,7 +105,7 @@ fun Application.module() {  //testing: Boolean = false
             passwordParamName = "password"
             validate {
                 val user: User? = dq.user(it.name, DAPSSecurity.hash(it.password))
-                if ( user != null) { // sessions.get<DAPSSession>()?.token != null
+                if (user != null) { // sessions.get<DAPSSession>()?.token != null
                     UserIdPrincipal(it.name)
                 } else {
                     null
@@ -115,20 +123,45 @@ fun Application.module() {  //testing: Boolean = false
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
-            dateFormat = DateFormat.getDateInstance()
-            register(ContentType.Application.Json, JacksonConverter())
+            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            this.setVisibility(
+                VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+            )
+            register(ContentType.Application.Json, JacksonConverter(this))
         }
     }
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
+    // This feature enables truly open access across domain boundaries
+    install(CORS) {
+//        host("localhost:4000") to specify client app
+//        anyHost()
+//        method(HttpMethod.Options)
+//        method(HttpMethod.Get)
+//        method(HttpMethod.Post)
+//        method(HttpMethod.Put)
+//        method(HttpMethod.Delete)
+//        method(HttpMethod.Patch)
+//        header(HttpHeaders.Authorization)
+//        allowCredentials = true
+    }
     // This uses use the logger to log every call (request/response)
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
+    // cache control
+//    install(CachingHeaders) {
+//        options {
+//            when(it.contentType?.withoutParameters()) {
+//                ContentType.Text.JavaScript -> CachingOptions(cacheControl = CacheControl)
+//                else -> null
+//            }
+//        }
+//    }
     // SESSION cookie
-    install( Sessions ) {
+    install(Sessions) {
         cookie<DAPSSession>("SESSION") {
             cookie.path = "/"
         }
@@ -138,13 +171,13 @@ fun Application.module() {  //testing: Boolean = false
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
-    install( Webjars ) {
+    install(Webjars) {
         path = "/webjars" //defaults to /webjars
         zone = ZoneId.systemDefault() //defaults to ZoneId.systemDefault()
     }
     routing {
         // static content
-        static ("/static/" ) {
+        static("/static/") {
             // css, javascript & images served here
             resources("static")
         }
@@ -152,15 +185,25 @@ fun Application.module() {  //testing: Boolean = false
         register(RegisterPresenter(dq, dapsJWT))
         index()
         weblogout()
+//         clients(cache)  // TODO: leaving this here, so i can continue to experiment with the node.js app
         // Initial web authentication
         authenticate("form") {
             weblogin(WebLoginPresenter(dq, dapsJWT))
         }
         // Web authentication
         authenticate("web") {
-            welcome(WelcomePresenter(dq))
+            route("/web") {
+                clients(cache)
+                billings(cache)
+                tempnotes(cache)
+                temps(cache)
+            }
+            welcome(WelcomePresenter())
             users(dq)
-            table(dq)
+            webclients(WebClientsPresenter())
+            webbillings(WebBillingsPresenter())
+            webtempnotes(WebTempNotesPresenter())
+            webtemps()
         }
         // API authentication
         route("/api") {
@@ -168,9 +211,10 @@ fun Application.module() {  //testing: Boolean = false
         }
         authenticate("api") {
             route("/api") {
-                clients(dq)
-                billings(dq)
+                clients(cache)
+                billings(cache)
                 clientNotes(dq)
+                temps(cache)
             }
         }
     }

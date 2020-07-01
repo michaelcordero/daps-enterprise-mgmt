@@ -12,15 +12,15 @@ interface TempNotesQuery {
     /**
      * Create
      */
-    fun createTempNote(tn: TempNotes) {
-        transaction (db) {
+    fun createTempNote(tn: TempNotes): Int {
+        return transaction (db) {
             TempNotesTable.insert {
                 it[emp_num] = tn.emp_num
                 it[note_date] = tn.note_date
                 it[initial] = tn.initial
                 it[emp_note] = tn.emp_note
                 //tempnotekey will be auto-incremented
-            }
+            } get TempNotesTable.temp_note_key
         }
     }
 
@@ -59,8 +59,8 @@ interface TempNotesQuery {
      * Update
      */
 
-    fun updateTempNote(tn: TempNotes) {
-        transaction (db) {
+    fun updateTempNote(tn: TempNotes): Int {
+        return transaction (db) {
             TempNotesTable.update({
                 TempNotesTable.temp_note_key.eq(tn.temp_note_key!!)
             }) {
@@ -77,10 +77,10 @@ interface TempNotesQuery {
      * Delete
      */
 
-    fun deleteTempNote(tn: TempNotes) {
-        transaction (db) {
+    fun deleteTempNote(temp_note_key: Int): Int {
+        return transaction (db) {
             TempNotesTable.deleteWhere {
-                TempNotesTable.temp_note_key.eq(tn.temp_note_key!!)
+                TempNotesTable.temp_note_key.eq(temp_note_key)
             }
         }
     }

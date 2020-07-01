@@ -12,8 +12,8 @@ interface TempsQuery {
     /**
      * Create
      */
-    fun createTemps(t: Temps) {
-        transaction (db) {
+    fun createTemps(t: Temps): Int {
+        return transaction (db) {
             TempsTable.insert {
                 // emp_num will be auto-incremented
                 it[type_a] = t.type_a
@@ -78,8 +78,8 @@ interface TempsQuery {
                 it[yes_list] = t.yes_list
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
-                it[filler_two] = t.fillter_two
-            }
+                it[filler_two] = t.filler_two
+            } get TempsTable.emp_num
         }
     }
 
@@ -149,7 +149,7 @@ interface TempsQuery {
                 it[yes_list] = t.yes_list
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
-                it[filler_two] = t.fillter_two
+                it[filler_two] = t.filler_two
             }
         }
     }
@@ -310,8 +310,8 @@ interface TempsQuery {
      * Update
      */
 
-    fun updateTemp(t: Temps) {
-        transaction (db) {
+    fun updateTemp(t: Temps): Int {
+        return transaction (db) {
             TempsTable.update({
                 TempsTable.emp_num.eq(t.emp_num)
             }) {
@@ -378,7 +378,7 @@ interface TempsQuery {
                 it[yes_list] = t.yes_list
                 it[resident_alien] = t.resident_alien
                 it[resident_alien_exp] = t.resident_alien_exp
-                it[filler_two] = t.fillter_two
+                it[filler_two] = t.filler_two
             }
         }
     }
@@ -387,10 +387,10 @@ interface TempsQuery {
      * Delete
      */
 
-    fun deleteTemp(t: Temps) {
-        transaction (db) {
+    fun deleteTemp(emp_num: Int): Int {
+        return transaction (db) {
             TempsTable.deleteWhere {
-                TempsTable.emp_num.eq(t.emp_num)
+                TempsTable.emp_num.eq(emp_num)
             }
         }
     }

@@ -13,7 +13,7 @@ interface DAPSStaffQuery {
      * Create
      */
     fun insertDAPSStaff(ds: DAPSStaff) {
-        transaction (db) {
+        return transaction (db) {
             DAPSStaffTable.insert {
                 it[initial] = ds.initial!!
                 it[firstname] = ds.firstname
@@ -44,8 +44,8 @@ interface DAPSStaffQuery {
      * Update
      */
 
-    fun updateDAPSStaff(ds: DAPSStaff) {
-        transaction (db) {
+    fun updateDAPSStaff(ds: DAPSStaff): Int {
+        return transaction (db) {
             DAPSStaffTable.update({
                 DAPSStaffTable.initial.eq(ds.initial!!)
             }) {
@@ -60,8 +60,8 @@ interface DAPSStaffQuery {
      * Delete
      */
 
-    fun deleteDAPSStaff(ds: DAPSStaff) {
-        transaction (db) {
+    fun deleteDAPSStaff(ds: DAPSStaff): Int {
+        return transaction (db) {
             DAPSStaffTable.deleteWhere {
                 DAPSStaffTable.initial.eq(ds.initial!!)
             }

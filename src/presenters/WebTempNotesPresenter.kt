@@ -1,0 +1,4 @@
+package presenters
+
+class WebTempNotesPresenter {
+}

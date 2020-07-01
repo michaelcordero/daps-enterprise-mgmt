@@ -12,8 +12,8 @@ val db: Database
     /**
      * Create
      */
-    fun createDAPSAddress(da: DAPSAddress){
-        transaction (db) {
+    fun createDAPSAddress(da: DAPSAddress): Int {
+        return transaction (db) {
             DAPSAddressTable.insert {
 //                it[mailinglist_id] = da.mailing_list_id!! auto-increment handles this
                 it[office] = da.office
@@ -23,7 +23,7 @@ val db: Database
                 it[state] = da.state
                 it[zipcode] = da.zip_code
             }
-        }
+        } get DAPSAddressTable.mailinglist_id
     }
 
     fun insertDAPSAddress(da: DAPSAddress){
@@ -64,8 +64,8 @@ val db: Database
      * Update
      */
 
-    fun updateDAPSAddress(da: DAPSAddress) {
-        transaction (db) {
+    fun updateDAPSAddress(da: DAPSAddress): Int {
+        return transaction (db) {
             DAPSAddressTable.update({ DAPSAddressTable.mailinglist_id.eq(da.mailing_list_id!!)}) {
                 it[office] = da.office
                 it[address1] = da.address1
@@ -81,10 +81,10 @@ val db: Database
      * Delete
      */
 
-    fun deleteDAPSAddress(da: DAPSAddress) {
-        transaction (db) {
+    fun deleteDAPSAddress(mailing_list_id: Int): Int {
+        return transaction (db) {
             DAPSAddressTable.deleteWhere {
-                DAPSAddressTable.mailinglist_id.eq(da.mailing_list_id!!)
+                DAPSAddressTable.mailinglist_id.eq(mailing_list_id)
             }
         }
     }

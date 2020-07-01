@@ -16,3 +16,12 @@ input:required:valid {
     background-repeat: no-repeat;
 }
 
+/*https://stackoverflow.com/questions/9789723/css-text-overflow-in-a-table-cell*/
+td {
+    /*max-height: 350px;*/
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

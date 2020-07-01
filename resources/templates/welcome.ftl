@@ -1,8 +1,9 @@
-<#-- @ftlvariable name="emailId" type="java.lang.String" -->
-<#import "template.ftl" as layout />
-
-<@layout.mainLayout title="Welcome">
-    <p> Welcome <#if emailId??> ${emailId} </#if> to the first kotlin app! :D </p>
-    <#--noinspection HtmlUnknownTarget-->
-    <a href="/weblogout" class="links">Logout </a>
-</@layout.mainLayout>
+<#-- @ftlvariable name="user" type="model.User" -->
+<#import "dashboard-ui.ftl" as ui />
+<@ui.dashboardUI title="Welcome">
+    <div class="container-fluid">
+        <div class="header">
+            <h1 class="header-title">Welcome <#if user??>  ${user.first_name + " " +user.last_name}! </#if></h1>
+        </div>
+    </div>
+</@ui.dashboardUI>

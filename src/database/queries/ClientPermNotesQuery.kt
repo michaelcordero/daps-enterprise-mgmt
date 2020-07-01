@@ -13,8 +13,8 @@ val db: Database
     /**
      * Create
      */
-    fun createClientPermNotes(cpn: ClientPermNotes) {
-        transaction (db) {
+    fun createClientPermNotes(cpn: ClientPermNotes): Int {
+        return transaction (db) {
             ClientPermNotesTable.insert {
 //                it[id] = cpn.id auto-increment
                 it[client_num] = cpn.client_num
@@ -22,7 +22,7 @@ val db: Database
                 it[not_interested] = cpn.not_interested
                 it[staffname] = cpn.staff_name
             }
-        }
+        } get ClientPermNotesTable.ID
     }
 
     fun insertClientPermNotes(cpn: ClientPermNotes) {
@@ -59,8 +59,8 @@ val db: Database
      * Update
      */
 
-    fun updateClientPermNote(cpn: ClientPermNotes) {
-        transaction(db) {
+    fun updateClientPermNote(cpn: ClientPermNotes): Int {
+        return transaction(db) {
             ClientPermNotesTable.update({
                 ClientPermNotesTable.ID.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)
             }) {
@@ -77,10 +77,10 @@ val db: Database
      * Delete
      */
 
-    fun deleteClientPermNote(cpn: ClientPermNotes) {
-        transaction (db) {
+    fun deleteClientPermNote(id: Int): Int {
+       return transaction (db) {
             ClientPermNotesTable.deleteWhere {
-                ClientPermNotesTable.ID.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)
+                ClientPermNotesTable.ID.eq(id)
             }
         }
     }

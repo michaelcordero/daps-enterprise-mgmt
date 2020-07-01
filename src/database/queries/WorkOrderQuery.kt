@@ -12,8 +12,8 @@ interface WorkOrderQuery {
     /**
      * Create
      */
-    fun createWorkOrder(wo: WorkOrder){
-        transaction (db) {
+    fun createWorkOrder(wo: WorkOrder): Int {
+        return transaction (db) {
             WorkOrderTable.insert {
                 // wo_number will be auto-incremented
                 it[client_num] = wo.client_num
@@ -39,7 +39,7 @@ interface WorkOrderQuery {
                 it[active] = wo.active
                 it[left_message] = wo.left_message
                 it[confirmed] = wo.confirmed
-            }
+            } get WorkOrderTable.wo_number
         }
     }
 
@@ -149,8 +149,8 @@ interface WorkOrderQuery {
      * Update
      */
 
-    fun updateWorkOrder(wo: WorkOrder) {
-        transaction (db) {
+    fun updateWorkOrder(wo: WorkOrder): Int {
+        return transaction (db) {
             WorkOrderTable.update({
                 WorkOrderTable.wo_number.eq(wo.wo_number)
             }) {
@@ -187,10 +187,10 @@ interface WorkOrderQuery {
      * Delete
      */
 
-    fun deleteWorkOrder(wo: WorkOrder) {
-        transaction (db) {
+    fun deleteWorkOrder(wo_num: Int): Int {
+       return transaction (db) {
             WorkOrderTable.deleteWhere {
-                WorkOrderTable.wo_number.eq(wo.wo_number)
+                WorkOrderTable.wo_number.eq(wo_num)
             }
         }
     }

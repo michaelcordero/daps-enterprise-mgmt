@@ -12,8 +12,8 @@ interface WONotesQuery {
     /**
      * Create
      */
-    fun createWONotes(won: WONotes) {
-        transaction (db) {
+    fun createWONotes(won: WONotes): Int {
+        return transaction (db) {
             WONotesTable.insert {
                 // id will be auto-incremented
                 it[wo_number] = won.wo_number
@@ -22,7 +22,7 @@ interface WONotesQuery {
                 it[comments] = won.comments
                 it[followup_date] = won.followup_date
             }
-        }
+        } get WONotesTable.ID
     }
 
     fun insertWONotes(won: WONotes) {
@@ -78,8 +78,8 @@ interface WONotesQuery {
      * Update
      */
 
-    fun updateWONotes(won: WONotes) {
-        transaction (db) {
+    fun updateWONotes(won: WONotes): Int {
+        return transaction (db) {
             WONotesTable.update({
                 WONotesTable.ID.eq(won.id)
             }) {
@@ -97,10 +97,10 @@ interface WONotesQuery {
      * Delete
      */
 
-    fun deleteWONote(won: WONotes) {
-        transaction (db) {
+    fun deleteWONote(id: Int): Int {
+       return transaction (db) {
             WONotesTable.deleteWhere {
-                WONotesTable.ID.eq(won.id)
+                WONotesTable.ID.eq(id)
             }
         }
     }

@@ -3,7 +3,6 @@
 
 <@layout.mainLayout title="WebLogin">
     <body class="text-center">
-    <link rel="stylesheet" href="/static/css/main.css">
     <#--noinspection HtmlUnknownTarget-->
     <form class="form-login" action="/weblogin" method="post" enctype="application/x-www-form-urlencoded">
         <#--noinspection CheckImageSize-->

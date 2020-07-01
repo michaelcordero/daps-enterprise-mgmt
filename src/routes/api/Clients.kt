@@ -1,6 +1,7 @@
 package routes.api
 
-import database.queries.DataQuery
+import application.log
+import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
@@ -9,7 +10,9 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.util.KtorExperimentalAPI
 import model.ClientFile
-import java.util.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 @KtorExperimentalLocationsAPI
 @Location("/clients")
@@ -18,53 +21,81 @@ class Clients {
     data class Client(val client_num: String, val clients: Clients)
 }
 
+@ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.clients(dq: DataQuery) {
+fun Route.clients(cache: DataCache) {
     get<Clients> {
         try {
-            val clients: List<ClientFile> = Collections.synchronizedList(dq.allClientFiles())
-            call.respond(mapOf("clients" to synchronized(clients) { clients.toList()} ))
+            log.info("GET /clients requested")
+            val time: TimedValue<Unit> = measureTimedValue {
+                call.respond(status = HttpStatusCode.OK, message = cache.allClientFiles())
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message = mapOf("error" to e.toString()))
         }
     }
 
     get<Clients.Client> {
         try {
-            val client: ClientFile? = dq.readClientFile(it.client_num.toInt()).firstOrNull()
-            call.respond(mapOf("client" to client))
+            log.info("GET /clients/{client_num} requested")
+            val time: TimedValue<Unit> = measureTimedValue {
+                val client: ClientFile? = cache.allClientFiles().find { cf -> cf.client_num == it.client_num.toInt() }
+                call.respond(mapOf("client" to client))
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: ${e}")
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message = mapOf("error" to e.toString()))
         }
     }
 
     post<Clients> {
         try {
+            log.info("POST /clients requested")
             val clientFile: ClientFile = call.receive()
-            val result: Int = dq.createClientFile(clientFile)
-            call.respond(status = HttpStatusCode.OK, message = mapOf("added client" to true, "client_num" to result))
+            val time: TimedValue<Unit> = measureTimedValue {
+                val result: Int = cache.add(clientFile)
+                val cfr = cache.allClientFiles().find { cf -> cf.client_num == result }
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cfr)))
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message =  mapOf("error" to e.toString()))
         }
     }
 
-    put<Clients.Client> {
+    put<Clients> {
         try {
+            log.info("PUT /clients requested")
             val clientFile: ClientFile = call.receive()
-            val result: Int = dq.updateClientFile(clientFile)
-            call.respond(status = HttpStatusCode.OK, message = mapOf("updated client" to true, "result" to result))
+            val time: TimedValue<Unit> = measureTimedValue {
+                val result: Int = cache.edit(clientFile)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(clientFile), "result" to result))
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message = mapOf("error" to e.toString()))
         }
     }
 
-    delete<Clients.Client> {
+    delete<Clients> {
         try {
-            val result: Int = dq.deleteClientFile(it.client_num.toInt())
-            call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client" to true, "result" to result))
+            log.info("DELETE /clients requested")
+            val clientFile: ClientFile = call.receive()
+            val time: TimedValue<Unit> = measureTimedValue {
+                val cf: ClientFile? = cache.allClientFiles().find { c -> c.client_num == clientFile.client_num }
+                val result: Int = cf.let { cache.remove(cf) }
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientFile>(), "result" to result))
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message =  e.toString())
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message = mapOf("error" to e.toString()))
         }
     }
 }

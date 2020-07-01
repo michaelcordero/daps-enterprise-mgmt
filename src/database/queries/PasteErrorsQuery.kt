@@ -27,7 +27,7 @@ interface PasteErrorsQuery {
     /**
      * Read
      */
-    fun allPasteErrors(pe: PasteErrors): List<PasteErrors> {
+    fun allPasteErrors(): List<PasteErrors> {
         return transaction(db) {
             PasteErrorsTable.selectAll().toList()
         }.map {
@@ -45,8 +45,8 @@ interface PasteErrorsQuery {
      * Update
      */
 
-    fun updatePasteErrors(pe: PasteErrors) {
-        transaction (db) {
+    fun updatePasteErrors(pe: PasteErrors): Int {
+        return transaction (db) {
             PasteErrorsTable.update ({
                 PasteErrorsTable.client_num.eq(pe.client_num) and
                         PasteErrorsTable.ref_num.eq(pe.ref_num)
@@ -64,8 +64,8 @@ interface PasteErrorsQuery {
      * Delete
      */
 
-    fun deletePasteErrors(pe: PasteErrors) {
-        transaction (db) {
+    fun deletePasteErrors(pe: PasteErrors): Int {
+        return transaction (db) {
             PasteErrorsTable.deleteWhere {
                 PasteErrorsTable.client_num.eq(pe.client_num) and
                         PasteErrorsTable.ref_num.eq(pe.ref_num) and

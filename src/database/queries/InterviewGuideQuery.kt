@@ -11,8 +11,8 @@ interface InterviewGuideQuery {
     /**
      * Create
      */
-    fun createInterviewGuide(ig: InterviewGuide) {
-        transaction (db) {
+    fun createInterviewGuide(ig: InterviewGuide): Int {
+        return transaction (db) {
             InterviewGuideTable.insert {
                 // id is auto-incremented
                 it[client_num] = ig.client_num
@@ -27,7 +27,7 @@ interface InterviewGuideQuery {
                 it[emp_notes_id] = ig.emp_notes_id
                 it[client_notes_id] = ig.client_notes_id
             }
-        }
+        } get InterviewGuideTable.ID
     }
 
     fun insertInterviewGuide(ig: InterviewGuide) {
@@ -78,8 +78,8 @@ interface InterviewGuideQuery {
      * Update
      */
 
-    fun updateInterviewGuide(ig: InterviewGuide) {
-        transaction (db) {
+    fun updateInterviewGuide(ig: InterviewGuide): Int {
+        return transaction (db) {
             InterviewGuideTable.update({
                 InterviewGuideTable.ID.eq(ig.id!!)
             }) {
@@ -102,10 +102,10 @@ interface InterviewGuideQuery {
      * Delete
      */
 
-    fun deleteInterviewGuide(ig: InterviewGuide) {
-        transaction (db) {
+    fun deleteInterviewGuide(id: Int): Int {
+        return transaction (db) {
             InterviewGuideTable.deleteWhere {
-                InterviewGuideTable.ID.eq(ig.id!!)
+                InterviewGuideTable.ID.eq(id)
             }
         }
     }

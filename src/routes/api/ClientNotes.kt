@@ -1,18 +1,19 @@
 package routes.api
 
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
+import application.log
 import database.queries.DataQuery
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
-import io.ktor.locations.delete
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.*
+import io.ktor.routing.Route
 import io.ktor.util.KtorExperimentalAPI
 import model.ClientNotes
 import java.util.*
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimedValue
+import kotlin.time.measureTimedValue
 
 @KtorExperimentalLocationsAPI
 @Location("/client_notes")
@@ -25,13 +26,18 @@ class ClientNotesRoute {
     data class ClientNotesByInitial(val clients: ClientNotesRoute, val initial: String)
 }
 
+@ExperimentalTime
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
 fun Route.clientNotes(dq: DataQuery) {
     get<ClientNotesRoute> {
         try {
-            val client_notes: List<ClientNotes> = Collections.synchronizedList(dq.allClientNotes())
-            call.respond(mapOf("all_client_notes" to synchronized(client_notes) { client_notes.toList()} ))
+            log.info("/client_notes requested")
+            val time: TimedValue<Unit> = measureTimedValue {
+                val client_notes: List<ClientNotes> = Collections.synchronizedList(dq.allClientNotes())
+                call.respond(mapOf("all_client_notes" to synchronized(client_notes) { client_notes.toList()} ))
+            }
+            log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
         }

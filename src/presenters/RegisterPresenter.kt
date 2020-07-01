@@ -8,7 +8,7 @@ import security.DAPSJWT
 import kotlin.random.Random
 
 @KtorExperimentalAPI
-data class RegisterPresenter (val dao: DataQuery, val dapsjwt: DAPSJWT) : AbstractPresenter(dao) {
+data class RegisterPresenter (val dao: DataQuery, val dapsjwt: DAPSJWT) : AbstractPresenter() {
 
     fun createUser(first_name: String, last_name: String, email: String, password: String) {
         val error: String = validate(first_name, last_name, email, password)

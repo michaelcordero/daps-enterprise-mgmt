@@ -132,11 +132,10 @@ val db: Database
     /**
      * Read
      */
-
     fun allClientFiles(): List<ClientFile> = transaction (db) {
-        ClientFileTable.selectAll().toMutableList()
-    }.map {
-        ClientFile(it[ClientFileTable.client_num],
+        val to_return: MutableList<ClientFile> = mutableListOf()
+        for (it in ClientFileTable.selectAll().toList()) {
+            to_return.add(ClientFile(it[ClientFileTable.client_num],
             it[ClientFileTable.ofcname],
             it[ClientFileTable.firstname1],
             it[ClientFileTable.lastname1],
@@ -186,13 +185,15 @@ val db: Database
             it[ClientFileTable.payperiods],
             it[ClientFileTable.yeslist],
             it[ClientFileTable.filler],
-            it[ClientFileTable.filler2])
+            it[ClientFileTable.filler2]))
+        }
+        return@transaction to_return
     }
 
-    fun readClientFile(client_num: Int) : List<ClientFile> = transaction (db) {
+    fun readClientFile(client_num: Int) : ClientFile? = transaction (db) {
         ClientFileTable.select {
             ClientFileTable.client_num.eq(client_num)
-        }.mapNotNull {
+        }.map {
             ClientFile(
                 it[ClientFileTable.client_num],
                 it[ClientFileTable.ofcname],
@@ -246,7 +247,7 @@ val db: Database
                 it[ClientFileTable.filler],
                 it[ClientFileTable.filler2]
             )
-        }
+        }.singleOrNull()
     }
 
     /**

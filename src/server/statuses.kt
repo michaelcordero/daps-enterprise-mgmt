@@ -1,5 +1,6 @@
 package server
 
+import application.log
 import io.ktor.application.call
 import io.ktor.content.TextContent
 import io.ktor.features.StatusPages
@@ -8,7 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.withCharset
 import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.request.contentType
+import io.ktor.request.uri
 import io.ktor.response.respond
 import io.ktor.response.respondText
 
@@ -27,10 +28,13 @@ fun statuses(configuration: StatusPages.Configuration ) {
     // 401
     configuration.status(HttpStatusCode.Unauthorized) {
         // We need to know if this request originates from the Web or the API
-        if (call.request.contentType() != ContentType.Application.Json){
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to "unknown", "error" to it.description), "someeetag"))
-        } else {
+        // || call.request.uri.contains("web/")
+        if (call.request.uri.contains("api/")){
+            log.info("URI: ${call.request.uri}")
             call.respondText { "${it.value} ${it.description}" }
+        } else {
+            log.info("URI: ${call.request.uri}")
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("error" to it.description), "401-e-tag"))
         }
     }
 }

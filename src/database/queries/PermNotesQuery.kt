@@ -12,8 +12,8 @@ interface PermNotesQuery {
      * Create
      */
 
-    fun createPermNotes(pn: PermNotes) {
-        transaction (db) {
+    fun createPermNotes(pn: PermNotes): Int {
+        return transaction (db) {
             PermNotesTable.insert {
                 // id is auto-incremented
                 it[emp_num] = pn.emp_num
@@ -21,7 +21,7 @@ interface PermNotesQuery {
                 it[initial] = pn.initial
                 it[comments] = pn.comments
                 it[follow_update] = pn.follow_update
-            }
+            } get PermNotesTable.ID
         }
     }
 
@@ -42,7 +42,7 @@ interface PermNotesQuery {
      * Read
      */
 
-    fun allPermNotes(pn: PermNotes): List<PermNotes> {
+    fun allPermNotes(): List<PermNotes> {
        return transaction (db) {
             PermNotesTable.selectAll().toList()
         }.map {
@@ -61,8 +61,8 @@ interface PermNotesQuery {
      * Update
      */
 
-    fun updatePermNotes(pn: PermNotes) {
-        transaction (db) {
+    fun updatePermNotes(pn: PermNotes): Int {
+        return transaction (db) {
             PermNotesTable.update({
                 PermNotesTable.ID.eq(pn.id!!)
             }) {
@@ -81,10 +81,10 @@ interface PermNotesQuery {
      * Delete
      */
 
-    fun deletePermNotes(pn: PermNotes) {
-        transaction (db) {
+    fun deletePermNotes(id: Int): Int {
+        return transaction (db) {
             PermNotesTable.deleteWhere {
-                PermNotesTable.ID.eq(pn.id!!)
+                PermNotesTable.ID.eq(id)
             }
         }
     }

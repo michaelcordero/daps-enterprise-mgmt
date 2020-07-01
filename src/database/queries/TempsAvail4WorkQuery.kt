@@ -13,14 +13,14 @@ interface TempsAvail4WorkQuery {
      * Create
      */
 
-    fun createTempAvail4Work(taw: TempsAvail4Work) {
-        transaction (db) {
+    fun createTempAvail4Work(taw: TempsAvail4Work): Int {
+        return transaction (db) {
             TempsAvail4WorkTable.insert {
                 // rec-num will be auto-incremented
                 it[emp_num] = taw.emp_num
                 it[date_can_work] = taw.date_can_work
             }
-        }
+        } get TempsAvail4WorkTable.rec_num
     }
 
     fun insertTempAvail4Work(taw: TempsAvail4Work) {
@@ -66,8 +66,8 @@ interface TempsAvail4WorkQuery {
     /**
      * Update
      */
-    fun updateTempAvail4Work(taw: TempsAvail4Work) {
-        transaction (db) {
+    fun updateTempAvail4Work(taw: TempsAvail4Work): Int {
+        return transaction (db) {
             TempsAvail4WorkTable.update({
                 TempsAvail4WorkTable.rec_num.eq(taw.rec_num)
             }) {
@@ -81,10 +81,10 @@ interface TempsAvail4WorkQuery {
      * Delete
      */
 
-    fun deleteTempAvail4Work(taw: TempsAvail4Work) {
-        transaction (db) {
+    fun deleteTempAvail4Work(rec_num: Int): Int {
+        return transaction (db) {
             TempsAvail4WorkTable.deleteWhere {
-                TempsAvail4WorkTable.rec_num.eq(taw.rec_num)
+                TempsAvail4WorkTable.rec_num.eq(rec_num)
             }
         }
     }
