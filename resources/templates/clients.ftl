@@ -83,8 +83,8 @@
                         type: 'POST',
                         url:'http://localhost:8080/web/clients',
                         "data": function ( d ) {
-                            var raw = JSON.stringify(d.data);
                             // removing row key
+                            var raw = JSON.stringify(d.data);
                             var client = raw.substr(raw.indexOf(':')+1)
                             return client
                         },
@@ -102,8 +102,8 @@
                         type: 'PUT',
                         url:'http://localhost:8080/web/clients',
                         "data": function ( d ) {
-                            var raw = JSON.stringify(d.data);
                             // removing row key
+                            var raw = JSON.stringify(d.data);
                             var client = raw.substr(raw.indexOf(':')+1)
                             return client
                         },
@@ -114,13 +114,13 @@
                         dataType: "json",
                         type: 'DELETE',
                         url:'http://localhost:8080/web/clients',
-                        // processData: false,
-                        // "data": function ( d ) {
-                        //     var raw = JSON.stringify(d.data);
-                        //     // removing row key
-                        //     var client = raw.substr(raw.indexOf(':')+1)
-                        //     return client
-                        // },
+                        "deleteBody": false,
+                        "data": function ( d ) {
+                            // removing row key
+                            var raw = JSON.stringify(d.data);
+                            var client = raw.substr(raw.indexOf(':')+1)
+                            return client
+                        },
                     },
                 },
                 table: '#data-clients',

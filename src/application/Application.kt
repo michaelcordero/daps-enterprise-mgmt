@@ -136,6 +136,14 @@ fun Application.module() {  //testing: Boolean = false
     install(CORS) {
 //        host("localhost:4000") to specify client app
 //        anyHost()
+//        method(HttpMethod.Options)
+//        method(HttpMethod.Get)
+//        method(HttpMethod.Post)
+//        method(HttpMethod.Put)
+//        method(HttpMethod.Delete)
+//        method(HttpMethod.Patch)
+//        header(HttpHeaders.Authorization)
+//        allowCredentials = true
     }
     // This uses use the logger to log every call (request/response)
     install(CallLogging)
