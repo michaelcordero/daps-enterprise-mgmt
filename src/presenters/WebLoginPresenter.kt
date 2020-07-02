@@ -1,6 +1,6 @@
 package presenters
 
-import database.queries.DataQuery
+import cache.DataCache
 import security.DAPSJWT
 
-data class WebLoginPresenter(val dao: DataQuery, val dapsjwt: DAPSJWT) : AbstractPresenter()
+data class WebLoginPresenter(val cache: DataCache, val dapsjwt: DAPSJWT) : AbstractPresenter()

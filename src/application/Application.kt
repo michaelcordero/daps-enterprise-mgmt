@@ -104,7 +104,8 @@ fun Application.module() {  //testing: Boolean = false
             userParamName = "emailId"
             passwordParamName = "password"
             validate {
-                val user: User? = dq.user(it.name, DAPSSecurity.hash(it.password))
+                val user: User? = cache.allUsers()
+                    .find { user -> user.email == it.name && user.passwordHash == DAPSSecurity.hash(it.password) }
                 if (user != null) { // sessions.get<DAPSSession>()?.token != null
                     UserIdPrincipal(it.name)
                 } else {
@@ -182,13 +183,13 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // None authentication
-        register(RegisterPresenter(dq, dapsJWT))
+        register(RegisterPresenter(cache, dapsJWT))
         index()
         weblogout()
 //         clients(cache)  // TODO: leaving this here, so i can continue to experiment with the node.js app
         // Initial web authentication
         authenticate("form") {
-            weblogin(WebLoginPresenter(dq, dapsJWT))
+            weblogin(WebLoginPresenter(cache, dapsJWT))
         }
         // Web authentication
         authenticate("web") {
@@ -199,7 +200,7 @@ fun Application.module() {  //testing: Boolean = false
                 temps(cache)
             }
             welcome(WelcomePresenter())
-            users(dq)
+            users(cache)
             webclients(WebClientsPresenter())
             webbillings(WebBillingsPresenter())
             webtempnotes(WebTempNotesPresenter())
@@ -207,13 +208,13 @@ fun Application.module() {  //testing: Boolean = false
         }
         // API authentication
         route("/api") {
-            login(dq, dapsJWT)
+            login(cache, dapsJWT)
         }
         authenticate("api") {
             route("/api") {
                 clients(cache)
                 billings(cache)
-                clientNotes(dq)
+                clientNotes(cache)
                 temps(cache)
             }
         }

@@ -1,6 +1,6 @@
 package routes.web
 
-import database.queries.DataQuery
+import cache.DataCache
 import io.ktor.application.call
 import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.locations.KtorExperimentalLocationsAPI
@@ -15,9 +15,9 @@ import model.User
 class Users
 
 @KtorExperimentalLocationsAPI
-fun Route.users(dao: DataQuery){
+fun Route.users(cache: DataCache){
     get<Users>{
-        val users: List<User> = dao.allUsers()
+        val users: List<User> = cache.allUsers()
         call.respond(FreeMarkerContent("users.ftl", mapOf("users" to users), "someetag"))
     }
 }

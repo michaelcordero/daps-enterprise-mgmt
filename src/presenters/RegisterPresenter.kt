@@ -1,14 +1,13 @@
 package presenters
 
-import application.dq
-import database.queries.DataQuery
+import cache.DataCache
 import io.ktor.util.KtorExperimentalAPI
 import model.User
 import security.DAPSJWT
 import kotlin.random.Random
 
 @KtorExperimentalAPI
-data class RegisterPresenter (val dao: DataQuery, val dapsjwt: DAPSJWT) : AbstractPresenter() {
+data class RegisterPresenter(val cache: DataCache,val dapsjwt: DAPSJWT) : AbstractPresenter() {
 
     fun createUser(first_name: String, last_name: String, email: String, password: String) {
         val error: String = validate(first_name, last_name, email, password)
@@ -18,7 +17,7 @@ data class RegisterPresenter (val dao: DataQuery, val dapsjwt: DAPSJWT) : Abstra
             val new_password: String = hashPassword(password)
             val new_id: Long = Random.nextLong(from = 1000000, until = 1999999)
             val newUser = User(new_id,email, first_name, last_name, new_password)
-            dq.addUser(newUser)
+            cache.add(newUser)
         }
     }
 

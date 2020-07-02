@@ -1,6 +1,6 @@
 package routes.api
 
-import database.queries.DataQuery
+import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
@@ -25,10 +25,14 @@ class Logout
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.login(dq: DataQuery, dapsjwt: DAPSJWT) {
+fun Route.login(cache: DataCache, dapsjwt: DAPSJWT) {
     post<Login> {
         val post = call.receive<Parameters>()
-        val user: User? = dq.user(post["user"] ?: "", DAPSSecurity.hash(post["password"] ?: ""))
+        val user: User? = cache.allUsers().find { user ->
+            user.email == post["user"] ?: "" && user.passwordHash == DAPSSecurity.hash(
+                post["password"] ?: ""
+            )
+        }
         if (user != null) {
             call.respond(mapOf("token" to dapsjwt.sign(user.email)))
         } else {
