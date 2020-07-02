@@ -30,7 +30,7 @@ fun Route.webclients(presenter: WebClientsPresenter) {
                     mapOf("presenter" to presenter),
                     "clients-e-tag"
                 )
-            ) //"user" to user,
+            )
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "webclient-e-tag"))
         }
