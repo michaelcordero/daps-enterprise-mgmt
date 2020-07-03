@@ -11,6 +11,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import presenters.WebClientsPresenter
+import presenters.WebLoginPresenter
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
@@ -32,7 +33,7 @@ fun Route.webclients(presenter: WebClientsPresenter) {
                 )
             )
         } else {
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "webclient-e-tag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("presenter" to WebLoginPresenter()), "webclient-e-tag"))
         }
     }
 }

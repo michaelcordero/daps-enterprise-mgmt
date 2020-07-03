@@ -1,13 +1,12 @@
 package presenters
 
-import cache.DataCache
+import application.cache
 import io.ktor.util.KtorExperimentalAPI
 import model.User
-import security.DAPSJWT
 import kotlin.random.Random
 
 @KtorExperimentalAPI
-data class RegisterPresenter(val cache: DataCache,val dapsjwt: DAPSJWT) : AbstractPresenter() {
+class RegisterPresenter : AbstractPresenter() {
 
     fun createUser(first_name: String, last_name: String, email: String, password: String) {
         val error: String = validate(first_name, last_name, email, password)

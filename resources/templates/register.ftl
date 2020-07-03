@@ -1,10 +1,12 @@
 <#-- @ftlvariable name="error" type="java.lang.String" -->
 <#-- @ftlvariable name="validator" type="presenters.RegisterPresenter.Validator" -->
+<#-- @ftlvariable name="presenter" type="presenters.RegisterPresenter" -->
 <#import "clouds.ftl" as layout />
 
 <@layout.mainLayout title="Register">
     <body>
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="${presenter.theme.css}" >
     <div class="card mx-auto" style="width: 35rem; margin-top: 15rem">
         <div class="card-body">
             <div class="m-sm-4">

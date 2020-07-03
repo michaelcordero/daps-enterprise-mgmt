@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="presenter" type="presenters.WebStatusPresenter" -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,19 +9,7 @@
     <meta name="description" content="DAPS Enterprise Management System">
     <meta name="author" content="Bootlab">
     <title>Dental Auxiliary Placement Service</title>
-    <!-- PICK ONE OF THE STYLES BELOW -->
-    <!-- <link href="css/modern.css" rel="stylesheet"> -->
-    <!-- <link href="css/classic.css" rel="stylesheet"> -->
-    <link href="/static/css/dark.css" rel="stylesheet">
-    <!-- <link href="css/light.css" rel="stylesheet"> -->
-
-    <!-- BEGIN SETTINGS -->
-    <!-- You can remove this after picking a style -->
-    <style>
-        body {
-            opacity: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="${presenter.theme.css}" >
     <script src="/static/js/settings.js"></script>
     <!-- END SETTINGS -->
 </head>

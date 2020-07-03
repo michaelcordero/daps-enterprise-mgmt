@@ -1,7 +1,7 @@
 package routes.api
 
+import application.cache
 import application.log
-import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
@@ -30,7 +30,7 @@ class Billings {
 @ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.billings(cache: DataCache) {
+fun Route.billings() {
     // Read HTTP Methods
     get<Billings> {
         try {

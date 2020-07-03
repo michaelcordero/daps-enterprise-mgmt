@@ -1,7 +1,7 @@
 package routes.api
 
+import application.cache
 import application.log
-import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
@@ -29,7 +29,7 @@ class ClientNotesRoute {
 @ExperimentalTime
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
-fun Route.clientNotes(cache: DataCache) {
+fun Route.clientNotes() {
     get<ClientNotesRoute> {
         try {
             log.info("/client_notes requested")

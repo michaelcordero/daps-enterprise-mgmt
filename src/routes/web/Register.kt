@@ -1,5 +1,6 @@
 package routes.web
 
+import application.dapsJWT
 import application.redirect
 import io.ktor.application.application
 import io.ktor.application.call
@@ -48,7 +49,7 @@ fun Route.register(presenter: RegisterPresenter) {
         // do biz work
         try {
             presenter.createUser(first_name, last_name, email, password)
-            val token = presenter.dapsjwt.sign(email)
+            val token = dapsJWT.sign(email)
             call.sessions.set(DAPSSession(email,token))
             call.redirect(Welcome())
         } catch (e: Exception) {
@@ -62,7 +63,7 @@ fun Route.register(presenter: RegisterPresenter) {
             call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User(0L,
                 it.email, it.first_name,
                 it.last_name,""
-            ), "error" to it.error, "validator" to RegisterPresenter.Validator ), "some-etag"))
+            ), "error" to it.error, "validator" to RegisterPresenter.Validator ,"presenter" to RegisterPresenter() ), "some-etag"))
     }
 }
 

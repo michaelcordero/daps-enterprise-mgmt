@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="presenter" type="presenters.WebClientsPresenter" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Clients">
+    <link rel="stylesheet" href="${presenter.theme.css}" >
     <div class="row">
         <div class="col">
             <div class="card">

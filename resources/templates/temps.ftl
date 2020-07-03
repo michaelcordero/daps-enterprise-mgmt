@@ -1,6 +1,8 @@
+<#-- @ftlvariable name="presenter" type="presenters.WebTempsPresenter" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Temps">
 <#--Table Format-->
+    <link rel="stylesheet" href="${presenter.theme.css}" >
     <div class="row">
         <div class="col">
             <div class="card">

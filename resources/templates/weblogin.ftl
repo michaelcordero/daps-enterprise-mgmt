@@ -1,7 +1,8 @@
 <#-- @ftlvariable name="error" type="java.lang.String" -->
+<#-- @ftlvariable name="presenter" type="presenters.WebLoginPresenter" -->
 <#import "clouds.ftl" as layout />
-
 <@layout.mainLayout title="WebLogin">
+    <link rel="stylesheet" href="${presenter.theme.css}" >
     <body class="text-center">
     <#--noinspection HtmlUnknownTarget-->
     <form class="form-login" action="/weblogin" method="post" enctype="application/x-www-form-urlencoded">

@@ -54,6 +54,7 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
+val theme: Theme = Theme.DARK
 
 
 @ExperimentalTime
@@ -156,7 +157,8 @@ fun Application.module() {  //testing: Boolean = false
 //    install(CachingHeaders) {
 //        options {
 //            when(it.contentType?.withoutParameters()) {
-//                ContentType.Text.JavaScript -> CachingOptions(cacheControl = CacheControl)
+////                ContentType.Text.JavaScript -> CachingOptions(io.ktor.http.CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60)),
+//                ContentType.Text.CSS -> CachingOptions(CacheControl.NoCache(CacheControl.Visibility.Public))
 //                else -> null
 //            }
 //        }
@@ -167,7 +169,7 @@ fun Application.module() {  //testing: Boolean = false
             cookie.path = "/"
         }
     }
-    install(StatusPages) { statuses(this) }
+    install(StatusPages) { statuses(WebStatusPresenter(this)) }
     install(Locations)
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
@@ -183,39 +185,39 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // None authentication
-        register(RegisterPresenter(cache, dapsJWT))
+        register(RegisterPresenter())
         index()
         weblogout()
 //         clients(cache)  // TODO: leaving this here, so i can continue to experiment with the node.js app
         // Initial web authentication
         authenticate("form") {
-            weblogin(WebLoginPresenter(cache, dapsJWT))
+            weblogin(WebLoginPresenter())
         }
         // Web authentication
         authenticate("web") {
             route("/web") {
-                clients(cache)
-                billings(cache)
-                tempnotes(cache)
-                temps(cache)
+                clients()
+                billings()
+                tempnotes()
+                temps()
             }
             welcome(WelcomePresenter())
-            users(cache)
+            users()
             webclients(WebClientsPresenter())
             webbillings(WebBillingsPresenter())
             webtempnotes(WebTempNotesPresenter())
-            webtemps()
+            webtemps(WebTempsPresenter())
         }
         // API authentication
         route("/api") {
-            login(cache, dapsJWT)
+            login()
         }
         authenticate("api") {
             route("/api") {
-                clients(cache)
-                billings(cache)
-                clientNotes(cache)
-                temps(cache)
+                clients()
+                billings()
+                clientNotes()
+                temps()
             }
         }
     }

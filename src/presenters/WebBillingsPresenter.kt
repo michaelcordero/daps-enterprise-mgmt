@@ -1,3 +1,3 @@
 package presenters
 
-class WebBillingsPresenter
+class WebBillingsPresenter: AbstractPresenter()

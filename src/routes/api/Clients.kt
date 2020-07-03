@@ -1,7 +1,7 @@
 package routes.api
 
+import application.cache
 import application.log
-import cache.DataCache
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
@@ -24,7 +24,7 @@ class Clients {
 @ExperimentalTime
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.clients(cache: DataCache) {
+fun Route.clients() {
     get<Clients> {
         try {
             log.info("GET /clients requested")

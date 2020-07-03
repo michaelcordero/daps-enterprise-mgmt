@@ -1,6 +1,6 @@
 package routes.web
 
-import application.cache
+import application.dapsJWT
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
@@ -17,6 +17,7 @@ import io.ktor.sessions.set
 import io.ktor.util.KtorExperimentalAPI
 import model.User
 import presenters.WebLoginPresenter
+import presenters.WelcomePresenter
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
@@ -27,16 +28,16 @@ data class WebLogin (val emailId: String = "", val error: String = "")
 @KtorExperimentalLocationsAPI
 fun Route.weblogin(presenter: WebLoginPresenter) {
     get<WebLogin> {
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("test" to "result"), "someeetag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("test" to "result", "presenter" to presenter), "someeetag"))
     }
 
     post<WebLogin> {
             val principal = call.principal<UserIdPrincipal>()
             if (principal != null) {
-                val token = presenter.dapsjwt.sign(principal.name)
+                val token = dapsJWT.sign(principal.name)
                 call.sessions.set(DAPSSession(principal.name, token))
-                val user: User = cache.allUsers().find { u -> u.email == principal.name }!!
-                call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "someetag"))
+                val user: User = presenter.user(principal.name)!!
+                call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user, "presenter" to WelcomePresenter()), "someetag"))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "unauthorized!")
             }

@@ -1,4 +1,3 @@
 package presenters
 
-class WebTempNotesPresenter {
-}
+class WebTempNotesPresenter: AbstractPresenter()

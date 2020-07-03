@@ -1,3 +1,3 @@
 package presenters
 
-class WebClientsPresenter
+class WebClientsPresenter: AbstractPresenter()

@@ -9,6 +9,8 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
+import presenters.WebLoginPresenter
+import presenters.WelcomePresenter
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
@@ -24,9 +26,9 @@ fun Route.index() {
     get<Index> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
         if (session?.token != null ) {
-            call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId), "someetag"))
+            call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId, "presenter" to WelcomePresenter()), "welcome-etag"))
         } else {
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null), "someetag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null, "presenter" to WebLoginPresenter()), "web-login-etag"))
         }
     }
 }

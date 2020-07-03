@@ -11,6 +11,7 @@ import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
+import presenters.WebLoginPresenter
 import presenters.WebTempNotesPresenter
 import security.DAPSSession
 
@@ -28,7 +29,7 @@ fun Route.webtempnotes(presenter: WebTempNotesPresenter){
             if (session != null) {
                 call.respond(FreeMarkerContent("tempnotes.ftl", mapOf("presenter" to presenter), "tempnotes-e-tag"))
             } else {
-                call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "web-tempnotes-e-tag"))
+                call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null", "presenter" to WebLoginPresenter()), "web-tempnotes-e-tag"))
             }
         } catch(e: Exception) {
             call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
