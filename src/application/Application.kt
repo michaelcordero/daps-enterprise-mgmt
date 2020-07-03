@@ -207,6 +207,8 @@ fun Application.module() {  //testing: Boolean = false
             webbillings(WebBillingsPresenter())
             webtempnotes(WebTempNotesPresenter())
             webtemps(WebTempsPresenter())
+            web_apex_charts(WebChartsPresenter())
+            web_traditional_charts(WebChartsPresenter())
         }
         // API authentication
         route("/api") {

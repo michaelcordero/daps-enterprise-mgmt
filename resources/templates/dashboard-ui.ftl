@@ -64,14 +64,14 @@
                     Elements
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" data-toggle="collapse" class="sidebar-link collapsed">
+                    <a href="#charts" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle mr-2 fas fa-fw fa-chart-pie">l</i> <span class="align-middle">Charts</span>
                         <#--                            <span class="sidebar-badge badge badge-pill badge-primary">New</span>-->
                     </a>
-                    <#--                        <ul id="charts" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">-->
-                    <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/charts-chartjs.html">Chart.js</a></li>-->
-                    <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/charts-apexcharts.html">ApexCharts</a></li>-->
-                    <#--                        </ul>-->
+                                            <ul id="charts" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                                                <li class="sidebar-item"><a class="sidebar-link" href="/web-traditional-charts">Traditional Charts</a></li>
+                                                <li class="sidebar-item"><a class="sidebar-link" href="/web-apex-charts">Apex Charts</a></li>
+                                            </ul>
                 </li>
 
                 <li class="sidebar-item">
