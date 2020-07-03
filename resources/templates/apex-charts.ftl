@@ -7,15 +7,8 @@
             <div class="container-fluid">
                 <div class="header">
                     <h1 class="header-title">
-                        ApexCharts
+                        Apex Charts
                     </h1>
-<#--                    <nav aria-label="breadcrumb">-->
-<#--                        <ol class="breadcrumb">-->
-<#--                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>-->
-<#--                            <li class="breadcrumb-item"><a href="#">Charts</a></li>-->
-<#--                            <li class="breadcrumb-item active" aria-current="page">ApexCharts</li>-->
-<#--                        </ol>-->
-<#--                    </nav>-->
                 </div>
                 <div class="row">
                     <div class="col-12 col-lg-6">
