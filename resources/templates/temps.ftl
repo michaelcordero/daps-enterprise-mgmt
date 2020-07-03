@@ -1,89 +1,95 @@
 <#-- @ftlvariable name="presenter" type="presenters.WebTempsPresenter" -->
 <#import "dashboard-ui.ftl" as ui />
 <@ui.dashboardUI title="Temps">
-<#--Table Format-->
-    <link rel="stylesheet" href="${presenter.theme.css}" >
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <table id="data-temps" class="table table-striped table-bordered table-responsive table-hover"
-                           style="width: 100%;">
-                        <thead>
-                        <tr>
-                            <th>Emp#</th>
-                            <th>TypeA</th>
-                            <th>TypeB</th>
-                            <th>Status</th>
-                            <th>FName</th>
-                            <th>LName</th>
-                            <th>Addr1</th>
-                            <th>Addr2</th>
-                            <th>City</th>
-                            <th>State</th>
-                            <th>Zip</th>
-                            <th>County</th>
-                            <th>e-Mail</th>
-                            <th>HPhone</th>
-                            <th>WPhone</th>
-                            <th>WExt</th>
-                            <th>CallWrk?</th>
-                            <th>Fax</th>
-                            <th>CellPhone</th>
-                            <th>SS#</th>
-                            <th>DAPSstart</th>
-                            <th>DAPS$</th>
-                            <th>HourlyRate</th>
-                            <th>ChartComplete</th>
-                            <th>LicenseFile</th>
-                            <th>License</th>
-                            <th>LicDate</th>
-                            <th>MALPins?</th>
-                            <th>MAPLinfo</th>
-                            <th>ExperSince</th>
-                            <th>PhotoId</th>
-                            <th>WorkAuth</th>
-                            <th>RefCheck</th>
-                            <th>ContSubLic</th>
-                            <th>ExperType</th>
-                            <th>EmrgyContact</th>
-                            <th>EmrgyPhone</th>
-                            <th>EExt</th>
-                            <th>Preferences</th>
-                            <th>Dislikes</th>
-                            <th>TempNeeds</th>
-                            <th>PermNeeds</th>
-                            <th>Computer</th>
-                            <th>OnCall</th>
-                            <th>Avail-M</th>
-                            <th>Avail-T</th>
-                            <th>Avail-W</th>
-                            <th>Avail-R</th>
-                            <th>Avail-F</th>
-                            <th>Avail-S</th>
-                            <th>Avail-U</th>
-                            <th>Avail-NoS</th>
-                            <th>PrefLoc</th>
-                            <th>MaxMiles</th>
-                            <th>RefBy</th>
-                            <th>Notes</th>
-                            <th>AccountRep</th>
-                            <th>AccountRepEndDate</th>
-                            <th>PermNotes</th>
-                            <th>SetFlag</th>
-                            <th>YesList</th>
-                            <th>Resident Alien</th>
-                            <th>Resident Alien Exp</th>
-                            <th>Filler-2</th>
-                        </tr>
-                        </thead>
-                        <tfoot>
-                        </tfoot>
-                    </table>
+    <link rel="stylesheet" href="${presenter.theme.css}">
+    <main class="content">
+        <div class="header">
+            <h1 class="header-title">
+                Temps
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="data-temps" class="table table-striped table-bordered table-responsive table-hover"
+                               style="width: 100%;">
+                            <thead>
+                            <tr>
+                                <th>Emp#</th>
+                                <th>TypeA</th>
+                                <th>TypeB</th>
+                                <th>Status</th>
+                                <th>FName</th>
+                                <th>LName</th>
+                                <th>Addr1</th>
+                                <th>Addr2</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                                <th>County</th>
+                                <th>e-Mail</th>
+                                <th>HPhone</th>
+                                <th>WPhone</th>
+                                <th>WExt</th>
+                                <th>CallWrk?</th>
+                                <th>Fax</th>
+                                <th>CellPhone</th>
+                                <th>SS#</th>
+                                <th>DAPSstart</th>
+                                <th>DAPS$</th>
+                                <th>HourlyRate</th>
+                                <th>ChartComplete</th>
+                                <th>LicenseFile</th>
+                                <th>License</th>
+                                <th>LicDate</th>
+                                <th>MALPins?</th>
+                                <th>MAPLinfo</th>
+                                <th>ExperSince</th>
+                                <th>PhotoId</th>
+                                <th>WorkAuth</th>
+                                <th>RefCheck</th>
+                                <th>ContSubLic</th>
+                                <th>ExperType</th>
+                                <th>EmrgyContact</th>
+                                <th>EmrgyPhone</th>
+                                <th>EExt</th>
+                                <th>Preferences</th>
+                                <th>Dislikes</th>
+                                <th>TempNeeds</th>
+                                <th>PermNeeds</th>
+                                <th>Computer</th>
+                                <th>OnCall</th>
+                                <th>Avail-M</th>
+                                <th>Avail-T</th>
+                                <th>Avail-W</th>
+                                <th>Avail-R</th>
+                                <th>Avail-F</th>
+                                <th>Avail-S</th>
+                                <th>Avail-U</th>
+                                <th>Avail-NoS</th>
+                                <th>PrefLoc</th>
+                                <th>MaxMiles</th>
+                                <th>RefBy</th>
+                                <th>Notes</th>
+                                <th>AccountRep</th>
+                                <th>AccountRepEndDate</th>
+                                <th>PermNotes</th>
+                                <th>SetFlag</th>
+                                <th>YesList</th>
+                                <th>Resident Alien</th>
+                                <th>Resident Alien Exp</th>
+                                <th>Filler-2</th>
+                            </tr>
+                            </thead>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 <#--Table Logic-->
     <script>
         // var editor = new $.fn.dataTable.Editor({
