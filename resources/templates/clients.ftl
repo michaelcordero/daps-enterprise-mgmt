@@ -250,7 +250,7 @@
                     "url": 'http://localhost:8080/web/clients',
                     "dataSrc": '',
                 },
-                dom: 'Bfrtip',
+                dom: 'lBfrtip',
                 columns:
                     [
                         {data: 'client_num'},
@@ -306,7 +306,7 @@
                         {data: 'filler2'}],
                 select: true,
                 buttons: [
-                    'pageLength',
+                    // 'pageLength',
                     {extend: 'create', editor: editor},
                     {extend: 'edit', editor: editor},
                     {extend: 'remove', editor: editor}
