@@ -78,11 +78,10 @@
                     </div>
                 </div>
         </main>
-<#--    <script src="/static/js/app.js"></script>-->
     <script>
         $(function () {
             // Datatables Editor
-            var editor = new $.fn.dataTable.Editor({
+            const editor = new $.fn.dataTable.Editor({
                 ajax: {
                     // CRUD
                     create: {
@@ -93,7 +92,7 @@
                         url: 'http://localhost:8080/web/clients',
                         "data": function (d) {
                             // removing row key
-                            var raw = JSON.stringify(d.data);
+                            const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
                         // success: function (json) {
@@ -111,7 +110,7 @@
                         url: 'http://localhost:8080/web/clients',
                         "data": function (d) {
                             // removing row key
-                            var raw = JSON.stringify(d.data);
+                            const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
                     },
@@ -124,7 +123,7 @@
                         "deleteBody": false,
                         "data": function (d) {
                             // removing row key
-                            var raw = JSON.stringify(d.data);
+                            const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
                     },
@@ -237,14 +236,8 @@
                     }]
             });
             editor.disable('client_num')
-            // Submit if all changed
-            $('#data-clients').on('click', 'tbody td:not(:first-child)', function (e) {
-                editor.inline(this, {
-                    submit: 'all'
-                });
-            });
             // Data Table
-            var table = $('#data-clients').DataTable({
+            const table = $('#data-clients').DataTable({
                 "ajax": {
                     "type": 'GET',
                     "url": 'http://localhost:8080/web/clients',
@@ -313,8 +306,15 @@
                 ]
             });
             // Double click for edit
-            $('#data-clients tbody').on('dblclick', 'tr', function () {
+            table.on('dblclick', 'tr', function () {
                 table.row(this).edit()
+            });
+
+            // Submit if all changed
+            table.on('click', 'tbody td:not(:first-child)', function () {
+                editor.inline(this, {
+                    submit: 'all'
+                });
             });
         });
     </script>
