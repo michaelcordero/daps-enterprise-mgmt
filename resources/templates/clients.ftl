@@ -305,6 +305,15 @@
                     {extend: 'remove', editor: editor}
                 ]
             });
+            // Reload Event
+            // setInterval( function () {
+            //     table.ajax.reload(null, false);
+            // }, 10000)
+            // const webSocket = new WebSocket('ws://localhost:8080/web/clients', ['http', 'https'])
+            // webSocket.onmessage = function(event) {
+            //     console.log(event)
+            //     table.ajax.reload(null, false)
+            // }
             // Double click for edit
             table.on('dblclick', 'tr', function () {
                 table.row(this).edit()

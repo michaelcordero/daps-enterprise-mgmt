@@ -36,6 +36,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
+import io.ktor.websocket.WebSockets
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -174,6 +175,7 @@ fun Application.module() {  //testing: Boolean = false
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
+    install(WebSockets)
     install(Webjars) {
         path = "/webjars" //defaults to /webjars
         zone = ZoneId.systemDefault() //defaults to ZoneId.systemDefault()

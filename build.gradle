@@ -46,6 +46,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines"
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation "io.ktor:ktor-auth-jwt:$ktor_version"
+    implementation "io.ktor:ktor-websockets:$ktor_version"
 //    compile "io.ktor.features.ContentNegotiation:$ktor_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
@@ -112,12 +113,12 @@ dependencies {
 //}
 
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
-jar {
-    manifest {
-        attributes 'Main-Class' : 'utilities.H2exCSVKt'
-    }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
+//jar {
+//    manifest {
+//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+//    }
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//}
 
 /**
  * To run from command line:
