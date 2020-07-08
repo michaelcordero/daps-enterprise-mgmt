@@ -15,6 +15,9 @@ import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.ContentType
+import io.ktor.http.cio.websocket.DefaultWebSocketSession
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.readText
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.jackson.JacksonConverter
@@ -37,6 +40,7 @@ import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
 import io.ktor.websocket.WebSockets
+import io.ktor.websocket.webSocket
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -48,6 +52,8 @@ import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
 import java.time.ZoneId
+import java.util.*
+import kotlin.collections.LinkedHashSet
 import kotlin.time.ExperimentalTime
 
 
@@ -197,11 +203,31 @@ fun Application.module() {  //testing: Boolean = false
         }
         // Web authentication
         authenticate("web") {
+            val connections = Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
             route("/web") {
                 clients()
                 billings()
                 tempnotes()
                 temps()
+            }
+            webSocket("/update") {
+                connections += this
+                try {
+                    while (true) {
+                        val frame = incoming.receive()
+                        when (frame) {
+                            is Frame.Text -> {
+                                val text = frame.readText()
+                                // Iterate over all the connections
+                                for (conn in connections) {
+                                    conn.outgoing.send(Frame.Text(text))
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    connections -= this
+                }
             }
             welcome(WelcomePresenter())
             users()

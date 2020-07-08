@@ -80,6 +80,11 @@
         </main>
     <script>
         $(function () {
+            const web_socket = new WebSocket('ws://localhost:8080/update', ['http', 'https'])
+            web_socket.onmessage = function(event) {
+                console.log(event)
+                table.ajax.reload(null, false)
+            }
             // Datatables Editor
             const editor = new $.fn.dataTable.Editor({
                 ajax: {
@@ -113,6 +118,9 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
+                        success: function (json) {
+                            web_socket.send("update")
+                        }
                     },
                     remove: {
                         // Defaults
@@ -309,11 +317,6 @@
             // setInterval( function () {
             //     table.ajax.reload(null, false);
             // }, 10000)
-            // const webSocket = new WebSocket('ws://localhost:8080/web/clients', ['http', 'https'])
-            // webSocket.onmessage = function(event) {
-            //     console.log(event)
-            //     table.ajax.reload(null, false)
-            // }
             // Double click for edit
             table.on('dblclick', 'tr', function () {
                 table.row(this).edit()
