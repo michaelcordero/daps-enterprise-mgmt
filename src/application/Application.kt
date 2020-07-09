@@ -227,7 +227,7 @@ fun Application.module() {  //testing: Boolean = false
                         when (val frame = incoming.receive()) {
                             is Frame.Text -> {
                                 val text = frame.readText()
-                                // Iterate over all the connections, except the original initiating connection.
+                                // Send message to all the connections, except the messenger connection.
                                 for (conn in connections) {
                                     if (conn != this) {
                                         conn.outgoing.send(Frame.Text(text))
