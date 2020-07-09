@@ -62,7 +62,7 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-val theme: Theme = Theme.DARK
+val theme: Theme = Theme.LIGHT
 
 
 @ExperimentalTime
