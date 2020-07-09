@@ -41,6 +41,7 @@ import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -203,31 +204,11 @@ fun Application.module() {  //testing: Boolean = false
         }
         // Web authentication
         authenticate("web") {
-            val connections = Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
             route("/web") {
                 clients()
                 billings()
                 tempnotes()
                 temps()
-            }
-            webSocket("/update") {
-                connections += this
-                try {
-                    while (true) {
-                        val frame = incoming.receive()
-                        when (frame) {
-                            is Frame.Text -> {
-                                val text = frame.readText()
-                                // Iterate over all the connections
-                                for (conn in connections) {
-                                    conn.outgoing.send(Frame.Text(text))
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    connections -= this
-                }
             }
             welcome(WelcomePresenter())
             users()
@@ -237,6 +218,32 @@ fun Application.module() {  //testing: Boolean = false
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
             web_traditional_charts(WebChartsPresenter())
+            // Real Time Update Event via WebSocket
+            val connections = Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
+            webSocket("/update") {
+                connections += this
+                try {
+                    while (true) {
+                        val frame = incoming.receive()
+                        when (frame) {
+                            is Frame.Text -> {
+                                val text = frame.readText()
+                                // Iterate over all the connections, except the original initiating connection.
+                                for (conn in connections) {
+                                    if (conn != this) {
+                                        conn.outgoing.send(Frame.Text(text))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (e: ClosedReceiveChannelException) {
+                    log.info("connection closed. ignore.")
+                }
+                finally {
+                    connections -= this
+                }
+            }
         }
         // API authentication
         route("/api") {

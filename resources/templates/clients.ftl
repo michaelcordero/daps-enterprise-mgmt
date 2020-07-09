@@ -80,10 +80,13 @@
         </main>
     <script>
         $(function () {
-            const web_socket = new WebSocket('ws://localhost:8080/update', ['http', 'https'])
+            const web_socket = new WebSocket('ws://localhost:8080/update', ['http'])
+            // Realtime Update Event
             web_socket.onmessage = function(event) {
-                console.log(event)
-                table.ajax.reload(null, false)
+                // Additional server logic prevents this from locally updating which would be redundant.
+                if(event.data === 'clients') {
+                    table.ajax.reload(null, false)
+                }
             }
             // Datatables Editor
             const editor = new $.fn.dataTable.Editor({
@@ -100,9 +103,9 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        // success: function (json) {
-                        //     alert("OK")
-                        // },
+                        success: function () {
+                            web_socket.send("clients")
+                        }
                         // error: function (xhr, error, thrown) {
                         //     alert("Save Failed!" + error)
                         // }
@@ -118,8 +121,8 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function (json) {
-                            web_socket.send("update")
+                        success: function () {
+                            web_socket.send("clients")
                         }
                     },
                     remove: {
@@ -133,6 +136,9 @@
                             // removing row key
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
+                        },
+                        success: function () {
+                            web_socket.send("clients")
                         },
                     },
                 },
@@ -313,10 +319,6 @@
                     {extend: 'remove', editor: editor}
                 ]
             });
-            // Reload Event
-            // setInterval( function () {
-            //     table.ajax.reload(null, false);
-            // }, 10000)
             // Double click for edit
             table.on('dblclick', 'tr', function () {
                 table.row(this).edit()
