@@ -224,8 +224,7 @@ fun Application.module() {  //testing: Boolean = false
                 connections += this
                 try {
                     while (true) {
-                        val frame = incoming.receive()
-                        when (frame) {
+                        when (val frame = incoming.receive()) {
                             is Frame.Text -> {
                                 val text = frame.readText()
                                 // Iterate over all the connections, except the original initiating connection.
