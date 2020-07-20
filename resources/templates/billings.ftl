@@ -113,8 +113,8 @@
                 idSrc: 'counter',
                 fields: [
                     {label: 'Counter #', name: 'counter'},
-                    {label: 'Client #', name: 'client_num'},
-                    {label: 'Employee #', name: 'employee_num'},
+                    {label: 'Client #', name: 'client_num', attr: {required: true}},
+                    {label: 'Employee #', name: 'employee_num', attr: {required: true}},
                     {label: 'Wdate', name: 'wdate'},
                     {label: 'Hours', name: 'hours'},
                     {label: 'Start Time', name: 'start_time'},
@@ -136,6 +136,16 @@
                 ]
             });
             editor.disable('counter')
+            editor.on('initSubmit', function (e, action) {
+                if ( !editor.field('client_num').val() || isNaN(editor.field('client_num').val())) {
+                    editor.field('client_num').error('Client # must be a number')
+                    return false;
+                }
+                if ( !editor.field('employee_num').val() || isNaN(editor.field('employee_num').val())){
+                    editor.field('employee_num').error('Employee # must be a number')
+                    return false;
+                }
+            })
             // Datatables basic
             const table = $('#data-billings').DataTable({
                 "ajax": {
