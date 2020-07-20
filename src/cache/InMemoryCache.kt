@@ -23,7 +23,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
     lateinit var permReqNotes: MutableList<PermReqNotes>
     lateinit var tempNotes: MutableList<TempNotes>
     lateinit var tempsAvail4Work: MutableList<TempsAvail4Work>
-    lateinit var temps: MutableList<Temps>
+    lateinit var temps: MutableList<Temp>
     lateinit var users: MutableList<User>
     lateinit var woNotes: MutableList<WONotes>
     lateinit var workOrders: MutableList<WorkOrder>
@@ -158,7 +158,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                         tempsAvail4Work.add(ta4w)
                         return result
                     }
-                    is Temps -> {
+                    is Temp -> {
                         val result = dq.createTemps(obj)
                         val temp = obj.copy(emp_num = result)
                         temps.add(temp)
@@ -279,7 +279,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     tempNotes.add(obj)
                     return result
                 }
-                is Temps -> {
+                is Temp -> {
                     val result = dq.updateTemp(obj)
                     temps.removeIf { t -> t.emp_num == obj.emp_num }
                     temps.add(obj)
@@ -396,7 +396,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     tempNotes.removeIf { tn -> tn.temp_note_key == obj.temp_note_key }
                     return result
                 }
-                is Temps -> {
+                is Temp -> {
                     val result = dq.deleteTemp(obj.emp_num)
                     temps.removeIf { t -> t.emp_num == obj.emp_num }
                     return result
@@ -488,7 +488,7 @@ return clientPermNotes
         return tempsAvail4Work
     }
 
-    override fun allTemps(): List<Temps> {
+    override fun allTemps(): List<Temp> {
         return temps
     }
 

@@ -107,7 +107,7 @@ fun Route.billings() {
             log.info("PUT /billings requested")
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(billing)
+                cache.edit(billing)
                 val br: Billing? = cache.allBilling().find { b -> b.counter == billing.counter } // need to query! otherwise object will come back without previous data.
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
             }

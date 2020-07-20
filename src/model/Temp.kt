@@ -15,7 +15,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class Temps
+data class Temp
 @JsonCreator constructor(
     @JsonProperty(value = "emp_num", required = true)
     val emp_num: Int,

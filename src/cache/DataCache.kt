@@ -24,7 +24,7 @@ interface DataCache {
     fun allPermReqNotes(): List<PermReqNotes>
     fun allTempNotes(): List<TempNotes>
     fun allTempsAvail4Work(): List<TempsAvail4Work>
-    fun allTemps(): List<Temps>
+    fun allTemps(): List<Temp>
     fun allUsers(): List<User>
     fun allWONotes(): List<WONotes>
     fun allWorkOrders(): List<WorkOrder>
