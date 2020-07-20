@@ -90,11 +90,13 @@ fun Route.billings() {
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(billing)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("result" to result))
+                val br: Billing? = cache.allBilling().find { b -> b.counter == result }
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message =  mapOf("error" to e.toString()))
         }
     }
 
@@ -106,26 +108,29 @@ fun Route.billings() {
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.edit(billing)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("result" to result))
+                val br: Billing? = cache.allBilling().find { b -> b.counter == billing.counter } // need to query! otherwise object will come back without previous data.
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message =  mapOf("error" to e.toString()))
         }
     }
 
     // Delete HTTP Method
-    delete<Billings.BillingsCounter> {
+    delete<Billings> {
         try {
             log.info("DELETE /billings requested")
+            val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val billing: Billing? = cache.allBilling().find { b -> b.counter == it.counter.toInt() }
                 val result: Int = billing.let { cache.remove(billing) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("deleted client" to true, "result" to result))
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Billing>(), "result" to result))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+            log.error(e.message)
+            call.respond(status = HttpStatusCode.BadRequest, message =  mapOf("error" to e.toString()))
         }
     }
 
