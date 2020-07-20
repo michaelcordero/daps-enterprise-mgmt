@@ -14,10 +14,12 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
+import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.cio.websocket.DefaultWebSocketSession
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.cio.websocket.readText
+import io.ktor.http.content.CachingOptions
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.jackson.JacksonConverter
@@ -62,7 +64,7 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-val theme: Theme = Theme.LIGHT
+val theme: Theme = Theme.DARK
 
 
 @ExperimentalTime
@@ -162,15 +164,17 @@ fun Application.module() {  //testing: Boolean = false
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
     // cache control
-//    install(CachingHeaders) {
-//        options {
-//            when(it.contentType?.withoutParameters()) {
-////                ContentType.Text.JavaScript -> CachingOptions(io.ktor.http.CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60)),
-//                ContentType.Text.CSS -> CachingOptions(CacheControl.NoCache(CacheControl.Visibility.Public))
-//                else -> null
-//            }
-//        }
-//    }
+    install(CachingHeaders) {
+        options {
+            when(it.contentType?.withoutParameters()) {
+                // CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+                ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.Html -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                else -> null
+            }
+        }
+    }
     // SESSION cookie
     install(Sessions) {
         cookie<DAPSSession>("SESSION") {
