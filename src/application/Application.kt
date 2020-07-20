@@ -258,6 +258,7 @@ fun Application.module() {  //testing: Boolean = false
                 billings()
                 clientNotes()
                 temps()
+                tempnotes()
             }
         }
     }

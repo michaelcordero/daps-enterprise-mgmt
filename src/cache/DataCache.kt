@@ -22,7 +22,7 @@ interface DataCache {
     fun allPayments(): List<Payment>
     fun allPermNotes(): List<PermNotes>
     fun allPermReqNotes(): List<PermReqNotes>
-    fun allTempNotes(): List<TempNotes>
+    fun allTempNotes(): List<TempNote>
     fun allTempsAvail4Work(): List<TempsAvail4Work>
     fun allTemps(): List<Temp>
     fun allUsers(): List<User>

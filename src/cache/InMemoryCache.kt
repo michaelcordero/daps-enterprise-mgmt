@@ -21,7 +21,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
     lateinit var payments: MutableList<Payment>
     lateinit var permNotes: MutableList<PermNotes>
     lateinit var permReqNotes: MutableList<PermReqNotes>
-    lateinit var tempNotes: MutableList<TempNotes>
+    lateinit var tempNotes: MutableList<TempNote>
     lateinit var tempsAvail4Work: MutableList<TempsAvail4Work>
     lateinit var temps: MutableList<Temp>
     lateinit var users: MutableList<User>
@@ -146,7 +146,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                         permReqNotes.add(prn)
                         return result
                     }
-                    is TempNotes -> {
+                    is TempNote -> {
                         val result = dq.createTempNote(obj)
                         val tn = obj.copy(temp_note_key = result)
                         tempNotes.add(tn)
@@ -273,7 +273,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     permReqNotes.add(obj)
                     return result
                 }
-                is TempNotes -> {
+                is TempNote -> {
                     val result = dq.updateTempNote(obj)
                     tempNotes.removeIf { tn -> tn.temp_note_key == obj.temp_note_key }
                     tempNotes.add(obj)
@@ -391,7 +391,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     permReqNotes.removeIf { prn -> prn.id == obj.id }
                     return result
                 }
-                is TempNotes -> {
+                is TempNote -> {
                     val result = dq.deleteTempNote(obj.temp_note_key!!)
                     tempNotes.removeIf { tn -> tn.temp_note_key == obj.temp_note_key }
                     return result
@@ -480,7 +480,7 @@ return clientPermNotes
         return permReqNotes
     }
 
-    override fun allTempNotes(): List<TempNotes> {
+    override fun allTempNotes(): List<TempNote> {
         return tempNotes
     }
 

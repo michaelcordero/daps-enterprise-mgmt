@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.TempNotesTable
-import model.TempNotes
+import model.TempNote
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ interface TempNotesQuery {
     /**
      * Create
      */
-    fun createTempNote(tn: TempNotes): Int {
+    fun createTempNote(tn: TempNote): Int {
         return transaction (db) {
             TempNotesTable.insert {
                 it[emp_num] = tn.emp_num
@@ -24,7 +24,7 @@ interface TempNotesQuery {
         }
     }
 
-    fun insertTempNote(tn: TempNotes) {
+    fun insertTempNote(tn: TempNote) {
         transaction (db) {
             TempNotesTable.insert {
                 it[emp_num] = tn.emp_num
@@ -41,11 +41,11 @@ interface TempNotesQuery {
      * Read
      */
 
-    fun allTempNotes(): List<TempNotes> {
+    fun allTempNotes(): List<TempNote> {
         return transaction (db) {
             TempNotesTable.selectAll().toList()
         }.map {
-            TempNotes(
+            TempNote(
                 it[TempNotesTable.emp_num],
                 it[TempNotesTable.note_date],
                 it[TempNotesTable.initial],
@@ -59,7 +59,7 @@ interface TempNotesQuery {
      * Update
      */
 
-    fun updateTempNote(tn: TempNotes): Int {
+    fun updateTempNote(tn: TempNote): Int {
         return transaction (db) {
             TempNotesTable.update({
                 TempNotesTable.temp_note_key.eq(tn.temp_note_key!!)

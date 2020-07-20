@@ -85,7 +85,7 @@ suspend fun process(directory: File) {
                                         .also { pb.step() }
                                     "PermReqNotes.csv" -> dq.insertPermReqNotes(PermReqNotes(resultSet))
                                         .also { pb.step() }
-                                    "TempNotes.csv" -> dq.insertTempNote(TempNotes(resultSet))
+                                    "TempNotes.csv" -> dq.insertTempNote(TempNote(resultSet))
                                         .also { pb.step() }
                                     "Temp.csv" -> dq.insertTemp(Temp(resultSet)).also { pb.step() }
                                     "TempsAvail4Work.csv" -> dq.insertTempAvail4Work(TempsAvail4Work(resultSet))
