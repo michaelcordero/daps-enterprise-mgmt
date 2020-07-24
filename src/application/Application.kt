@@ -147,7 +147,7 @@ fun Application.module() {  //testing: Boolean = false
     // This feature enables truly open access across domain boundaries
     install(CORS) {
 //        host("localhost:4000") to specify client app
-//        anyHost()
+        anyHost()
 //        method(HttpMethod.Options)
 //        method(HttpMethod.Get)
 //        method(HttpMethod.Post)
@@ -201,12 +201,12 @@ fun Application.module() {  //testing: Boolean = false
         register(RegisterPresenter())
         index()
         weblogout()
-//         clients(cache)  // TODO: leaving this here, so i can continue to experiment with the node.js app
         // Initial web authentication
         authenticate("form") {
             weblogin(WebLoginPresenter())
         }
         // Web authentication
+        // comment out to experiment with the node.js app
         authenticate("web") {
             route("/web") {
                 clients()
