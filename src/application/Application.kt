@@ -211,19 +211,21 @@ fun Application.module() {  //testing: Boolean = false
             route("/web") {
                 clients()
                 client_notes()
+                daps_staff_messages()
                 billings()
                 tempnotes()
                 temps()
             }
             welcome(WelcomePresenter())
-            users()
+            webbillings(WebBillingsPresenter())
             webclients(WebClientsPresenter())
             webclientnotes(WebClientNotesPresenter())
-            webbillings(WebBillingsPresenter())
+            webdapsstaffmessages(WebDAPSStaffMessagesPresenter())
             webtempnotes(WebTempNotesPresenter())
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
             web_traditional_charts(WebChartsPresenter())
+            users()
             // Real Time Update Event via WebSocket
             val connections = Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
             webSocket("/update") {
@@ -256,9 +258,10 @@ fun Application.module() {  //testing: Boolean = false
         }
         authenticate("api") {
             route("/api") {
-                clients()
                 billings()
                 client_notes()
+                clients()
+                daps_staff_messages()
                 temps()
                 tempnotes()
             }

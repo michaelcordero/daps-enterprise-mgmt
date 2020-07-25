@@ -66,7 +66,7 @@ suspend fun process(directory: File) {
                                     "ClientPermNotes.csv" -> dq.insertClientPermNotes(ClientPermNotes(resultSet))
                                         .also { pb.step() }
                                     "DAPS Staff Messages.csv" -> dq.insertDAPSStaffMessages(
-                                        DAPSStaffMessages(
+                                        DAPSStaffMessage(
                                             resultSet
                                         )
                                     )

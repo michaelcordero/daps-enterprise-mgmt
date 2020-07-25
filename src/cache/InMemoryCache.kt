@@ -14,7 +14,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
     lateinit var clientNotes: MutableList<ClientNote>
     lateinit var clientPermNotes: MutableList<ClientPermNotes>
     lateinit var dapsAddress: MutableList<DAPSAddress>
-    lateinit var dapsStaffMessages: MutableList<DAPSStaffMessages>
+    lateinit var dapsStaffMessages: MutableList<DAPSStaffMessage>
     lateinit var dapsStaff: MutableList<DAPSStaff>
     lateinit var interviewGuides: MutableList<InterviewGuide>
     lateinit var pasteErrors: MutableList<PasteErrors>
@@ -106,7 +106,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                         dapsStaff.add(obj)
                         return 0
                     }
-                    is DAPSStaffMessages -> {
+                    is DAPSStaffMessage -> {
                         val result = dq.createDAPSStaffMessages(obj)
                         val dsm = obj.copy(staff_messages_key = result)
                         dapsStaffMessages.add(dsm)
@@ -234,7 +234,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     dapsStaff.add(obj)
                     return result
                 }
-                is DAPSStaffMessages -> {
+                is DAPSStaffMessage -> {
                     val result = dq.updateDAPSStaffMessages(obj)
                     dapsStaffMessages.removeIf { dsm -> dsm.staff_messages_key == obj.staff_messages_key }
                     dapsStaffMessages.add(obj)
@@ -356,7 +356,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     dapsStaff.remove(obj)
                     return result
                 }
-                is DAPSStaffMessages -> {
+                is DAPSStaffMessage -> {
                     val result = dq.deleteDAPSStaffMessages(obj.staff_messages_key!!)
                     dapsStaffMessages.removeIf { dsm -> dsm.staff_messages_key == obj.staff_messages_key }
                     return result
@@ -452,7 +452,7 @@ return clientPermNotes
         return dapsAddress
     }
 
-    override fun allDAPSStaffMessages(): List<DAPSStaffMessages> {
+    override fun allDAPSStaffMessages(): List<DAPSStaffMessage> {
         return dapsStaffMessages
     }
 

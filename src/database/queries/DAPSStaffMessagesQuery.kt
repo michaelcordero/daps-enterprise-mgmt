@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.DAPSStaffMessagesTable
-import model.DAPSStaffMessages
+import model.DAPSStaffMessage
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ interface DAPSStaffMessagesQuery {
     /**
      * Create
      */
-    fun createDAPSStaffMessages(dsm: DAPSStaffMessages): Int {
+    fun createDAPSStaffMessages(dsm: DAPSStaffMessage): Int {
         return transaction (db) {
             DAPSStaffMessagesTable.insert {
                 it[memo_date] = dsm.memo_date
@@ -24,7 +24,7 @@ interface DAPSStaffMessagesQuery {
         }
     }
 
-    fun insertDAPSStaffMessages(dsm: DAPSStaffMessages) {
+    fun insertDAPSStaffMessages(dsm: DAPSStaffMessage) {
         transaction (db) {
             DAPSStaffMessagesTable.insert {
                 it[staff_messages_key] = dsm.staff_messages_key!!
@@ -39,11 +39,11 @@ interface DAPSStaffMessagesQuery {
     /**
      * Read
      */
-    fun allDAPSStaffMessages() : List<DAPSStaffMessages> {
+    fun allDAPSStaffMessages() : List<DAPSStaffMessage> {
         return transaction (db) {
             DAPSStaffMessagesTable.selectAll().toList()
         }.map {
-            DAPSStaffMessages(
+            DAPSStaffMessage(
                 it[DAPSStaffMessagesTable.memo_date],
                 it[DAPSStaffMessagesTable.entered_by],
                 it[DAPSStaffMessagesTable.intended_for],
@@ -57,7 +57,7 @@ interface DAPSStaffMessagesQuery {
      * Update
      */
 
-    fun updateDAPSStaffMessages(dsm: DAPSStaffMessages): Int {
+    fun updateDAPSStaffMessages(dsm: DAPSStaffMessage): Int {
         return transaction (db) {
             DAPSStaffMessagesTable.update({
                 DAPSStaffMessagesTable.staff_messages_key.eq(dsm.staff_messages_key!!)

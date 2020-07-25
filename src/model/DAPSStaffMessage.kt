@@ -11,7 +11,7 @@ import java.sql.ResultSet
 import java.sql.Timestamp
 
 
-data class DAPSStaffMessages
+data class DAPSStaffMessage
     @JsonCreator constructor(
         @JsonSerialize(using = LocalDateSerializer::class)
         @JsonDeserialize(using = LocalDateDeserializer::class)

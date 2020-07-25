@@ -15,7 +15,7 @@ interface DataCache {
     fun allClientNotes(): List<ClientNote>
     fun allClientPermNotes(): List<ClientPermNotes>
     fun allDAPSAddress(): List<DAPSAddress>
-    fun allDAPSStaffMessages(): List<DAPSStaffMessages>
+    fun allDAPSStaffMessages(): List<DAPSStaffMessage>
     fun allDAPSStaff(): List<DAPSStaff>
     fun allInterviewGuides(): List<InterviewGuide>
     fun allPasteErrors(): List<PasteErrors>
