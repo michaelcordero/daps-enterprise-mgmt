@@ -12,7 +12,7 @@ interface DataCache {
     fun allBilling(): List<Billing>
     fun allBillTypes(): List<BillType>
     fun allClientFiles(): List<ClientFile>
-    fun allClientNotes(): List<ClientNotes>
+    fun allClientNotes(): List<ClientNote>
     fun allClientPermNotes(): List<ClientPermNotes>
     fun allDAPSAddress(): List<DAPSAddress>
     fun allDAPSStaffMessages(): List<DAPSStaffMessages>

@@ -11,7 +11,7 @@ val log: Logger = LoggerFactory.getLogger(InMemoryCache::class.java)
 class InMemoryCache(val dq: DataQuery): DataCache {
     lateinit var billings: MutableList<Billing>
     lateinit var clientFiles: MutableList<ClientFile>
-    lateinit var clientNotes: MutableList<ClientNotes>
+    lateinit var clientNotes: MutableList<ClientNote>
     lateinit var clientPermNotes: MutableList<ClientPermNotes>
     lateinit var dapsAddress: MutableList<DAPSAddress>
     lateinit var dapsStaffMessages: MutableList<DAPSStaffMessages>
@@ -82,7 +82,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                         clientFiles.add(cf)
                         return result
                     }
-                    is ClientNotes -> {
+                    is ClientNote -> {
                         val result: Int = dq.createClientNotes(obj)
                         val cn = obj.copy(client_note_key = result)
                         clientNotes.add(cn)
@@ -210,7 +210,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     clientFiles.add(obj)
                     return result
                 }
-                is ClientNotes -> {
+                is ClientNote -> {
                     val result = dq.updateClientNotes(obj)
                     clientNotes.removeIf { cn -> cn.client_note_key == obj.client_note_key }
                     clientNotes.add(obj)
@@ -335,7 +335,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     clientFiles.removeIf { cf -> cf.client_num == obj.client_num }
                     return result
                 }
-                is ClientNotes -> {
+                is ClientNote -> {
                     val result = dq.deleteClientNote(obj.client_note_key!!)
                     clientNotes.removeIf { cn -> cn.client_note_key == obj.client_note_key }
                     return result
@@ -440,7 +440,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
         return clientFiles
     }
 
-    override fun allClientNotes(): List<ClientNotes> {
+    override fun allClientNotes(): List<ClientNote> {
         return clientNotes
     }
 

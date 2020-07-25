@@ -73,8 +73,22 @@
                     <ul id="tables" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="/webbillings">Billings</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webclients">Clients</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webclientnotes">Client Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webclientpermnotes">Client Perm Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webdapsaddresses">DAPS Addresses</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webdapsstaffmessages">DAPS Staff Messages</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webdapsstaff">DAPS Staff</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webinterviewguide">Interview Guide</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpasteerrors">Paste Errors</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpayment">Payment</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpermnotes">Perm Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpermreqnotes">Perm Req Notes</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webtempsavail4work">Temps Available For Work</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtemps">Temps</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webusers">Users</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webwonotes">WO Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webworkorders">Work Orders</a></li>
                     </ul>
                 </li>
                 <li class="sidebar-item">

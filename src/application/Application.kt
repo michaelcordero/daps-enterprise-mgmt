@@ -210,6 +210,7 @@ fun Application.module() {  //testing: Boolean = false
         authenticate("web") {
             route("/web") {
                 clients()
+                client_notes()
                 billings()
                 tempnotes()
                 temps()
@@ -217,6 +218,7 @@ fun Application.module() {  //testing: Boolean = false
             welcome(WelcomePresenter())
             users()
             webclients(WebClientsPresenter())
+            webclientnotes(WebClientNotesPresenter())
             webbillings(WebBillingsPresenter())
             webtempnotes(WebTempNotesPresenter())
             webtemps(WebTempsPresenter())
@@ -256,7 +258,7 @@ fun Application.module() {  //testing: Boolean = false
             route("/api") {
                 clients()
                 billings()
-                clientNotes()
+                client_notes()
                 temps()
                 tempnotes()
             }
