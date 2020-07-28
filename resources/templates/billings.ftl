@@ -50,7 +50,7 @@
     </main>
     <script>
         $(function () {
-            const web_socket = new WebSocket('ws://localhost:8080/update', ['http'])
+            const web_socket = new WebSocket('ws://${presenter.host+':'+presenter.port}/update', ['http'])
             // Realtime Update Event
             web_socket.onmessage = function (event) {
                 // Additional server logic prevents this from locally updating which would be redundant.
