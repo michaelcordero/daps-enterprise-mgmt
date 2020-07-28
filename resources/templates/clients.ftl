@@ -80,7 +80,7 @@
         </main>
     <script>
         $(function () {
-            const web_socket = new WebSocket('ws://localhost:8080/update', ['http'])
+            const web_socket = new WebSocket('ws://${presenter.host+':'+presenter.port}/update', ['http'])
             // Realtime Update Event
             web_socket.onmessage = function(event) {
                 // Additional server logic prevents this from locally updating which would be redundant.
@@ -97,7 +97,7 @@
                         contentType: 'application/json',
                         dataType: "json",
                         type: 'POST',
-                        url: 'http://localhost:8080/web/clients',
+                        url: '/web/clients',
                         "data": function (d) {
                             // removing row key
                             const raw = JSON.stringify(d.data);
@@ -115,7 +115,7 @@
                         contentType: 'application/json',
                         dataType: "json",
                         type: 'PUT',
-                        url: 'http://localhost:8080/web/clients',
+                        url: '/web/clients',
                         "data": function (d) {
                             // removing row key
                             const raw = JSON.stringify(d.data);
@@ -130,7 +130,7 @@
                         contentType: 'application/json',
                         dataType: "json",
                         type: 'DELETE',
-                        url: 'http://localhost:8080/web/clients',
+                        url: '/web/clients',
                         "deleteBody": false,
                         "data": function (d) {
                             // removing row key
@@ -254,7 +254,7 @@
             const table = $('#data-clients').DataTable({
                 "ajax": {
                     "type": 'GET',
-                    "url": 'http://localhost:8080/web/clients',
+                    "url": '/web/clients',
                     "dataSrc": '',
                 },
                 dom: 'lBfrtip',

@@ -8,6 +8,8 @@ import security.DAPSSecurity
 
 abstract class AbstractPresenter {
     val theme: Theme = application.theme
+    val host: String = application.host
+    val port: String = application.port
     fun user(email: String): User? {
         return cache.allUsers().find { user -> user.email == email }
     }

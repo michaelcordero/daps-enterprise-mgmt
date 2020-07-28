@@ -65,6 +65,8 @@ val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.DARK
+val host: String = "localhost"
+val port: String = "8080"
 
 
 @ExperimentalTime
@@ -77,8 +79,8 @@ fun main(args: Array<String>) {
     log.info("Starting server...")
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
-        host = "localhost",
-        port = 8080,
+        host = host,
+        port = port.toInt(),
         watchPaths = listOf("daps-enterprise-mgmt"),
         module = Application::module
     )
