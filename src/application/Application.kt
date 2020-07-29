@@ -71,18 +71,12 @@ val theme: Theme = Theme.DARK
 var host: String = ""
 var port: String = ""
 
-// Taken from ReactJS: https://github.com/facebook/create-react-app/blob/master/packages/react-dev-utils/WebpackDevServerUtils.js
-// Check if the address is a private ip
-// https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
-//    .filter { ia -> ia.address.toString().matches(Regex("^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]$", RegexOption.LITERAL)) }
-
 
 @ExperimentalTime
 @ExperimentalStdlibApi
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun main(args: Array<String>) {
-    // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
     log.info("Starting server...")
     host = System.getProperty("host") ?: NetworkInterface.getNetworkInterfaces()
