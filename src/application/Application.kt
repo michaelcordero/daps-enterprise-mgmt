@@ -68,8 +68,12 @@ val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.DARK
-var host: String = ""
-var port: String = ""
+val host = System.getProperty("host") ?: NetworkInterface.getNetworkInterfaces()
+.toList().stream()
+.flatMap { i -> i.interfaceAddresses.stream() }
+.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
+.toList().first().address.hostAddress.toString()
+val port = System.getProperty("port") ?: "8080"
 
 
 @ExperimentalTime
@@ -79,12 +83,6 @@ var port: String = ""
 fun main(args: Array<String>) {
     log.info("Program started with args: %s".format(args.joinToString(" ")))
     log.info("Starting server...")
-    host = System.getProperty("host") ?: NetworkInterface.getNetworkInterfaces()
-        .toList().stream()
-        .flatMap { i -> i.interfaceAddresses.stream() }
-        .filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
-        .toList().first().address.hostAddress.toString()
-    port = System.getProperty("port") ?: "8080"
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
         host = host,
