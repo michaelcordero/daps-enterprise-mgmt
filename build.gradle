@@ -73,6 +73,17 @@ dependencies {
     testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit5', version: '1.3.72'
 }
 
+// To run from command line:
+// ./gradlew run -Phost=localhost -Pport=5000
+run() {
+    if (project.hasProperty("host")) {
+        systemProperties["host"] = host
+    }
+    if (project.hasProperty("port")) {
+        systemProperties["port"] = port
+    }
+}
+
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
 //jar {

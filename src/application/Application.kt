@@ -68,12 +68,8 @@ val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.DARK
-val host: String = NetworkInterface.getNetworkInterfaces()
-    .toList().stream()
-    .flatMap { i -> i.interfaceAddresses.stream() }
-    .filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
-    .toList().first().address.hostAddress.toString()
-val port: String = "8080"
+var host: String = ""
+var port: String = ""
 
 // Taken from ReactJS: https://github.com/facebook/create-react-app/blob/master/packages/react-dev-utils/WebpackDevServerUtils.js
 // Check if the address is a private ip
@@ -89,6 +85,12 @@ fun main(args: Array<String>) {
     // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
     log.info("Starting server...")
+    host = System.getProperty("host") ?: NetworkInterface.getNetworkInterfaces()
+        .toList().stream()
+        .flatMap { i -> i.interfaceAddresses.stream() }
+        .filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
+        .toList().first().address.hostAddress.toString()
+    port = System.getProperty("port") ?: "8080"
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
         host = host,
