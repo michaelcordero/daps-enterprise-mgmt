@@ -73,9 +73,16 @@ dependencies {
     testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit5', version: '1.3.72'
 }
 
+
+//task npm(type: Exec) {
+//    workingDir "$projectDir/react-front-end"
+////    commandLine 'npm', 'run', 'build'
+//    commandLine 'npm', 'run','start'
+//}
 // To run from command line:
 // ./gradlew run -Phost=localhost -Pport=5000
 run() {
+//    run.dependsOn npm
     if (project.hasProperty("host")) {
         systemProperties["host"] = host
     }
