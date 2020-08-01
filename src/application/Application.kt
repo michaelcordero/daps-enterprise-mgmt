@@ -54,12 +54,9 @@ import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
-import java.net.Inet4Address
-import java.net.NetworkInterface
 import java.time.ZoneId
 import java.util.*
 import kotlin.collections.LinkedHashSet
-import kotlin.streams.toList
 import kotlin.time.ExperimentalTime
 
 
@@ -68,11 +65,12 @@ val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.DARK
-val host = System.getProperty("host") ?: NetworkInterface.getNetworkInterfaces()
-.toList().stream()
-.flatMap { i -> i.interfaceAddresses.stream() }
-.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
-.toList().first().address.hostAddress.toString()
+val host = System.getProperty("host") ?: "localhost"
+//NetworkInterface.getNetworkInterfaces()
+//.toList().stream()
+//.flatMap { i -> i.interfaceAddresses.stream() }
+//.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
+//.toList().first().address.hostAddress.toString()
 val port = System.getProperty("port") ?: "8080"
 
 
