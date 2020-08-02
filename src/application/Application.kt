@@ -174,7 +174,7 @@ fun Application.module() {  //testing: Boolean = false
     // cache control
     install(CachingHeaders) {
         options {
-//            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Private))
+//            CachingOptions(CacheControl.NoCache(CacheControl.Visibility.Private))
             when(it.contentType?.withoutParameters()) {
                 ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
                 ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
