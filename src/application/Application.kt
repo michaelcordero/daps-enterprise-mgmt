@@ -178,7 +178,7 @@ fun Application.module() {  //testing: Boolean = false
             when(it.contentType?.withoutParameters()) {
                 ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
                 ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
-                ContentType.Text.Html -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.Html -> CachingOptions(CacheControl.NoCache(CacheControl.Visibility.Private))
                 else -> null
             }
         }
