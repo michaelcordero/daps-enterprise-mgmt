@@ -72,6 +72,7 @@ val host = System.getProperty("host") ?: "localhost"
 //.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
 //.toList().first().address.hostAddress.toString()
 val port = System.getProperty("port") ?: "8080"
+//val in_mem_session: SessionStorageMemory = SessionStorageMemory()
 
 
 @ExperimentalTime
@@ -110,7 +111,8 @@ fun Application.module() {  //testing: Boolean = false
         basic("web") {
             skipWhen { call ->
                 try {
-                    dapsJWT.verifier.verify(call.sessions.get<DAPSSession>()?.token)
+                    val session = call.sessions.get<DAPSSession>()
+                    dapsJWT.verifier.verify(session?.token)
                     return@skipWhen true
                 } catch (e: Exception){
                     return@skipWhen false
@@ -153,7 +155,7 @@ fun Application.module() {  //testing: Boolean = false
     // This feature enables truly open access across domain boundaries
     install(CORS) {
 //        host("localhost:4000") to specify client app
-        anyHost()
+//        anyHost()
 //        method(HttpMethod.Options)
 //        method(HttpMethod.Get)
 //        method(HttpMethod.Post)
@@ -172,8 +174,8 @@ fun Application.module() {  //testing: Boolean = false
     // cache control
     install(CachingHeaders) {
         options {
+//            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Private))
             when(it.contentType?.withoutParameters()) {
-                // CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
                 ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
                 ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
                 ContentType.Text.Html -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
@@ -183,7 +185,7 @@ fun Application.module() {  //testing: Boolean = false
     }
     // SESSION cookie
     install(Sessions) {
-        cookie<DAPSSession>("SESSION") {
+        cookie<DAPSSession>("DAPS_SESSION_ID") {
             cookie.path = "/"
         }
     }

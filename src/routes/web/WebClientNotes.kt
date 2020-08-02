@@ -7,12 +7,8 @@ import io.ktor.locations.Location
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import presenters.WebClientNotesPresenter
-import presenters.WebLoginPresenter
-import security.DAPSSession
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
@@ -23,8 +19,6 @@ class WebClientNotes
 @KtorExperimentalLocationsAPI
 fun Route.webclientnotes(presenter: WebClientNotesPresenter) {
     get<WebClientNotes> {
-        val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session != null) {
             call.respond(
                 FreeMarkerContent(
                     "client-notes.ftl",
@@ -32,8 +26,5 @@ fun Route.webclientnotes(presenter: WebClientNotesPresenter) {
                     "client-notes-e-tag"
                 )
             )
-        } else {
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("presenter" to WebLoginPresenter()), "webclient-notes-e-tag"))
-        }
     }
 }

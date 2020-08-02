@@ -7,12 +7,8 @@ import io.ktor.locations.Location
 import io.ktor.locations.get
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
-import presenters.WebLoginPresenter
 import presenters.WebTempsPresenter
-import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
@@ -22,12 +18,7 @@ class WebTemps
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.webtemps(presenter: WebTempsPresenter) {
-get<WebTemps> {
-    val session: DAPSSession? = call.sessions.get<DAPSSession>()
-    if (session != null) {
+    get<WebTemps> {
         call.respond(FreeMarkerContent("temps.ftl", mapOf("presenter" to presenter), "web-temps-tag"))
-    } else {
-        call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null", "presenter" to WebLoginPresenter()), "webclient-e-tag"))
     }
-}
 }
