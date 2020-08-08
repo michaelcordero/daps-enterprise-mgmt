@@ -1,0 +1,17 @@
+/.gradle
+/.idea
+/build
+/gradle
+/out
+*.iml
+*.ipr
+*.iws
+*.DS_Store
+*.js
+*.css
+*.sh
+*.svg
+*.txt
+*.xml
+*.bat
+gradlew
