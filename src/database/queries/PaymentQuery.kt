@@ -47,11 +47,10 @@ interface PaymentQuery {
      */
 
     fun updatePayment(p: Payment): Int {
-        return transaction (db) {
-            PaymentTable.update ({
-                PaymentTable.client_num.eq(p.client_num) and
-                        PaymentTable.ref_num.eq(p.ref_num)
-            }){
+        return transaction(db) {
+            PaymentTable.update({
+                PaymentTable.ref_num.eq(p.ref_num)
+            }) {
                 it[client_num] = p.client_num
                 it[ref_num] = p.ref_num
                 it[pmt_type] = p.pmt_type

@@ -64,7 +64,7 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-val theme: Theme = Theme.DARK
+val theme: Theme = Theme.MODERN
 val host = System.getProperty("host") ?: "localhost"
 //NetworkInterface.getNetworkInterfaces()
 //.toList().stream()
@@ -125,7 +125,7 @@ fun Application.module() {  //testing: Boolean = false
             validate {
                 val user: User? = cache.allUsers()
                     .find { user -> user.email == it.name && user.passwordHash == DAPSSecurity.hash(it.password) }
-                if (user != null) { // sessions.get<DAPSSession>()?.token != null
+                if (user != null) {
                     UserIdPrincipal(it.name)
                 } else {
                     null
@@ -217,11 +217,12 @@ fun Application.module() {  //testing: Boolean = false
         // comment out to experiment with the node.js app
         authenticate("web") {
             route("/web") {
+                billings()
                 clients()
                 client_notes()
                 daps_staff_messages()
                 daps_staff()
-                billings()
+                payments()
                 tempnotes()
                 temps()
             }
@@ -231,6 +232,7 @@ fun Application.module() {  //testing: Boolean = false
             webclientnotes(WebClientNotesPresenter())
             webdapsstaffmessages(WebDAPSStaffMessagesPresenter())
             webdapsstaff(WebDAPSStaffPresenter())
+            webpayments(WebPaymentsPresenter())
             webtempnotes(WebTempNotesPresenter())
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
@@ -272,6 +274,7 @@ fun Application.module() {  //testing: Boolean = false
                 client_notes()
                 clients()
                 daps_staff_messages()
+//                payments()
                 temps()
                 tempnotes()
             }

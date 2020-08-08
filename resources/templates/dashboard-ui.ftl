@@ -80,7 +80,7 @@
                         <li class="sidebar-item"><a class="sidebar-link" href="/webdapsstaff">DAPS Staff</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webinterviewguide">Interview Guide</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webpasteerrors">Paste Errors</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/webpayment">Payment</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpayments">Payments</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webpermnotes">Perm Notes</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webpermreqnotes">Perm Req Notes</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
