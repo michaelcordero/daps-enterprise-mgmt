@@ -3,6 +3,8 @@
 /build
 /gradle
 /out
+/fonts
+/images
 *.iml
 *.ipr
 *.iws
@@ -12,6 +14,5 @@
 *.sh
 *.svg
 *.txt
-*.xml
 *.bat
 gradlew
