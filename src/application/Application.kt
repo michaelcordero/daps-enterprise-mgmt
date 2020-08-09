@@ -239,6 +239,7 @@ fun Application.module() {  //testing: Boolean = false
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
             web_traditional_charts(WebChartsPresenter())
+            webdocumentation(WebDocumentationPresenter())
             users()
             // Real Time Update Event via WebSocket
             val connections = Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
