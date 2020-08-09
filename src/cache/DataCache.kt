@@ -20,7 +20,7 @@ interface DataCache {
     fun allInterviewGuides(): List<InterviewGuide>
     fun allPasteErrors(): List<PasteErrors>
     fun allPayments(): List<Payment>
-    fun allPermNotes(): List<PermNotes>
+    fun allPermNotes(): List<PermNote>
     fun allPermReqNotes(): List<PermReqNotes>
     fun allTempNotes(): List<TempNote>
     fun allTempsAvail4Work(): List<TempsAvail4Work>

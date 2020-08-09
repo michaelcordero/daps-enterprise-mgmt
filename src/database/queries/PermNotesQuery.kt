@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.PermNotesTable
-import model.PermNotes
+import model.PermNote
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ interface PermNotesQuery {
      * Create
      */
 
-    fun createPermNotes(pn: PermNotes): Int {
+    fun createPermNotes(pn: PermNote): Int {
         return transaction (db) {
             PermNotesTable.insert {
                 // id is auto-incremented
@@ -25,7 +25,7 @@ interface PermNotesQuery {
         }
     }
 
-    fun insertPermNotes(pn: PermNotes) {
+    fun insertPermNotes(pn: PermNote) {
         transaction (db) {
             PermNotesTable.insert {
                 it[ID] = pn.id!!
@@ -42,11 +42,11 @@ interface PermNotesQuery {
      * Read
      */
 
-    fun allPermNotes(): List<PermNotes> {
+    fun allPermNotes(): List<PermNote> {
        return transaction (db) {
             PermNotesTable.selectAll().toList()
         }.map {
-           PermNotes(
+           PermNote(
                it[PermNotesTable.ID],
                it[PermNotesTable.emp_num],
                it[PermNotesTable.note_date],
@@ -61,7 +61,7 @@ interface PermNotesQuery {
      * Update
      */
 
-    fun updatePermNotes(pn: PermNotes): Int {
+    fun updatePermNotes(pn: PermNote): Int {
         return transaction (db) {
             PermNotesTable.update({
                 PermNotesTable.ID.eq(pn.id!!)

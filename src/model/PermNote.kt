@@ -11,7 +11,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class PermNotes
+data class PermNote
 @JsonCreator constructor(
     val id: Int?,
     @JsonProperty(value = "emp_num", required = true)

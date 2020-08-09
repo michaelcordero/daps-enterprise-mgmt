@@ -224,6 +224,7 @@ fun Application.module() {  //testing: Boolean = false
                 daps_staff()
                 interview_guides()
                 payments()
+                perm_notes()
                 tempnotes()
                 temps()
             }
@@ -235,6 +236,7 @@ fun Application.module() {  //testing: Boolean = false
             webdapsstaff(WebDAPSStaffPresenter())
             webinterviewguide(WebInterviewGuidePresenter())
             webpayments(WebPaymentsPresenter())
+            webpermnotes(WebPermNotesPresenter())
             webtempnotes(WebTempNotesPresenter())
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
@@ -279,6 +281,7 @@ fun Application.module() {  //testing: Boolean = false
                 daps_staff_messages()
                 interview_guides()
                 payments()
+                perm_notes()
                 temps()
                 tempnotes()
             }
