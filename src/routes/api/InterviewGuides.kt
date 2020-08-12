@@ -42,7 +42,7 @@ fun Route.interview_guides() {
             val interview_guide: InterviewGuide = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(interview_guide)
-                val ig = cache.allInterviewGuides().find { i -> i.id == interview_guide.id }
+                val ig = cache.allInterviewGuides().find { i -> i.id == result}
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig), "result" to result))
             }
             log.info("Response took: ${time.duration}")

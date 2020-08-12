@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body"> <!-- style="width: fit-content" -->
                         <table id="data-payments"
                                class="table table-striped table-bordered table-responsive table-hover"
                                style="width: 100%;">
