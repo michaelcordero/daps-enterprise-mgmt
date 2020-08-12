@@ -13,7 +13,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class PermReqNotes
+data class PermReqNote
 @JsonCreator constructor(
     val id: Int?,
     @JsonProperty(value = "emp_num", required = true)

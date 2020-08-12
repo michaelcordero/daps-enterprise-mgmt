@@ -64,7 +64,7 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-val theme: Theme = Theme.MODERN
+val theme: Theme = Theme.CLASSIC
 val host = System.getProperty("host") ?: "localhost"
 //NetworkInterface.getNetworkInterfaces()
 //.toList().stream()
@@ -225,6 +225,7 @@ fun Application.module() {  //testing: Boolean = false
                 interview_guides()
                 payments()
                 perm_notes()
+                perm_req_notes()
                 tempnotes()
                 temps()
             }
@@ -237,6 +238,7 @@ fun Application.module() {  //testing: Boolean = false
             webinterviewguide(WebInterviewGuidePresenter())
             webpayments(WebPaymentsPresenter())
             webpermnotes(WebPermNotesPresenter())
+            webpermreqnotes(WebPermReqNotesPresenter())
             webtempnotes(WebTempNotesPresenter())
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
@@ -282,6 +284,7 @@ fun Application.module() {  //testing: Boolean = false
                 interview_guides()
                 payments()
                 perm_notes()
+                perm_req_notes()
                 temps()
                 tempnotes()
             }

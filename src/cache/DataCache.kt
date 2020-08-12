@@ -21,7 +21,7 @@ interface DataCache {
     fun allPasteErrors(): List<PasteErrors>
     fun allPayments(): List<Payment>
     fun allPermNotes(): List<PermNote>
-    fun allPermReqNotes(): List<PermReqNotes>
+    fun allPermReqNotes(): List<PermReqNote>
     fun allTempNotes(): List<TempNote>
     fun allTempsAvail4Work(): List<TempsAvail4Work>
     fun allTemps(): List<Temp>
