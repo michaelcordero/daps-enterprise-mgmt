@@ -27,7 +27,7 @@ fun Route.tempnotes() {
         try {
             log.info("/tempnotes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allTempNotes())
+                call.respond(status = HttpStatusCode.OK, message = cache.allTempNotes().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -43,7 +43,7 @@ fun Route.tempnotes() {
             val temp_note: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(temp_note)
-                val saved: TempNote? = cache.allTempNotes().find { tn -> tn.temp_note_key == result}
+                val saved: TempNote? = cache.allTempNotes()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")
@@ -60,7 +60,7 @@ fun Route.tempnotes() {
             val temp_note: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(temp_note)
-                val edited: TempNote? = cache.allTempNotes().find { tn -> tn.temp_note_key == temp_note.temp_note_key }
+                val edited: TempNote? = cache.allTempNotes()[temp_note.temp_note_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
             log.info("Response took: ${time.duration}")
@@ -76,8 +76,8 @@ fun Route.tempnotes() {
             log.info("DELETE /tempnotes requested")
             val tempNote: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = tempNote.let {  cache.remove(tempNote) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<TempNote>(), "result" to result))
+                cache.remove(tempNote)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<TempNote>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

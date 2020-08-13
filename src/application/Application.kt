@@ -64,7 +64,7 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-val theme: Theme = Theme.CLASSIC
+val theme: Theme = Theme.LIGHT
 val host = System.getProperty("host") ?: "localhost"
 //NetworkInterface.getNetworkInterfaces()
 //.toList().stream()
@@ -72,8 +72,8 @@ val host = System.getProperty("host") ?: "localhost"
 //.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
 //.toList().first().address.hostAddress.toString()
 val port = System.getProperty("port") ?: "8080"
-//val in_mem_session: SessionStorageMemory = SessionStorageMemory()
-
+val connections: MutableSet<DefaultWebSocketSession> =
+    Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
 
 @ExperimentalTime
 @ExperimentalStdlibApi
@@ -123,7 +123,7 @@ fun Application.module() {  //testing: Boolean = false
             userParamName = "emailId"
             passwordParamName = "password"
             validate {
-                val user: User? = cache.allUsers()
+                val user: User? = cache.allUsers().values
                     .find { user -> user.email == it.name && user.passwordHash == DAPSSecurity.hash(it.password) }
                 if (user != null) {
                     UserIdPrincipal(it.name)
@@ -246,7 +246,6 @@ fun Application.module() {  //testing: Boolean = false
             webdocumentation(WebDocumentationPresenter())
             users()
             // Real Time Update Event via WebSocket
-            val connections = Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
             webSocket("/update") {
                 connections += this
                 try {

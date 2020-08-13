@@ -26,7 +26,7 @@ fun Route.client_notes() {
         try {
             log.info("GET /client_notes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allClientNotes())
+                call.respond(status = HttpStatusCode.OK, message = cache.allClientNotes().values)
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -41,7 +41,7 @@ fun Route.client_notes() {
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(client_note)
-                val cn = cache.allClientNotes().find { cno -> cno.client_note_key == result }
+                val cn = cache.allClientNotes()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn)))
             }
             log.info("Response took: ${time.duration}")
@@ -56,9 +56,9 @@ fun Route.client_notes() {
             log.info("PUT /client_notes requested")
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(client_note)
-                val cn = cache.allClientNotes().find { cno -> cno.client_note_key == client_note.client_note_key }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn), "result" to result))
+                cache.edit(client_note)
+                val cn = cache.allClientNotes()[client_note.client_note_key]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn)))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -72,8 +72,8 @@ fun Route.client_notes() {
             log.info("DELETE /client_notes requested")
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.remove(client_note)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientNote>(), "result" to result))
+                cache.remove(client_note)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientNote>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

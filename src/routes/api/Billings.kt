@@ -17,14 +17,14 @@ import kotlin.time.measureTimedValue
 @KtorExperimentalLocationsAPI
 @Location("/billings")
 class Billings {
-    @Location("/client/{client_num}")
-    data class BillingsClient(val client_num: String, val billings: Billings)
-
-    @Location("/employee/{emp_num}")
-    data class BillingsEmployee(val emp_num: String, val billings: Billings)
-
-    @Location("/counter/{counter}")
-    data class BillingsCounter(val counter: String, val billings: Billings)
+//    @Location("/client/{client_num}")
+//    data class BillingsClient(val client_num: String, val billings: Billings)
+//
+//    @Location("/employee/{emp_num}")
+//    data class BillingsEmployee(val emp_num: String, val billings: Billings)
+//
+//    @Location("/counter/{counter}")
+//    data class BillingsCounter(val counter: String, val billings: Billings)
 }
 
 @ExperimentalTime
@@ -36,7 +36,7 @@ fun Route.billings() {
         try {
             log.info("GET /billings requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allBilling())
+                call.respond(status = HttpStatusCode.OK, message = cache.allBilling().values)
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -44,44 +44,44 @@ fun Route.billings() {
         }
     }
 
-    get<Billings.BillingsClient> {
-        try {
-            log.info("GET /billings/client_num=${it.client_num} requested")
-            val time: TimedValue<Unit> = measureTimedValue {
-                val billings: List<Billing> = cache.allBilling().filter {  b -> b.client_num == it.client_num.toInt()}
-                call.respond(status = HttpStatusCode.OK, message = billings)
-            }
-            log.info("Response took: ${time.duration}")
-        } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
-        }
-    }
-
-    get<Billings.BillingsEmployee> {
-        try {
-            log.info("GET /billings/emp_num=${it.emp_num} requested")
-            val time: TimedValue<Unit> = measureTimedValue {
-                val billings: List<Billing> = cache.allBilling().filter { b -> b.employee_num == it.emp_num.toInt() }
-                call.respond(status = HttpStatusCode.OK, message = billings)
-            }
-            log.info("Response took: ${time.duration}")
-        } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
-        }
-    }
-
-    get<Billings.BillingsCounter> {
-        try {
-            log.info("GET /billings/counter=${it.counter} requested")
-            val time: TimedValue<Unit> = measureTimedValue {
-                val billings: List<Billing> = cache.allBilling().filter { b -> b.counter == it.counter.toInt() }
-                call.respond(status = HttpStatusCode.OK, message = billings)
-            }
-            log.info("Response took: ${time.duration}")
-        } catch (e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
-        }
-    }
+//    get<Billings.BillingsClient> {
+//        try {
+//            log.info("GET /billings/client_num=${it.client_num} requested")
+//            val time: TimedValue<Unit> = measureTimedValue {
+//                val billings: List<Billing> = cache.allBilling().filter {  b -> b.client_num == it.client_num.toInt()}
+//                call.respond(status = HttpStatusCode.OK, message = billings)
+//            }
+//            log.info("Response took: ${time.duration}")
+//        } catch (e: Exception) {
+//            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+//        }
+//    }
+//
+//    get<Billings.BillingsEmployee> {
+//        try {
+//            log.info("GET /billings/emp_num=${it.emp_num} requested")
+//            val time: TimedValue<Unit> = measureTimedValue {
+//                val billings: List<Billing> = cache.allBilling().filter { b -> b.employee_num == it.emp_num.toInt() }
+//                call.respond(status = HttpStatusCode.OK, message = billings)
+//            }
+//            log.info("Response took: ${time.duration}")
+//        } catch (e: Exception) {
+//            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+//        }
+//    }
+//
+//    get<Billings.BillingsCounter> {
+//        try {
+//            log.info("GET /billings/counter=${it.counter} requested")
+//            val time: TimedValue<Unit> = measureTimedValue {
+//                val billings: List<Billing> = cache.allBilling().filter { b -> b.counter == it.counter.toInt() }
+//                call.respond(status = HttpStatusCode.OK, message = billings)
+//            }
+//            log.info("Response took: ${time.duration}")
+//        } catch (e: Exception) {
+//            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
+//        }
+//    }
 
     // Create HTTP Method
     post<Billings> {
@@ -90,7 +90,7 @@ fun Route.billings() {
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(billing)
-                val br: Billing? = cache.allBilling().find { b -> b.counter == result }
+                val br: Billing? = cache.allBilling().get(result)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
             }
             log.info("Response took: ${time.duration}")
@@ -108,7 +108,7 @@ fun Route.billings() {
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(billing)
-                val br: Billing? = cache.allBilling().find { b -> b.counter == billing.counter } // need to query! otherwise object will come back without previous data.
+                val br: Billing? = cache.allBilling().get(billing.counter) // need to query! otherwise object will come back without previous data.
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
             }
             log.info("Response took: ${time.duration}")
@@ -124,8 +124,8 @@ fun Route.billings() {
             log.info("DELETE /billings requested")
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = billing.let { cache.remove(billing) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Billing>(), "result" to result))
+                cache.remove(billing)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Billing>()))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {

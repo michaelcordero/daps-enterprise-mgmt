@@ -25,7 +25,7 @@ fun Route.daps_staff(){
         try {
             log.info("GET /daps_staff requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allDAPSStaff())
+                call.respond(status = HttpStatusCode.OK, message = cache.allDAPSStaff().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -39,9 +39,9 @@ fun Route.daps_staff(){
             log.info("POST /daps_staff requested")
             val dapsStaff: model.DAPSStaff = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(dapsStaff)
-                val da = cache.allDAPSStaff().find { dsf -> dsf.initial == dapsStaff.initial }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(da), "result" to result))
+                cache.add(dapsStaff)
+                val da = cache.allDAPSStaff()[dapsStaff.initial]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(da)))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -55,9 +55,9 @@ fun Route.daps_staff(){
            log.info("PUT /daps_staff requested")
            val dapsStaff: model.DAPSStaff = call.receive()
            val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(dapsStaff)
-                val ds = cache.allDAPSStaff().find { dsf -> dsf.initial == dapsStaff.initial }
-               call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ds), "result" to result))
+                cache.edit(dapsStaff)
+                val ds = cache.allDAPSStaff()[dapsStaff.initial]
+               call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ds)))
            }
            log.info("Response took: ${time.duration}")
        } catch(e: Exception) {
@@ -71,9 +71,9 @@ fun Route.daps_staff(){
             log.info("DELETE /daps_staff requested")
             val dapsStaff: model.DAPSStaff = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.remove(dapsStaff)
+                cache.remove(dapsStaff)
                 call.respond(status = HttpStatusCode.OK,
-                message = mapOf("data" to emptyList<DAPSStaff>(), "result" to result))
+                message = mapOf("data" to emptyList<DAPSStaff>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

@@ -27,7 +27,7 @@ fun Route.daps_staff_messages() {
         try {
             log.info("GET /daps_staff_messages")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allDAPSStaffMessages())
+                call.respond(status = HttpStatusCode.OK, message = cache.allDAPSStaffMessages().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -43,7 +43,7 @@ fun Route.daps_staff_messages() {
             val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(dsm)
-                val saved: DAPSStaffMessage? = cache.allDAPSStaffMessages().find { staff -> staff.staff_messages_key == result }
+                val saved: DAPSStaffMessage? = cache.allDAPSStaffMessages()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")
@@ -60,7 +60,7 @@ fun Route.daps_staff_messages() {
             val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(dsm)
-                val edited: DAPSStaffMessage? = cache.allDAPSStaffMessages().find { message -> message.staff_messages_key == dsm.staff_messages_key }
+                val edited: DAPSStaffMessage? = cache.allDAPSStaffMessages()[dsm.staff_messages_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
             log.info("Response took: ${time.duration}")
@@ -76,8 +76,8 @@ fun Route.daps_staff_messages() {
             log.info("DELETE /daps_staff_messages requested")
             val dsm: DAPSStaffMessage? = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = dsm.let { cache.remove(dsm) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<DAPSStaffMessage>(), "result" to result))
+                cache.remove(dsm)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<DAPSStaffMessage>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

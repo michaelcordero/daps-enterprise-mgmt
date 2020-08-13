@@ -28,7 +28,7 @@ fun Route.perm_notes() {
         try {
             log.info("GET /perm_notes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allPermNotes())
+                call.respond(status = HttpStatusCode.OK, message = cache.allPermNotes().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -43,7 +43,7 @@ fun Route.perm_notes() {
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(perm_note)
-                val pn = cache.allPermNotes().find { p -> p.id == result }
+                val pn = cache.allPermNotes()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn)))
             }
             log.info("Response took: ${time.duration}")
@@ -58,9 +58,9 @@ fun Route.perm_notes() {
             log.info("PUT /perm_notes requested")
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(perm_note)
-                val pn = cache.allPermNotes().find { p -> p.id == perm_note.id }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn), "result" to result))
+                cache.edit(perm_note)
+                val pn = cache.allPermNotes()[perm_note.id]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn)))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -74,8 +74,8 @@ fun Route.perm_notes() {
             log.info("DELETE /perm_notes requested")
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.remove(perm_note)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<PermNote>(), "result" to result))
+                cache.remove(perm_note)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<PermNote>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

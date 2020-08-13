@@ -27,7 +27,7 @@ fun Route.temps() {
         try {
         log.info("GET /temps requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allTemps())
+                call.respond(status = HttpStatusCode.OK, message = cache.allTemps().values)
             }
             log.info("Response took: ${time.duration}")
             } catch(e: Exception) {
@@ -42,7 +42,7 @@ fun Route.temps() {
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(temp)
-                val saved: Temp? = cache.allTemps().find { t -> t.emp_num == result }
+                val saved: Temp? = cache.allTemps()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")
@@ -59,7 +59,7 @@ fun Route.temps() {
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(temp)
-                val edited: Temp? = cache.allTemps().find { t -> t.emp_num == temp.emp_num }
+                val edited: Temp? = cache.allTemps()[temp.emp_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
             log.info("Response took: ${time.duration}")
@@ -75,8 +75,8 @@ fun Route.temps() {
             log.info("DELETE /temps requested")
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = temp.let { cache.remove(temp) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Temp>(), "result" to result))
+                cache.remove(temp)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Temp>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

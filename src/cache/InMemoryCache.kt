@@ -5,28 +5,29 @@ import kotlinx.coroutines.*
 import model.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentHashMap
 
 val log: Logger = LoggerFactory.getLogger(InMemoryCache::class.java)
 
 class InMemoryCache(val dq: DataQuery): DataCache {
-    lateinit var billings: MutableList<Billing>
-    lateinit var clientFiles: MutableList<ClientFile>
-    lateinit var clientNotes: MutableList<ClientNote>
-    lateinit var clientPermNotes: MutableList<ClientPermNotes>
-    lateinit var dapsAddress: MutableList<DAPSAddress>
-    lateinit var dapsStaffMessages: MutableList<DAPSStaffMessage>
-    lateinit var dapsStaff: MutableList<DAPSStaff>
-    lateinit var interviewGuides: MutableList<InterviewGuide>
-    lateinit var pasteErrors: MutableList<PasteErrors>
-    lateinit var payments: MutableList<Payment>
-    lateinit var permNotes: MutableList<PermNote>
-    lateinit var permReqNotes: MutableList<PermReqNote>
-    lateinit var tempNotes: MutableList<TempNote>
-    lateinit var tempsAvail4Work: MutableList<TempsAvail4Work>
-    lateinit var temps: MutableList<Temp>
-    lateinit var users: MutableList<User>
-    lateinit var woNotes: MutableList<WONotes>
-    lateinit var workOrders: MutableList<WorkOrder>
+    lateinit var billings: MutableMap<Int,Billing>
+    lateinit var clientFiles: MutableMap<Int,ClientFile>
+    lateinit var clientNotes: MutableMap<Int?,ClientNote>
+    lateinit var clientPermNotes: MutableMap<Int,ClientPermNotes>
+    lateinit var dapsAddress: MutableMap<Int?,DAPSAddress>
+    lateinit var dapsStaffMessages: MutableMap<Int?,DAPSStaffMessage>
+    lateinit var dapsStaff: MutableMap<String?,DAPSStaff>
+    lateinit var interviewGuides: MutableMap<Int?,InterviewGuide>
+    lateinit var pasteErrors: MutableMap<String?,PasteErrors>
+    lateinit var payments: MutableMap<String?,Payment>
+    lateinit var permNotes: MutableMap<Int?,PermNote>
+    lateinit var permReqNotes: MutableMap<Int?,PermReqNote>
+    lateinit var tempNotes: MutableMap<Int?,TempNote>
+    lateinit var tempsAvail4Work: MutableMap<Int?,TempsAvail4Work>
+    lateinit var temps: MutableMap<Int?,Temp>
+    lateinit var users: MutableMap<Long?,User>
+    lateinit var woNotes: MutableMap<Int?,WONotes>
+    lateinit var workOrders: MutableMap<Int?,WorkOrder>
     init {
         runBlocking {
             val jobs: MutableList<Job> = mutableListOf()
@@ -34,24 +35,24 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                 log.info("Adding data to cache...")
                 jobs.addAll(
                     mutableListOf(
-                        launch { billings = dq.allBilling().toMutableList() },
-                        launch { clientFiles = dq.allClientFiles().toMutableList()},
-                        launch { clientNotes = dq.allClientNotes().toMutableList() },
+                        launch { billings = ConcurrentHashMap(dq.allBilling().associateBy { it.counter }.toMutableMap()) },
+                        launch { clientFiles = ConcurrentHashMap(dq.allClientFiles().associateBy { it.client_num }.toMutableMap())},
+                        launch { clientNotes = ConcurrentHashMap(dq.allClientNotes().associateBy { it.client_note_key }.toMutableMap())},
 //                        launch { clientPermNotes= dq.allClientPermNotes().toMutableList() },
-                        launch { dapsAddress = dq.allDAPSAddress().toMutableList() },
-                        launch { dapsStaffMessages = dq.allDAPSStaffMessages().toMutableList() },
-                        launch { dapsStaff = dq.allDAPSStaff().toMutableList() },
-                        launch { interviewGuides = dq.allInterviewGuides().toMutableList() },
-                        launch { pasteErrors = dq.allPasteErrors().toMutableList() },
-                        launch { payments = dq.allPayments().toMutableList() },
-                        launch { permNotes = dq.allPermNotes().toMutableList() },
-                        launch { permReqNotes = dq.allPermReqNotes().toMutableList() },
-                        launch { tempNotes = dq.allTempNotes().toMutableList() },
-                        launch { tempsAvail4Work = dq.allTempsAvail4Work().toMutableList()},
-                        launch { temps = dq.allTemps().toMutableList() },
-                        launch { users = dq.allUsers().toMutableList() },
-                        launch { woNotes = dq.allWONotes().toMutableList() },
-                        launch { workOrders = dq.allWorkOrders().toMutableList() }
+                        launch { dapsAddress = ConcurrentHashMap(dq.allDAPSAddress().associateBy { it.mailing_list_id}.toMutableMap()) },
+                        launch { dapsStaffMessages = ConcurrentHashMap(dq.allDAPSStaffMessages().associateBy { it.staff_messages_key }.toMutableMap()) },
+                        launch { dapsStaff = ConcurrentHashMap(dq.allDAPSStaff().associateBy { it.initial }.toMutableMap()) },
+                        launch { interviewGuides = ConcurrentHashMap(dq.allInterviewGuides().associateBy { it.id }.toMutableMap()) },
+                        launch { pasteErrors = ConcurrentHashMap(dq.allPasteErrors().associateBy { it.ref_num }.toMutableMap()) },
+                        launch { payments = ConcurrentHashMap(dq.allPayments().associateBy { it.ref_num }.toMutableMap()) },
+                        launch { permNotes = ConcurrentHashMap(dq.allPermNotes().associateBy { it.id }.toMutableMap()) },
+                        launch { permReqNotes = ConcurrentHashMap(dq.allPermReqNotes().associateBy { it.id }.toMutableMap()) },
+                        launch { tempNotes = ConcurrentHashMap(dq.allTempNotes().associateBy { it.temp_note_key }.toMutableMap()) },
+                        launch { tempsAvail4Work = ConcurrentHashMap(dq.allTempsAvail4Work().associateBy { it.rec_num }.toMutableMap())},
+                        launch { temps = ConcurrentHashMap(dq.allTemps().associateBy { it.emp_num }.toMutableMap()) },
+                        launch { users = ConcurrentHashMap(dq.allUsers().associateBy { it.id }.toMutableMap()) },
+                        launch { woNotes = ConcurrentHashMap(dq.allWONotes().associateBy { it.id }.toMutableMap()) },
+                        launch { workOrders = ConcurrentHashMap(dq.allWorkOrders().associateBy { it.wo_number }.toMutableMap()) }
                     )
                 )
                 jobs.joinAll()
@@ -69,7 +70,7 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     is Billing -> {
                         val result: Int = dq.createBilling(obj)
                         val billing: Billing = obj.copy(counter = result)
-                        billings.add(billing)
+                        billings[billing.counter] = billing
                         return result
                     }
                     is BillType -> {
@@ -79,43 +80,43 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     is ClientFile -> {
                         val result: Int = dq.createClientFile(obj)
                         val cf: ClientFile = obj.copy(client_num = result)
-                        clientFiles.add(cf)
+                        clientFiles[cf.client_num] = cf
                         return result
                     }
                     is ClientNote -> {
                         val result: Int = dq.createClientNotes(obj)
                         val cn = obj.copy(client_note_key = result)
-                        clientNotes.add(cn)
+                        clientNotes[cn.client_note_key] = cn
                         return result
                     }
                     is ClientPermNotes -> {
                         val result = dq.createClientPermNotes(obj)
                         val cpn = obj.copy(id = result)
-                        clientPermNotes.add(cpn)
+                        clientPermNotes[cpn.id] = cpn
                         return result
                     }
                     is DAPSAddress -> {
                         val result = dq.createDAPSAddress(obj)
                         val da = obj.copy(mailing_list_id = result)
-                        dapsAddress.add(da)
+                        dapsAddress[da.mailing_list_id] = da
                         return result
                     }
                     is DAPSStaff -> {
                         // TODO: Revisit this one
                         dq.insertDAPSStaff(obj)
-                        dapsStaff.add(obj)
+                        dapsStaff[obj.initial] = obj
                         return 0
                     }
                     is DAPSStaffMessage -> {
                         val result = dq.createDAPSStaffMessages(obj)
                         val dsm = obj.copy(staff_messages_key = result)
-                        dapsStaffMessages.add(dsm)
+                        dapsStaffMessages[dsm.staff_messages_key] = dsm
                         return result
                     }
                     is InterviewGuide -> {
                         val result = dq.createInterviewGuide(obj)
                         val ig = obj.copy(id = result)
-                        interviewGuides.add(ig)
+                        interviewGuides[ig.id] = ig
                         return result
                     }
                     is JobFunction -> {
@@ -125,61 +126,61 @@ class InMemoryCache(val dq: DataQuery): DataCache {
                     is PasteErrors -> {
                         // TODO: Revisit
                         dq.insertPasteErrors(obj)
-                        pasteErrors.add(obj)
+                        pasteErrors[obj.ref_num] = obj
                         return 0
                     }
                     is Payment -> {
                         // TODO: Revisit
                         dq.insertPayment(obj)
-                        payments.add(obj)
+                        payments[obj.ref_num] = obj
                         return 0
                     }
                     is PermNote -> {
                         val result = dq.createPermNotes(obj)
                         val pn = obj.copy(id = result)
-                        permNotes.add(pn)
+                        permNotes[pn.id] = pn
                         return result
                     }
                     is PermReqNote -> {
                         val result = dq.createPermReqNotes(obj)
                         val prn = obj.copy(id = result)
-                        permReqNotes.add(prn)
+                        permReqNotes[prn.id] = prn
                         return result
                     }
                     is TempNote -> {
                         val result = dq.createTempNote(obj)
                         val tn = obj.copy(temp_note_key = result)
-                        tempNotes.add(tn)
+                        tempNotes[tn.temp_note_key] = tn
                         return result
                     }
                     is TempsAvail4Work -> {
                         val result = dq.createTempAvail4Work(obj)
                         val ta4w = obj.copy(rec_num = result)
-                        tempsAvail4Work.add(ta4w)
+                        tempsAvail4Work[ta4w.rec_num] = ta4w
                         return result
                     }
                     is Temp -> {
                         val result = dq.createTemps(obj)
                         val temp = obj.copy(emp_num = result)
-                        temps.add(temp)
+                        temps[temp.emp_num] = temp
                         return result
                     }
                     is User -> {
                         val result = dq.addUser(obj)
                         val user = obj.copy(id = result)
-                        users.add(user)
+                        users[user.id] = user
                         return result.toInt()
                     }
                     is WONotes -> {
                         val result = dq.createWONotes(obj)
                         val wonote = obj.copy(id = result)
-                        woNotes.add(wonote)
+                        woNotes[wonote.id] = wonote
                         return result
                     }
                     is WorkOrder -> {
                         val result = dq.createWorkOrder(obj)
                         val wo = obj.copy(wo_number = result)
-                        workOrders.add(wo)
+                        workOrders[wo.wo_number] = wo
                         return result
                     }
                 }
@@ -189,237 +190,183 @@ class InMemoryCache(val dq: DataQuery): DataCache {
         throw IllegalArgumentException("Unknown Object")
     }
 
-    override fun <T> edit(obj: T): Int {
-        try {
-            when(obj) {
-                is AccountRep -> {
-                    // skip...
+    override fun <T> edit(obj: T) {
+            try {
+                when(obj) {
+                    is AccountRep -> {
+                        // skip...
+                    }
+                    is Billing -> {
+                        val old = billings.replace(obj.counter,obj)
+                        val job = GlobalScope.launch { dq.updateBilling(obj) }
+                    }
+                    is BillType -> {
+                        // skip...
+                    }
+                    is ClientFile -> {
+                        val old = clientFiles.replace(obj.client_num,obj)
+                        val job = GlobalScope.launch { dq.updateClientFile(obj) }
+                    }
+                    is ClientNote -> {
+                        val old = clientNotes.replace(obj.client_note_key,obj)
+                        val job = GlobalScope.launch { dq.updateClientNotes(obj) }
+                    }
+                    is ClientPermNotes -> {
+                        val old = clientPermNotes.replace(obj.id,obj)
+                        val job = GlobalScope.launch { dq.updateClientPermNote(obj) }
+                    }
+                    is DAPSAddress -> {
+                        val job = GlobalScope.launch { dq.updateDAPSAddress(obj) }
+                        val old = dapsAddress.replace(obj.mailing_list_id,obj)
+                    }
+                    is DAPSStaff -> {
+                        val job = GlobalScope.launch { dq.updateDAPSStaff(obj) }
+                        val old = dapsStaff.replace(obj.initial,obj)
+                    }
+                    is DAPSStaffMessage -> {
+                        val job = GlobalScope.launch { dq.updateDAPSStaffMessages(obj) }
+                        val old = dapsStaffMessages.replace(obj.staff_messages_key,obj)
+                    }
+                    is InterviewGuide -> {
+                        val job = GlobalScope.launch { dq.updateInterviewGuide(obj) }
+                        val old = interviewGuides.replace(obj.id,obj)
+                    }
+                    is JobFunction -> {
+                        // skip...
+                    }
+                    is PasteErrors -> {
+                        val job = GlobalScope.launch { dq.updatePasteErrors(obj) }
+                        val old = pasteErrors.replace(obj.ref_num, obj)
+                    }
+                    is Payment -> {
+                        val job = GlobalScope.launch { dq.updatePayment(obj) }
+                        val old = payments.replace(obj.ref_num,obj)
+                    }
+                    is PermNote -> {
+                        val job = GlobalScope.launch { dq.updatePermNotes(obj) }
+                        val old = permNotes.replace(obj.id,obj)
+                    }
+                    is PermReqNote -> {
+                        val job = GlobalScope.launch { dq.updatePermReqNote(obj) }
+                        val old = permReqNotes.replace(obj.id,obj)
+                    }
+                    is TempNote -> {
+                        val job = GlobalScope.launch { dq.updateTempNote(obj) }
+                        val old = tempNotes.replace(obj.temp_note_key,obj)
+                    }
+                    is Temp -> {
+                        val job = GlobalScope.launch { dq.updateTemp(obj) }
+                        val old = temps.replace(obj.emp_num,obj)
+                    }
+                    is TempsAvail4Work -> {
+                        val job = GlobalScope.launch { dq.updateTempAvail4Work(obj) }
+                        val old = tempsAvail4Work.replace(obj.rec_num, obj)
+                    }
+                    is User -> {
+                        val job = GlobalScope.launch { dq.updateUser(obj) }
+                        val old = users.replace(obj.id,obj)
+                    }
+                    is WONotes -> {
+                        val job = dq.updateWONotes(obj)
+                        val old = woNotes.replace(obj.id, obj)
+                    }
+                    is WorkOrder -> {
+                        val job = GlobalScope.launch { dq.updateWorkOrder(obj) }
+                        val old = workOrders.replace(obj.wo_number,obj)
+                    }
+                    else ->  throw IllegalArgumentException("Unknown Object")
                 }
-                is Billing -> {
-                    val result = dq.updateBilling(obj)
-                    billings.removeIf{b -> b.counter == obj.counter}
-                    billings.add(obj)
-                    return result
-                }
-                is BillType -> {
-                    // skip...
-                }
-                is ClientFile -> {
-                    val result = dq.updateClientFile(obj)
-                    clientFiles.removeIf { cf -> cf.client_num == obj.client_num }
-                    clientFiles.add(obj)
-                    return result
-                }
-                is ClientNote -> {
-                    val result = dq.updateClientNotes(obj)
-                    clientNotes.removeIf { cn -> cn.client_note_key == obj.client_note_key }
-                    clientNotes.add(obj)
-                    return result
-                }
-                is ClientPermNotes -> {
-                    val result = dq.updateClientPermNote(obj)
-                    clientPermNotes.removeIf { cpn -> cpn.id == obj.id }
-                    clientPermNotes.add(obj)
-                    return result
-                }
-                is DAPSAddress -> {
-                    val result = dq.updateDAPSAddress(obj)
-                    dapsAddress.removeIf { da -> da.mailing_list_id == obj.mailing_list_id }
-                    dapsAddress.add(obj)
-                    return result
-                }
-                is DAPSStaff -> {
-                    val result = dq.updateDAPSStaff(obj)
-                    dapsStaff.removeIf { ds -> ds.initial == obj.initial }
-                    dapsStaff.add(obj)
-                    return result
-                }
-                is DAPSStaffMessage -> {
-                    val result = dq.updateDAPSStaffMessages(obj)
-                    dapsStaffMessages.removeIf { dsm -> dsm.staff_messages_key == obj.staff_messages_key }
-                    dapsStaffMessages.add(obj)
-                    return result
-                }
-                is InterviewGuide -> {
-                    val result = dq.updateInterviewGuide(obj)
-                    interviewGuides.removeIf { ig -> ig.id == obj.id }
-                    interviewGuides.add(obj)
-                    return result
-                }
-                is JobFunction -> {
-                    // skip...
-                }
-                is PasteErrors -> {
-                    val result = dq.updatePasteErrors(obj)
-                    pasteErrors.removeIf { pe -> pe.ref_num == obj.ref_num }
-                    pasteErrors.add(obj)
-                    return result
-                }
-                is Payment -> {
-                    val result = dq.updatePayment(obj)
-                    payments.removeIf { p -> p.ref_num == obj.ref_num }
-                    payments.add(obj)
-                    return result
-                }
-                is PermNote -> {
-                    val result = dq.updatePermNotes(obj)
-                    permNotes.removeIf { pn -> pn.id == obj.id }
-                    permNotes.add(obj)
-                    return result
-                }
-                is PermReqNote -> {
-                    val result = dq.updatePermReqNote(obj)
-                    permReqNotes.removeIf { prn -> prn.id == obj.id }
-                    permReqNotes.add(obj)
-                    return result
-                }
-                is TempNote -> {
-                    val result = dq.updateTempNote(obj)
-                    tempNotes.removeIf { tn -> tn.temp_note_key == obj.temp_note_key }
-                    tempNotes.add(obj)
-                    return result
-                }
-                is Temp -> {
-                    val result = dq.updateTemp(obj)
-                    temps.removeIf { t -> t.emp_num == obj.emp_num }
-                    temps.add(obj)
-                    return result
-                }
-                is TempsAvail4Work -> {
-                    val result = dq.updateTempAvail4Work(obj)
-                    tempsAvail4Work.removeIf { ta4w -> ta4w.rec_num == obj.rec_num }
-                    tempsAvail4Work.add(obj)
-                    return result
-                }
-                is User -> {
-                    val result = dq.updateUser(obj)
-                    users.removeIf { u -> u.id == obj.id }
-                    users.add(obj)
-                    return result
-                }
-                is WONotes -> {
-                    val result = dq.updateWONotes(obj)
-                    woNotes.removeIf { wn -> wn.id == obj.id }
-                    woNotes.add(obj)
-                    return result
-                }
-                is WorkOrder -> {
-                    val result = dq.updateWorkOrder(obj)
-                    workOrders.removeIf { wo -> wo.wo_number == obj.wo_number }
-                    workOrders.add(obj)
-                    return result
-                }
+            } catch (e: Exception) {
+                log.error("Update failed", e)
             }
-        } catch (e: Exception) {
-            log.error("Update failed", e)
-        }
-        throw IllegalArgumentException("Unknown Object")
     }
 
-    override fun <T> remove(obj: T): Int {
+    override fun <T> remove(obj: T) {
         try {
             when(obj) {
                 is AccountRep -> {
                     // skip...
                 }
                 is Billing -> {
-                    val result = dq.deleteBilling(obj.counter)
-                    billings.removeIf{b -> b.counter == obj.counter}
-                    return result
+                    val job = GlobalScope.launch { dq.deleteBilling(obj.counter) }
+                    val old = billings.remove(obj.counter)
                 }
                 is BillType -> {
                     // skip...
                 }
                 is ClientFile -> {
-                    val result = dq.deleteClientFile(obj.client_num)
-                    clientFiles.removeIf { cf -> cf.client_num == obj.client_num }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteClientFile(obj.client_num) }
+                    val old = clientFiles.remove(obj.client_num)
                 }
                 is ClientNote -> {
-                    val result = dq.deleteClientNote(obj.client_note_key!!)
-                    clientNotes.removeIf { cn -> cn.client_note_key == obj.client_note_key }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteClientNote(obj.client_note_key!!) }
+                    val old = clientNotes.remove(obj.client_note_key)
                 }
                 is ClientPermNotes -> {
-                    val result = dq.deleteClientPermNote(obj.id)
-                    clientPermNotes.removeIf { cpn -> cpn.id == obj.id }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteClientPermNote(obj.id) }
+                    val old = clientPermNotes.remove(obj.id)
                 }
                 is DAPSAddress -> {
-                    val result = dq.deleteDAPSAddress(obj.mailing_list_id!!)
-                    dapsAddress.removeIf { da -> da.mailing_list_id == obj.mailing_list_id }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteDAPSAddress(obj.mailing_list_id!!) }
+                    val old = dapsAddress.remove(obj.mailing_list_id)
                 }
                 is DAPSStaff -> {
                     // TODO: Add a primary key
-                    val result = dq.deleteDAPSStaff(obj)
-                    dapsStaff.remove(obj)
-                    return result
+                    val job = GlobalScope.launch { dq.deleteDAPSStaff(obj) }
+                    val old = dapsStaff.remove(obj.initial)
                 }
                 is DAPSStaffMessage -> {
-                    val result = dq.deleteDAPSStaffMessages(obj.staff_messages_key!!)
-                    dapsStaffMessages.removeIf { dsm -> dsm.staff_messages_key == obj.staff_messages_key }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteDAPSStaffMessages(obj.staff_messages_key!!) }
+                    val old = dapsStaffMessages.remove(obj.staff_messages_key)
                 }
                 is InterviewGuide -> {
-                    val result = dq.deleteInterviewGuide(obj.id!!)
-                    interviewGuides.removeIf { ig -> ig.id == obj.id }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteInterviewGuide(obj.id!!) }
+                    val old = interviewGuides.remove(obj.id)
                 }
                 is JobFunction -> {
                     // skip...
                 }
                 is PasteErrors -> {
                     // TODO: Add primary key
-                    val result = dq.deletePasteErrors(obj)
-                    pasteErrors.remove(obj)
-                    return result
+                    val job = GlobalScope.launch { dq.deletePasteErrors(obj) }
+                    val old = pasteErrors.remove(obj.ref_num)
                 }
                 is Payment -> {
                     // TODO: Add primary key
-                    val result = dq.deletePayment(obj)
-                    payments.remove(obj)
-                    return result
+                    val job = GlobalScope.launch { dq.deletePayment(obj) }
+                    val old = payments.remove(obj.ref_num)
                 }
                 is PermNote -> {
-                    val result = dq.deletePermNotes(obj.id!!)
-                    permNotes.removeIf { pn -> pn.id == obj.id }
-                    return result
+                    val job = GlobalScope.launch { dq.deletePermNotes(obj.id!!) }
+                    val old = permNotes.remove(obj.id)
                 }
                 is PermReqNote -> {
-                    val result = dq.deletePermReqNote(obj.id!!)
-                    permReqNotes.removeIf { prn -> prn.id == obj.id }
-                    return result
+                    val job = GlobalScope.launch { dq.deletePermReqNote(obj.id!!) }
+                    val old = permReqNotes.remove(obj.id)
                 }
                 is TempNote -> {
-                    val result = dq.deleteTempNote(obj.temp_note_key!!)
-                    tempNotes.removeIf { tn -> tn.temp_note_key == obj.temp_note_key }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteTempNote(obj.temp_note_key!!) }
+                    val old = tempNotes.remove(obj.temp_note_key)
                 }
                 is Temp -> {
-                    val result = dq.deleteTemp(obj.emp_num)
-                    temps.removeIf { t -> t.emp_num == obj.emp_num }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteTemp(obj.emp_num) }
+                    val old = temps.remove(obj.emp_num)
                 }
                 is TempsAvail4Work -> {
-                    val result = dq.deleteTempAvail4Work(obj.rec_num)
-                    tempsAvail4Work.removeIf { ta4w -> ta4w.rec_num == obj.rec_num }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteTempAvail4Work(obj.rec_num) }
+                    val old = tempsAvail4Work.remove(obj.rec_num)
                 }
                 is User -> {
-                    val result = dq.deleteUser(obj.id)
-                    users.removeIf { u -> u.id == obj.id }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteUser(obj.id) }
+                    val old = users.remove(obj.id)
                 }
                 is WONotes -> {
-                    val result = dq.deleteWONote(obj.id)
-                    woNotes.removeIf { wn -> wn.id == obj.id }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteWONote(obj.id) }
+                    val old = woNotes.remove(obj.id)
                 }
                 is WorkOrder -> {
-                    val result = dq.deleteWorkOrder(obj.wo_number)
-                    workOrders.removeIf { wo -> wo.wo_number == obj.wo_number }
-                    return result
+                    val job = GlobalScope.launch { dq.deleteWorkOrder(obj.wo_number) }
+                    val old = workOrders.remove(obj.wo_number)
                 }
             }
         } catch (e: Exception) {
@@ -428,79 +375,79 @@ class InMemoryCache(val dq: DataQuery): DataCache {
         throw IllegalArgumentException("Unknown Object")
     }
 
-    override fun allBilling(): List<Billing> {
+    override fun allBilling(): Map<Int,Billing> {
         return billings
     }
 
-    override fun allBillTypes(): List<BillType> {
-        return emptyList()
+    override fun allBillTypes(): Map<String,BillType> {
+        return emptyMap()
     }
 
-    override fun allClientFiles(): List<ClientFile> {
+    override fun allClientFiles(): Map<Int,ClientFile> {
         return clientFiles
     }
 
-    override fun allClientNotes(): List<ClientNote> {
+    override fun allClientNotes(): Map<Int?,ClientNote> {
         return clientNotes
     }
 
-    override fun allClientPermNotes(): List<ClientPermNotes> {
-return clientPermNotes
+    override fun allClientPermNotes(): Map<Int, ClientPermNotes> {
+        return clientPermNotes
     }
 
-    override fun allDAPSAddress(): List<DAPSAddress> {
+    override fun allDAPSAddress(): Map<Int?, DAPSAddress> {
         return dapsAddress
     }
 
-    override fun allDAPSStaffMessages(): List<DAPSStaffMessage> {
+    override fun allDAPSStaffMessages(): Map<Int?, DAPSStaffMessage> {
         return dapsStaffMessages
     }
 
-    override fun allDAPSStaff(): List<DAPSStaff> {
+    override fun allDAPSStaff(): Map<String?,DAPSStaff> {
         return dapsStaff
     }
 
-    override fun allInterviewGuides(): List<InterviewGuide> {
+    override fun allInterviewGuides(): Map<Int?, InterviewGuide> {
         return interviewGuides
     }
 
-    override fun allPasteErrors(): List<PasteErrors> {
+    override fun allPasteErrors(): Map<String?, PasteErrors> {
         return pasteErrors
     }
 
-    override fun allPayments(): List<Payment> {
+    override fun allPayments(): Map<String?, Payment> {
         return payments
     }
 
-    override fun allPermNotes(): List<PermNote> {
+    override fun allPermNotes(): Map<Int?, PermNote> {
         return permNotes
     }
 
-    override fun allPermReqNotes(): List<PermReqNote> {
+    override fun allPermReqNotes(): Map<Int?, PermReqNote> {
         return permReqNotes
     }
 
-    override fun allTempNotes(): List<TempNote> {
+    override fun allTempNotes(): Map<Int?, TempNote> {
         return tempNotes
     }
 
-    override fun allTempsAvail4Work(): List<TempsAvail4Work> {
+    override fun allTempsAvail4Work(): Map<Int?, TempsAvail4Work> {
         return tempsAvail4Work
     }
 
-    override fun allTemps(): List<Temp> {
+    override fun allTemps(): Map<Int?, Temp> {
         return temps
     }
 
-    override fun allUsers(): List<User> {
+    override fun allUsers(): Map<Long?, User> {
         return users
     }
 
-    override fun allWONotes(): List<WONotes> {
+    override fun allWONotes(): Map<Int?, WONotes> {
         return woNotes
     }
 
-    override fun allWorkOrders(): List<WorkOrder> {
+    override fun allWorkOrders(): Map<Int?, WorkOrder> {
         return workOrders
     }
 

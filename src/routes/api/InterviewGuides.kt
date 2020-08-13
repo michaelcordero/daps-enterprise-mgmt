@@ -27,7 +27,7 @@ fun Route.interview_guides() {
         try {
             log.info("GET /interview_guides requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allInterviewGuides())
+                call.respond(status = HttpStatusCode.OK, message = cache.allInterviewGuides().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -42,8 +42,8 @@ fun Route.interview_guides() {
             val interview_guide: InterviewGuide = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(interview_guide)
-                val ig = cache.allInterviewGuides().find { i -> i.id == result}
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig), "result" to result))
+                val ig = cache.allInterviewGuides()[result]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig)))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -57,9 +57,9 @@ fun Route.interview_guides() {
             log.info("PUT /interview_guides requested")
             val interview_guide: InterviewGuide = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(interview_guide)
-                val ig = cache.allInterviewGuides().find { i -> i.id == interview_guide.id }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig), "result" to result))
+                cache.edit(interview_guide)
+                val ig = cache.allInterviewGuides()[interview_guide.id]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig)))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -73,8 +73,8 @@ fun Route.interview_guides() {
             log.info("DELETE /interview_guides requested")
             val interview_guide: InterviewGuide = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.remove(interview_guide)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<InterviewGuide>(), "result" to result))
+                cache.remove(interview_guide)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<InterviewGuide>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {

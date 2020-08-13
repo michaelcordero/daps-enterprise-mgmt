@@ -29,7 +29,7 @@ fun Route.clients() {
         try {
             log.info("GET /clients requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allClientFiles())
+                call.respond(status = HttpStatusCode.OK, message = cache.allClientFiles().values)
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -42,7 +42,7 @@ fun Route.clients() {
         try {
             log.info("GET /clients/{client_num} requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                val client: ClientFile? = cache.allClientFiles().find { cf -> cf.client_num == it.client_num.toInt() }
+                val client: ClientFile? = cache.allClientFiles()[it.client_num.toInt()]
                 call.respond(mapOf("client" to client))
             }
             log.info("Response took: ${time.duration}")
@@ -58,7 +58,7 @@ fun Route.clients() {
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(clientFile)
-                val cfr = cache.allClientFiles().find { cf -> cf.client_num == result }
+                val cfr = cache.allClientFiles()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cfr)))
             }
             log.info("Response took: ${time.duration}")
@@ -73,8 +73,8 @@ fun Route.clients() {
             log.info("PUT /clients requested")
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(clientFile)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(clientFile), "result" to result))
+                cache.edit(clientFile)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(clientFile)))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -88,9 +88,8 @@ fun Route.clients() {
             log.info("DELETE /clients requested")
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val cf: ClientFile? = cache.allClientFiles().find { c -> c.client_num == clientFile.client_num }
-                val result: Int = cf.let { cache.remove(cf) }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientFile>(), "result" to result))
+                cache.remove(clientFile)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientFile>()))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {

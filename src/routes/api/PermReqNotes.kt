@@ -27,7 +27,7 @@ fun Route.perm_req_notes() {
         try {
             log.info("GET /perm_req_notes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allPermReqNotes())
+                call.respond(status = HttpStatusCode.OK, message = cache.allPermReqNotes().values)
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -42,7 +42,7 @@ fun Route.perm_req_notes() {
             val perm_req_note: PermReqNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(perm_req_note)
-                val prn = cache.allPermReqNotes().find { p -> p.id == result }
+                val prn = cache.allPermReqNotes()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(prn)))
             }
             log.info("Response took: ${time.duration}")
@@ -57,9 +57,9 @@ fun Route.perm_req_notes() {
             log.info("PUT /perm_req_notes requested")
             val perm_req_note: PermReqNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(perm_req_note)
-                val prn = cache.allPermReqNotes().find { p -> p.id == perm_req_note.id }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(prn), "result" to result))
+                cache.edit(perm_req_note)
+                val prn = cache.allPermReqNotes()[perm_req_note.id]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(prn)))
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -73,10 +73,10 @@ fun Route.perm_req_notes() {
             log.info("DELETE /perm_req_notes requested")
             val perm_req_note: PermReqNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.remove(perm_req_note)
+                cache.remove(perm_req_note)
                 call.respond(
                     status = HttpStatusCode.OK,
-                    message = mapOf("data" to emptyList<PermReqNote>(), "result" to result)
+                    message = mapOf("data" to emptyList<PermReqNote>())
                 )
             }
             log.info("Response took: ${time.duration}")

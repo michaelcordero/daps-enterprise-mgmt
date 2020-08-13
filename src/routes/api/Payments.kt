@@ -27,7 +27,7 @@ fun Route.payments(){
         try {
             log.info("GET /payments requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allPayments())
+                call.respond(status = HttpStatusCode.OK, message = cache.allPayments().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -42,7 +42,7 @@ fun Route.payments(){
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(payment)
-                val pm = cache.allPayments().find { p -> p.ref_num == payment.ref_num }
+                val pm = cache.allPayments()[payment.ref_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm), "result" to result))
             }
             log.info("Response took: ${time.duration}")
@@ -57,9 +57,9 @@ fun Route.payments(){
             log.info("PUT /payments requested")
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.edit(payment)
-                val pm = cache.allPayments().find { p -> p.ref_num == payment.ref_num }
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm), "result" to result))
+                cache.edit(payment)
+                val pm = cache.allPayments()[payment.ref_num]
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm)))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -73,8 +73,8 @@ fun Route.payments(){
             log.info("DELETE /payments requested")
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.remove(payment)
-                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Payment>(), "result" to result))
+                cache.remove(payment)
+                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Payment>()))
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
