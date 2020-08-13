@@ -27,7 +27,7 @@ fun Route.daps_staff_messages() {
         try {
             log.info("GET /daps_staff_messages")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allDAPSStaffMessages().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.daps_staff_messages_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -43,7 +43,7 @@ fun Route.daps_staff_messages() {
             val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(dsm)
-                val saved: DAPSStaffMessage? = cache.allDAPSStaffMessages()[result]
+                val saved: DAPSStaffMessage? = cache.daps_staff_messages_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")
@@ -60,7 +60,7 @@ fun Route.daps_staff_messages() {
             val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(dsm)
-                val edited: DAPSStaffMessage? = cache.allDAPSStaffMessages()[dsm.staff_messages_key]
+                val edited: DAPSStaffMessage? = cache.daps_staff_messages_map()[dsm.staff_messages_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
             log.info("Response took: ${time.duration}")

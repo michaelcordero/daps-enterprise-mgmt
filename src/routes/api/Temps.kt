@@ -27,7 +27,7 @@ fun Route.temps() {
         try {
         log.info("GET /temps requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allTemps().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.temps_map().values)
             }
             log.info("Response took: ${time.duration}")
             } catch(e: Exception) {
@@ -42,7 +42,7 @@ fun Route.temps() {
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(temp)
-                val saved: Temp? = cache.allTemps()[result]
+                val saved: Temp? = cache.temps_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")
@@ -59,7 +59,7 @@ fun Route.temps() {
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(temp)
-                val edited: Temp? = cache.allTemps()[temp.emp_num]
+                val edited: Temp? = cache.temps_map()[temp.emp_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
             log.info("Response took: ${time.duration}")

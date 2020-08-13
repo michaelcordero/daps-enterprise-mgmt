@@ -28,7 +28,7 @@ fun Route.perm_notes() {
         try {
             log.info("GET /perm_notes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allPermNotes().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.perm_notes_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -43,7 +43,7 @@ fun Route.perm_notes() {
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(perm_note)
-                val pn = cache.allPermNotes()[result]
+                val pn = cache.perm_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn)))
             }
             log.info("Response took: ${time.duration}")
@@ -59,7 +59,7 @@ fun Route.perm_notes() {
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(perm_note)
-                val pn = cache.allPermNotes()[perm_note.id]
+                val pn = cache.perm_notes_map()[perm_note.id]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn)))
             }
             log.info("Response took: ${time.duration}")

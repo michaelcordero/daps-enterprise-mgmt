@@ -123,7 +123,7 @@ fun Application.module() {  //testing: Boolean = false
             userParamName = "emailId"
             passwordParamName = "password"
             validate {
-                val user: User? = cache.allUsers().values
+                val user: User? = cache.users_map().values
                     .find { user -> user.email == it.name && user.passwordHash == DAPSSecurity.hash(it.password) }
                 if (user != null) {
                     UserIdPrincipal(it.name)

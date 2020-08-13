@@ -11,7 +11,7 @@ abstract class AbstractPresenter {
     val host: String = application.host
     val port: String = application.port
     fun user(email: String): User? {
-        return cache.allUsers().filter { map -> map.value.email == email }.values.firstOrNull()
+        return cache.users_map().filter { map -> map.value.email == email }.values.firstOrNull()
     }
 
     @KtorExperimentalAPI

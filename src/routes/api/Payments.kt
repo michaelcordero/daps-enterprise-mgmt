@@ -27,7 +27,7 @@ fun Route.payments(){
         try {
             log.info("GET /payments requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allPayments().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.payments_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -42,7 +42,7 @@ fun Route.payments(){
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(payment)
-                val pm = cache.allPayments()[payment.ref_num]
+                val pm = cache.payments_map()[payment.ref_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm), "result" to result))
             }
             log.info("Response took: ${time.duration}")
@@ -58,7 +58,7 @@ fun Route.payments(){
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(payment)
-                val pm = cache.allPayments()[payment.ref_num]
+                val pm = cache.payments_map()[payment.ref_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm)))
             }
             log.info("Response took: ${time.duration}")

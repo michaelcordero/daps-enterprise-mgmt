@@ -27,7 +27,7 @@ fun Route.tempnotes() {
         try {
             log.info("/tempnotes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allTempNotes().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.temp_notes_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -43,7 +43,7 @@ fun Route.tempnotes() {
             val temp_note: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(temp_note)
-                val saved: TempNote? = cache.allTempNotes()[result]
+                val saved: TempNote? = cache.temp_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")
@@ -60,7 +60,7 @@ fun Route.tempnotes() {
             val temp_note: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(temp_note)
-                val edited: TempNote? = cache.allTempNotes()[temp_note.temp_note_key]
+                val edited: TempNote? = cache.temp_notes_map()[temp_note.temp_note_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
             log.info("Response took: ${time.duration}")

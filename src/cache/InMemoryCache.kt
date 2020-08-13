@@ -375,79 +375,79 @@ class InMemoryCache(val dq: DataQuery): DataCache {
         throw IllegalArgumentException("Unknown Object")
     }
 
-    override fun allBilling(): Map<Int,Billing> {
+    override fun billings_map(): Map<Int,Billing> {
         return billings
     }
 
-    override fun allBillTypes(): Map<String,BillType> {
+    override fun bill_types_map(): Map<String,BillType> {
         return emptyMap()
     }
 
-    override fun allClientFiles(): Map<Int,ClientFile> {
+    override fun client_files_map(): Map<Int,ClientFile> {
         return clientFiles
     }
 
-    override fun allClientNotes(): Map<Int?,ClientNote> {
+    override fun client_notes_map(): Map<Int?,ClientNote> {
         return clientNotes
     }
 
-    override fun allClientPermNotes(): Map<Int, ClientPermNotes> {
+    override fun client_perm_notes_map(): Map<Int, ClientPermNotes> {
         return clientPermNotes
     }
 
-    override fun allDAPSAddress(): Map<Int?, DAPSAddress> {
+    override fun daps_address_map(): Map<Int?, DAPSAddress> {
         return dapsAddress
     }
 
-    override fun allDAPSStaffMessages(): Map<Int?, DAPSStaffMessage> {
+    override fun daps_staff_messages_map(): Map<Int?, DAPSStaffMessage> {
         return dapsStaffMessages
     }
 
-    override fun allDAPSStaff(): Map<String?,DAPSStaff> {
+    override fun daps_staff_map(): Map<String?,DAPSStaff> {
         return dapsStaff
     }
 
-    override fun allInterviewGuides(): Map<Int?, InterviewGuide> {
+    override fun interview_guides_map(): Map<Int?, InterviewGuide> {
         return interviewGuides
     }
 
-    override fun allPasteErrors(): Map<String?, PasteErrors> {
+    override fun paste_errors_map(): Map<String?, PasteErrors> {
         return pasteErrors
     }
 
-    override fun allPayments(): Map<String?, Payment> {
+    override fun payments_map(): Map<String?, Payment> {
         return payments
     }
 
-    override fun allPermNotes(): Map<Int?, PermNote> {
+    override fun perm_notes_map(): Map<Int?, PermNote> {
         return permNotes
     }
 
-    override fun allPermReqNotes(): Map<Int?, PermReqNote> {
+    override fun perm_req_notes_map(): Map<Int?, PermReqNote> {
         return permReqNotes
     }
 
-    override fun allTempNotes(): Map<Int?, TempNote> {
+    override fun temp_notes_map(): Map<Int?, TempNote> {
         return tempNotes
     }
 
-    override fun allTempsAvail4Work(): Map<Int?, TempsAvail4Work> {
+    override fun temps_avail_for_work_map(): Map<Int?, TempsAvail4Work> {
         return tempsAvail4Work
     }
 
-    override fun allTemps(): Map<Int?, Temp> {
+    override fun temps_map(): Map<Int?, Temp> {
         return temps
     }
 
-    override fun allUsers(): Map<Long?, User> {
+    override fun users_map(): Map<Long?, User> {
         return users
     }
 
-    override fun allWONotes(): Map<Int?, WONotes> {
+    override fun wo_notes_map(): Map<Int?, WONotes> {
         return woNotes
     }
 
-    override fun allWorkOrders(): Map<Int?, WorkOrder> {
+    override fun work_orders_map(): Map<Int?, WorkOrder> {
         return workOrders
     }
 

@@ -27,7 +27,7 @@ fun Route.interview_guides() {
         try {
             log.info("GET /interview_guides requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allInterviewGuides().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.interview_guides_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch(e: Exception) {
@@ -42,7 +42,7 @@ fun Route.interview_guides() {
             val interview_guide: InterviewGuide = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(interview_guide)
-                val ig = cache.allInterviewGuides()[result]
+                val ig = cache.interview_guides_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig)))
             }
             log.info("Response took: ${time.duration}")
@@ -58,7 +58,7 @@ fun Route.interview_guides() {
             val interview_guide: InterviewGuide = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(interview_guide)
-                val ig = cache.allInterviewGuides()[interview_guide.id]
+                val ig = cache.interview_guides_map()[interview_guide.id]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ig)))
             }
             log.info("Response took: ${time.duration}")

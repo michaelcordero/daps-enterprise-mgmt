@@ -26,7 +26,7 @@ fun Route.client_notes() {
         try {
             log.info("GET /client_notes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allClientNotes().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.client_notes_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -41,7 +41,7 @@ fun Route.client_notes() {
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(client_note)
-                val cn = cache.allClientNotes()[result]
+                val cn = cache.client_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn)))
             }
             log.info("Response took: ${time.duration}")
@@ -57,7 +57,7 @@ fun Route.client_notes() {
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(client_note)
-                val cn = cache.allClientNotes()[client_note.client_note_key]
+                val cn = cache.client_notes_map()[client_note.client_note_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn)))
             }
             log.info("Response took: ${time.duration}")

@@ -27,7 +27,7 @@ fun Route.perm_req_notes() {
         try {
             log.info("GET /perm_req_notes requested")
             val time: TimedValue<Unit> = measureTimedValue {
-                call.respond(status = HttpStatusCode.OK, message = cache.allPermReqNotes().values)
+                call.respond(status = HttpStatusCode.OK, message = cache.perm_req_notes_map().values)
             }
             log.info("Response took: ${time.duration}")
         } catch (e: Exception) {
@@ -42,7 +42,7 @@ fun Route.perm_req_notes() {
             val perm_req_note: PermReqNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val result: Int = cache.add(perm_req_note)
-                val prn = cache.allPermReqNotes()[result]
+                val prn = cache.perm_req_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(prn)))
             }
             log.info("Response took: ${time.duration}")
@@ -58,7 +58,7 @@ fun Route.perm_req_notes() {
             val perm_req_note: PermReqNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 cache.edit(perm_req_note)
-                val prn = cache.allPermReqNotes()[perm_req_note.id]
+                val prn = cache.perm_req_notes_map()[perm_req_note.id]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(prn)))
             }
             log.info("Response took: ${time.duration}")

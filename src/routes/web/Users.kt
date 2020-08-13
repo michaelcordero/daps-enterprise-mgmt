@@ -17,7 +17,7 @@ class Users
 @KtorExperimentalLocationsAPI
 fun Route.users(){
     get<Users>{
-        val users: List<User> = cache.allUsers().values.toList()
+        val users: List<User> = cache.users_map().values.toList()
         call.respond(FreeMarkerContent("users.ftl", mapOf("users" to users), "someetag"))
     }
 }
