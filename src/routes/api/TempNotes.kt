@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.TempNote
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -42,7 +45,8 @@ fun Route.tempnotes() {
             log.info("POST /tempnotes requested")
             val temp_note: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(temp_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(temp_note,session!!)
                 val saved: TempNote? = cache.temp_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
@@ -59,7 +63,8 @@ fun Route.tempnotes() {
             log.info("PUT /tempnotes requested")
             val temp_note: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(temp_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(temp_note,session!!)
                 val edited: TempNote? = cache.temp_notes_map()[temp_note.temp_note_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
@@ -76,7 +81,8 @@ fun Route.tempnotes() {
             log.info("DELETE /tempnotes requested")
             val tempNote: TempNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(tempNote)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(tempNote,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<TempNote>()))
             }
             log.info("Response took: ${time.duration}")

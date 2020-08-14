@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.ClientFile
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -57,7 +60,8 @@ fun Route.clients() {
             log.info("POST /clients requested")
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(clientFile)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(clientFile,session!!)
                 val cfr = cache.client_files_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cfr)))
             }
@@ -73,7 +77,8 @@ fun Route.clients() {
             log.info("PUT /clients requested")
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(clientFile)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(clientFile,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(clientFile)))
             }
             log.info("Response took: ${time.duration}")
@@ -88,7 +93,8 @@ fun Route.clients() {
             log.info("DELETE /clients requested")
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(clientFile)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(clientFile,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientFile>()))
             }
             log.info("Response took: ${time.duration}")

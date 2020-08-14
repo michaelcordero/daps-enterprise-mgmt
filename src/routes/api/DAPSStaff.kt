@@ -8,7 +8,10 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -39,7 +42,8 @@ fun Route.daps_staff(){
             log.info("POST /daps_staff requested")
             val dapsStaff: model.DAPSStaff = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.add(dapsStaff)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.add(dapsStaff,session!!)
                 val da = cache.daps_staff_map()[dapsStaff.initial]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(da)))
             }
@@ -55,7 +59,8 @@ fun Route.daps_staff(){
            log.info("PUT /daps_staff requested")
            val dapsStaff: model.DAPSStaff = call.receive()
            val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(dapsStaff)
+               val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(dapsStaff,session!!)
                 val ds = cache.daps_staff_map()[dapsStaff.initial]
                call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(ds)))
            }
@@ -71,7 +76,8 @@ fun Route.daps_staff(){
             log.info("DELETE /daps_staff requested")
             val dapsStaff: model.DAPSStaff = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(dapsStaff)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(dapsStaff,session!!)
                 call.respond(status = HttpStatusCode.OK,
                 message = mapOf("data" to emptyList<DAPSStaff>()))
             }

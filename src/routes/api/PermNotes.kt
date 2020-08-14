@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.PermNote
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -42,7 +45,8 @@ fun Route.perm_notes() {
             log.info("POST /perm_notes requested")
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(perm_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(perm_note,session!!)
                 val pn = cache.perm_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn)))
             }
@@ -58,7 +62,8 @@ fun Route.perm_notes() {
             log.info("PUT /perm_notes requested")
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(perm_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(perm_note,session!!)
                 val pn = cache.perm_notes_map()[perm_note.id]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pn)))
             }
@@ -74,7 +79,8 @@ fun Route.perm_notes() {
             log.info("DELETE /perm_notes requested")
             val perm_note: PermNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(perm_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(perm_note,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<PermNote>()))
             }
             log.info("Response took: ${time.duration}")

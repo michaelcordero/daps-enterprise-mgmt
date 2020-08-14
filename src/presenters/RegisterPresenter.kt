@@ -3,12 +3,13 @@ package presenters
 import application.cache
 import io.ktor.util.KtorExperimentalAPI
 import model.User
+import security.DAPSSession
 import kotlin.random.Random
 
 @KtorExperimentalAPI
 class RegisterPresenter : AbstractPresenter() {
 
-    fun createUser(first_name: String, last_name: String, email: String, password: String) {
+    fun createUser(first_name: String, last_name: String, email: String, password: String, session: DAPSSession) {
         val error: String = validate(first_name, last_name, email, password)
         if ( error.isNotEmpty() ){
             throw Exception(error)
@@ -16,7 +17,7 @@ class RegisterPresenter : AbstractPresenter() {
             val new_password: String = hashPassword(password)
             val new_id: Long = Random.nextLong(from = 1000000, until = 1999999)
             val newUser = User(new_id,email, first_name, last_name, new_password)
-            cache.add(newUser)
+            cache.add(newUser,session)
         }
     }
 

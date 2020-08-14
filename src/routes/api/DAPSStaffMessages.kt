@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.DAPSStaffMessage
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -42,7 +45,8 @@ fun Route.daps_staff_messages() {
             log.info("POST /daps_staff_messages requested")
             val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(dsm)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(dsm,session!!)
                 val saved: DAPSStaffMessage? = cache.daps_staff_messages_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
@@ -59,7 +63,8 @@ fun Route.daps_staff_messages() {
             log.info("PUT /daps_staff_messages requested")
             val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(dsm)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(dsm,session!!)
                 val edited: DAPSStaffMessage? = cache.daps_staff_messages_map()[dsm.staff_messages_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
@@ -76,7 +81,8 @@ fun Route.daps_staff_messages() {
             log.info("DELETE /daps_staff_messages requested")
             val dsm: DAPSStaffMessage? = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(dsm)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(dsm,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<DAPSStaffMessage>()))
             }
             log.info("Response took: ${time.duration}")

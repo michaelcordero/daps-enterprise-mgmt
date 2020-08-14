@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.Billing
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -41,7 +44,8 @@ fun Route.billings() {
             log.info("POST /billings requested")
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(billing)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(billing,session!!)
                 val br: Billing? = cache.billings_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
             }
@@ -59,7 +63,8 @@ fun Route.billings() {
             log.info("PUT /billings requested")
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(billing)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(billing, session!!)
                 val br: Billing? =
                     cache.billings_map()[billing.counter] // need to query! otherwise object will come back without previous data.
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(br)))
@@ -77,7 +82,8 @@ fun Route.billings() {
             log.info("DELETE /billings requested")
             val billing: Billing = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(billing)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(billing,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Billing>()))
             }
             log.info("Response took: ${time.duration}")

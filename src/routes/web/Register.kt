@@ -48,9 +48,10 @@ fun Route.register(presenter: RegisterPresenter) {
 
         // do biz work
         try {
-            presenter.createUser(first_name, last_name, email, password)
             val token = dapsJWT.sign(email)
             call.sessions.set(DAPSSession(email,token))
+            val updated_session = call.sessions.get<DAPSSession>()
+            presenter.createUser(first_name, last_name, email, password, updated_session!!)
             call.redirect(Welcome())
         } catch (e: Exception) {
             val error = Register(last_name, email, password)

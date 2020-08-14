@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.Temp
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -41,7 +44,8 @@ fun Route.temps() {
             log.info("POST /temps requested")
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(temp)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(temp,session!!)
                 val saved: Temp? = cache.temps_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
@@ -58,7 +62,8 @@ fun Route.temps() {
             log.info("PUT /temps requested")
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(temp)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(temp,session!!)
                 val edited: Temp? = cache.temps_map()[temp.emp_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(edited)))
             }
@@ -75,7 +80,8 @@ fun Route.temps() {
             log.info("DELETE /temps requested")
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(temp)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(temp,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Temp>()))
             }
             log.info("Response took: ${time.duration}")

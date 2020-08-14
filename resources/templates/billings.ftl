@@ -56,8 +56,11 @@
                 // Additional server logic prevents this from locally updating which would be redundant.
                 if (event.data === 'billings') {
                     table.ajax.reload(null, false)
+                } else if (event.data === 'alert:billings') {
+                    alert('Data save change failed. Reverting data.')
+                    table.ajax.reload(null, false)
                 }
-            }
+            };
             // Datatables Editor
             const editor = new $.fn.dataTable.Editor({
                 ajax: {
@@ -73,9 +76,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("billings")
-                        }
                     },
                     edit: {
                         // Defaults
@@ -88,9 +88,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("billings")
-                        }
                     },
                     remove: {
                         // Defaults
@@ -103,9 +100,6 @@
                             // removing row key
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
-                        },
-                        success: function () {
-                            web_socket.send("billings")
                         },
                     },
                 },
@@ -143,6 +137,10 @@
                 }
                 if ( !editor.field('employee_num').val() || isNaN(editor.field('employee_num').val())){
                     editor.field('employee_num').error('Employee # must be a number')
+                    return false;
+                }
+                if ( !editor.field('hours').val() || isNaN(editor.field('hours').val())){
+                    editor.field('hours').error('Hours must be a number')
                     return false;
                 }
             })

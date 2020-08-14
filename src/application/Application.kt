@@ -16,9 +16,6 @@ import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
-import io.ktor.http.cio.websocket.DefaultWebSocketSession
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.cio.websocket.readText
 import io.ktor.http.content.CachingOptions
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
@@ -41,6 +38,7 @@ import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.webjars.Webjars
+import io.ktor.websocket.DefaultWebSocketServerSession
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -55,8 +53,6 @@ import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
 import java.time.ZoneId
-import java.util.*
-import kotlin.collections.LinkedHashSet
 import kotlin.time.ExperimentalTime
 
 
@@ -72,8 +68,7 @@ val host = System.getProperty("host") ?: "localhost"
 //.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
 //.toList().first().address.hostAddress.toString()
 val port = System.getProperty("port") ?: "8080"
-val connections: MutableSet<DefaultWebSocketSession> =
-    Collections.synchronizedSet(LinkedHashSet<DefaultWebSocketSession>())
+val connections: MutableMap<String?,DefaultWebSocketServerSession> = mutableMapOf()
 
 @ExperimentalTime
 @ExperimentalStdlibApi
@@ -245,28 +240,20 @@ fun Application.module() {  //testing: Boolean = false
             web_traditional_charts(WebChartsPresenter())
             webdocumentation(WebDocumentationPresenter())
             users()
-            // Real Time Update Event via WebSocket
+            // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
+            // real time updates of the data, and alert messages, if the data save failed.
             webSocket("/update") {
-                connections += this
+                val sessionId: String? = this.call.sessions.get<DAPSSession>()?.token
+                connections[sessionId] = this
                 try {
                     while (true) {
-                        when (val frame = incoming.receive()) {
-                            is Frame.Text -> {
-                                val text = frame.readText()
-                                // Send message to all the connections, except the messenger connection.
-                                for (conn in connections) {
-                                    if (conn != this) {
-                                        conn.outgoing.send(Frame.Text(text))
-                                    }
-                                }
-                            }
-                        }
+                        // conversation moved...
                     }
                 } catch (e: ClosedReceiveChannelException) {
                     log.info("connection closed. ignore.")
                 }
                 finally {
-                    connections -= this
+                    connections.remove(sessionId)
                 }
             }
         }

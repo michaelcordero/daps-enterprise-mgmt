@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.Payment
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -41,7 +44,8 @@ fun Route.payments(){
             log.info("POST /payments requested")
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(payment)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(payment,session!!)
                 val pm = cache.payments_map()[payment.ref_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm), "result" to result))
             }
@@ -57,7 +61,8 @@ fun Route.payments(){
             log.info("PUT /payments requested")
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(payment)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(payment,session!!)
                 val pm = cache.payments_map()[payment.ref_num]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(pm)))
             }
@@ -73,7 +78,8 @@ fun Route.payments(){
             log.info("DELETE /payments requested")
             val payment: Payment = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(payment)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(payment,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<Payment>()))
             }
             log.info("Response took: ${time.duration}")

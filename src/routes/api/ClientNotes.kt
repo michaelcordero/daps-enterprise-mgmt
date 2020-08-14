@@ -8,8 +8,11 @@ import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
+import io.ktor.sessions.get
+import io.ktor.sessions.sessions
 import io.ktor.util.KtorExperimentalAPI
 import model.ClientNote
+import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
@@ -40,7 +43,8 @@ fun Route.client_notes() {
             log.info("POST /client_notes requested")
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                val result: Int = cache.add(client_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                val result: Int = cache.add(client_note,session!!)
                 val cn = cache.client_notes_map()[result]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn)))
             }
@@ -56,7 +60,8 @@ fun Route.client_notes() {
             log.info("PUT /client_notes requested")
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.edit(client_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.edit(client_note, session!!)
                 val cn = cache.client_notes_map()[client_note.client_note_key]
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cn)))
             }
@@ -72,7 +77,8 @@ fun Route.client_notes() {
             log.info("DELETE /client_notes requested")
             val client_note: ClientNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
-                cache.remove(client_note)
+                val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                cache.remove(client_note, session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to emptyList<ClientNote>()))
             }
             log.info("Response took: ${time.duration}")

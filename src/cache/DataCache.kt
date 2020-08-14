@@ -1,14 +1,15 @@
 package cache
 
 import model.*
+import security.DAPSSession
 
 interface DataCache {
     /**
      * All of these methods write to the database and write to the cache, ensuring the app is in a consistent state.
      */
-    fun <T> add(obj: T): Int
-    fun <T> edit(obj: T)
-    fun <T> remove(obj: T)
+    fun <T> add(obj: T, session: DAPSSession): Int
+    fun <T> edit(obj: T, session: DAPSSession)
+    fun <T> remove(obj: T, session: DAPSSession)
     fun billings_map(): Map<Int,Billing>
     fun bill_types_map(): Map<String,BillType>
     fun client_files_map(): Map<Int,ClientFile>
