@@ -41,6 +41,9 @@
                 // Additional server logic prevents this from locally updating which would be redundant.
                 if (event.data === 'perm_notes') {
                     table.ajax.reload(null, false)
+                } else if (event.data === 'alert:perm_notes') {
+                    alert('Data save change failed. Reverting data.')
+                    table.ajax.reload(null, false)
                 }
             }
             // Datatables Editor
@@ -58,9 +61,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("perm_notes")
-                        }
                     },
                     edit: {
                         // Defaults
@@ -73,9 +73,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("perm_notes")
-                        }
                     },
                     remove: {
                         // Defaults
@@ -88,9 +85,6 @@
                             // removing row key
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
-                        },
-                        success: function () {
-                            web_socket.send("perm_notes")
                         },
                     },
                 },

@@ -40,6 +40,9 @@
                 // Additional server logic prevents this from locally updating which would be redundant.
                 if (event.data === 'daps_staff_messages') {
                     table.ajax.reload(null, false)
+                } else if (event.data === 'alert:daps_staff_messages') {
+                    alert('Data save change failed. Reverting data.')
+                    table.ajax.reload(null, false)
                 }
             }
             // Datatables Editor
@@ -57,9 +60,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("daps_staff_messages")
-                        }
                     },
                     edit: {
                         // Defaults
@@ -72,9 +72,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("daps_staff_messages")
-                        }
                     },
                     remove: {
                         // Defaults
@@ -87,9 +84,6 @@
                             // removing row key
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
-                        },
-                        success: function () {
-                            web_socket.send("daps_staff_messages")
                         },
                     },
                 },

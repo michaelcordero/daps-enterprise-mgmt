@@ -99,6 +99,9 @@
                 // Additional server logic prevents this from locally updating which would be redundant.
                 if (event.data === 'temps') {
                     table.ajax.reload(null, false)
+                } else if (event.data === 'alert:temps') {
+                    alert('Data save change failed. Reverting data.')
+                    table.ajax.reload(null, false)
                 }
             }
             // Datatables Editor
@@ -116,9 +119,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("temps")
-                        }
                     },
                     edit: {
                         // Defaults
@@ -131,9 +131,6 @@
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
                         },
-                        success: function () {
-                            web_socket.send("temps")
-                        }
                     },
                     remove: {
                         // Defaults
@@ -146,9 +143,6 @@
                             // removing row key
                             const raw = JSON.stringify(d.data);
                             return raw.substr(raw.indexOf(':') + 1)
-                        },
-                        success: function () {
-                            web_socket.send("temps")
                         },
                     },
                 },

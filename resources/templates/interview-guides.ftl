@@ -47,6 +47,9 @@
                 // Additional server logic prevents this from locally updating which would be redundant.
                 if (event.data === 'interview_guides') {
                     table.ajax.reload(null, false)
+                } else if (event.data === 'alert:interview_guides') {
+                    alert('Data save change failed. Reverting data.')
+                    table.ajax.reload(null, false)
                 }
             }
             // Datatables Editor
