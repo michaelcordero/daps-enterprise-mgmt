@@ -12,26 +12,35 @@ import java.util.concurrent.ConcurrentHashMap
 
 val log: Logger = LoggerFactory.getLogger(InMemoryCache::class.java)
 
-class InMemoryCache(val dq: DataQuery) : DataCache {
-    lateinit var billings: MutableMap<Int, Billing>
-    lateinit var clientFiles: MutableMap<Int, ClientFile>
-    lateinit var clientNotes: MutableMap<Int?, ClientNote>
-    lateinit var clientPermNotes: MutableMap<Int, ClientPermNotes>
-    lateinit var dapsAddress: MutableMap<Int?, DAPSAddress>
-    lateinit var dapsStaffMessages: MutableMap<Int?, DAPSStaffMessage>
-    lateinit var dapsStaff: MutableMap<String?, DAPSStaff>
-    lateinit var interviewGuides: MutableMap<Int?, InterviewGuide>
-    lateinit var pasteErrors: MutableMap<String?, PasteErrors>
-    lateinit var payments: MutableMap<String?, Payment>
-    lateinit var permNotes: MutableMap<Int?, PermNote>
-    lateinit var permReqNotes: MutableMap<Int?, PermReqNote>
-    lateinit var tempNotes: MutableMap<Int?, TempNote>
-    lateinit var tempsAvail4Work: MutableMap<Int?, TempsAvail4Work>
-    lateinit var temps: MutableMap<Int?, Temp>
-    lateinit var users: MutableMap<Long?, User>
-    lateinit var woNotes: MutableMap<Int?, WONotes>
-    lateinit var workOrders: MutableMap<Int?, WorkOrder>
+class InMemoryCache(private val dq: DataQuery) : DataCache {
+    private lateinit var billings: MutableMap<Int, Billing>
+    private lateinit var clientFiles: MutableMap<Int, ClientFile>
+    private lateinit var clientNotes: MutableMap<Int?, ClientNote>
+    private lateinit var clientPermNotes: MutableMap<Int, ClientPermNotes>
+    private lateinit var dapsAddress: MutableMap<Int?, DAPSAddress>
+    private lateinit var dapsStaffMessages: MutableMap<Int?, DAPSStaffMessage>
+    private lateinit var dapsStaff: MutableMap<String?, DAPSStaff>
+    private lateinit var interviewGuides: MutableMap<Int?, InterviewGuide>
+    private lateinit var pasteErrors: MutableMap<String?, PasteErrors>
+    private lateinit var payments: MutableMap<String?, Payment>
+    private lateinit var permNotes: MutableMap<Int?, PermNote>
+    private lateinit var permReqNotes: MutableMap<Int?, PermReqNote>
+    private lateinit var tempNotes: MutableMap<Int?, TempNote>
+    private lateinit var tempsAvail4Work: MutableMap<Int?, TempsAvail4Work>
+    private lateinit var temps: MutableMap<Int?, Temp>
+    private lateinit var users: MutableMap<Long?, User>
+    private lateinit var woNotes: MutableMap<Int?, WONotes>
+    private lateinit var workOrders: MutableMap<Int?, WorkOrder>
 
+    /**
+     * Front loading all the data onto the JVM's heap space is an OK performance optimization because:
+     * 1. It saves us a slow read step from hard disk. When the java objects are already in memory, the
+     * the only step left in application code is the Jackson JSON conversion, with regards to the
+     * HTTP Request-Response life-cycle.
+     * 2. Computers are being built with more & more RAM. This program was written on a 32GB RAM machine.
+     * JVM heap space defaults to 1/4 of the total RAM. Therefore 8GB'S were allocated. Present data only
+     * takes up about 1.5 GB's. So we're good.
+     */
     init {
         runBlocking {
             val jobs: MutableList<Job> = mutableListOf()
@@ -139,15 +148,18 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
         }
     }
 
-    private fun notifier(session: DAPSSession, route: String ) {
-        CoroutineScope(Dispatchers.IO).launch{
-            connections.entries.forEach {
-                if (it.key != session.token) {
-                    val job = CoroutineScope(Dispatchers.IO).launch {
-                        it.value.outgoing.send(Frame.Text(route))
-                    }
-                    job.join()
-                }
+    /**
+     * Create methods need to run synchronously in order to get the result key, from the relational database.
+     * However, broadcasting to other web socket connections--asynchronously-- about the newly created row is permissible.
+     * Therefore, this method does just that.
+     * @param session we need the session id, so we can broadcast to the other web socket sessions, and not the creating
+     * session of the new row, because his view will be updated already.
+     * @param route tells the listening web session socket connections,
+     */
+    private suspend fun notifier(session: DAPSSession, route: String) {
+        connections.entries.forEach {
+            if (it.key != session.token) {
+                it.value.outgoing.send(Frame.Text(route))
             }
         }
     }
@@ -163,7 +175,9 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val result: Int = dq.createBilling(obj)
                     val billing: Billing = obj.copy(counter = result)
                     billings[billing.counter] = billing
-                    notifier(session,"billings")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notifier(session, "billings")
+                    }
                     return result
                 }
                 is BillType -> {
@@ -174,28 +188,36 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val result: Int = dq.createClientFile(obj)
                     val cf: ClientFile = obj.copy(client_num = result)
                     clientFiles[cf.client_num] = cf
-                    notifier(session,"clients")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notifier(session, "clients")
+                    }
                     return result
                 }
                 is ClientNote -> {
                     val result: Int = dq.createClientNotes(obj)
                     val cn = obj.copy(client_note_key = result)
                     clientNotes[cn.client_note_key] = cn
-                    notifier(session,"client_notes")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notifier(session, "client_notes")
+                    }
                     return result
                 }
                 is ClientPermNotes -> {
                     val result = dq.createClientPermNotes(obj)
                     val cpn = obj.copy(id = result)
                     clientPermNotes[cpn.id] = cpn
-                    notifier(session,"client_perm_notes")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notifier(session, "client_perm_notes")
+                    }
                     return result
                 }
                 is DAPSAddress -> {
                     val result = dq.createDAPSAddress(obj)
                     val da = obj.copy(mailing_list_id = result)
                     dapsAddress[da.mailing_list_id] = da
-                    notifier(session,"daps_addresses")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        notifier(session, "daps_addresses")
+                    }
                     return result
                 }
                 is DAPSStaff -> {
@@ -209,7 +231,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val dsm = obj.copy(staff_messages_key = result)
                     dapsStaffMessages[dsm.staff_messages_key] = dsm
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"daps_staff_messages")
+                        notifier(session, "daps_staff_messages")
                     }
                     return result
                 }
@@ -218,7 +240,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val ig = obj.copy(id = result)
                     interviewGuides[ig.id] = ig
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"interview_guides")
+                        notifier(session, "interview_guides")
                     }
                     return result
                 }
@@ -231,7 +253,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     dq.insertPasteErrors(obj)
                     pasteErrors[obj.ref_num] = obj
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"paste_errors")
+                        notifier(session, "paste_errors")
                     }
                     return 0
                 }
@@ -240,7 +262,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     dq.insertPayment(obj)
                     payments[obj.ref_num] = obj
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"payments")
+                        notifier(session, "payments")
                     }
                     return 0
                 }
@@ -249,7 +271,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val pn = obj.copy(id = result)
                     permNotes[pn.id] = pn
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"perm_notes")
+                        notifier(session, "perm_notes")
                     }
                     return result
                 }
@@ -258,7 +280,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val prn = obj.copy(id = result)
                     permReqNotes[prn.id] = prn
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"perm_req_notes")
+                        notifier(session, "perm_req_notes")
                     }
                     return result
                 }
@@ -267,7 +289,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val tn = obj.copy(temp_note_key = result)
                     tempNotes[tn.temp_note_key] = tn
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"tempnotes")
+                        notifier(session, "tempnotes")
                     }
                     return result
                 }
@@ -276,7 +298,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val ta4w = obj.copy(rec_num = result)
                     tempsAvail4Work[ta4w.rec_num] = ta4w
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"temps_avail_for_work")
+                        notifier(session, "temps_avail_for_work")
                     }
                     return result
                 }
@@ -285,7 +307,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val temp = obj.copy(emp_num = result)
                     temps[temp.emp_num] = temp
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"temps")
+                        notifier(session, "temps")
                     }
                     return result
                 }
@@ -294,7 +316,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val user = obj.copy(id = result)
                     users[user.id] = user
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"users")
+                        notifier(session, "users")
                     }
                     return result.toInt()
                 }
@@ -303,7 +325,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val wonote = obj.copy(id = result)
                     woNotes[wonote.id] = wonote
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"work_order_notes")
+                        notifier(session, "work_order_notes")
                     }
                     return result
                 }
@@ -312,7 +334,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val wo = obj.copy(wo_number = result)
                     workOrders[wo.wo_number] = wo
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"work_orders")
+                        notifier(session, "work_orders")
                     }
                     return result
                 }
