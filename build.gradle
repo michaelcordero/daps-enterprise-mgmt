@@ -83,15 +83,15 @@ dependencies {
 //}
 // To run from command line:
 // ./gradlew run -Phost=localhost -Pport=5000
-run() {
-//    run.dependsOn npm
-    if (project.hasProperty("host")) {
-        systemProperties["host"] = host
-    }
-    if (project.hasProperty("port")) {
-        systemProperties["port"] = port
-    }
-}
+//run() {
+////    run.dependsOn npm
+//    if (project.hasProperty("host")) {
+//        systemProperties["host"] = host
+//    }
+//    if (project.hasProperty("port")) {
+//        systemProperties["port"] = port
+//    }
+//}
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
