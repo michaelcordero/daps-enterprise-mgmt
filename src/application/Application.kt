@@ -150,7 +150,7 @@ fun Application.module() {  //testing: Boolean = false
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
     // This feature enables truly open access across domain boundaries
-    install(CORS) {
+//    install(CORS) {
 //        host("localhost:4000") to specify client app
 //        anyHost()
 //        method(HttpMethod.Options)
@@ -161,7 +161,7 @@ fun Application.module() {  //testing: Boolean = false
 //        method(HttpMethod.Patch)
 //        header(HttpHeaders.Authorization)
 //        allowCredentials = true
-    }
+//    }
     // This uses use the logger to log every call (request/response)
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
