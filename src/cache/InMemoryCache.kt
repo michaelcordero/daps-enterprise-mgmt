@@ -139,13 +139,17 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
         }
     }
 
-    private suspend fun notifier(session: DAPSSession, route: String ) {
-        connections.entries.forEach {
-            if (it.key != session.token) {
-                it.value.outgoing.send(Frame.Text(route))
+    private fun notifier(session: DAPSSession, route: String ) {
+        CoroutineScope(Dispatchers.IO).launch{
+            connections.entries.forEach {
+                if (it.key != session.token) {
+                    val job = CoroutineScope(Dispatchers.IO).launch {
+                        it.value.outgoing.send(Frame.Text(route))
+                    }
+                    job.join()
+                }
             }
         }
-
     }
 
 
@@ -159,9 +163,7 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val result: Int = dq.createBilling(obj)
                     val billing: Billing = obj.copy(counter = result)
                     billings[billing.counter] = billing
-                    CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"billings")
-                    }
+                    notifier(session,"billings")
                     return result
                 }
                 is BillType -> {
@@ -172,36 +174,28 @@ class InMemoryCache(val dq: DataQuery) : DataCache {
                     val result: Int = dq.createClientFile(obj)
                     val cf: ClientFile = obj.copy(client_num = result)
                     clientFiles[cf.client_num] = cf
-                    CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"clients")
-                    }
+                    notifier(session,"clients")
                     return result
                 }
                 is ClientNote -> {
                     val result: Int = dq.createClientNotes(obj)
                     val cn = obj.copy(client_note_key = result)
                     clientNotes[cn.client_note_key] = cn
-                    CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"client_notes")
-                    }
+                    notifier(session,"client_notes")
                     return result
                 }
                 is ClientPermNotes -> {
                     val result = dq.createClientPermNotes(obj)
                     val cpn = obj.copy(id = result)
                     clientPermNotes[cpn.id] = cpn
-                    CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"client_perm_notes")
-                    }
+                    notifier(session,"client_perm_notes")
                     return result
                 }
                 is DAPSAddress -> {
                     val result = dq.createDAPSAddress(obj)
                     val da = obj.copy(mailing_list_id = result)
                     dapsAddress[da.mailing_list_id] = da
-                    CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session,"daps_addresses")
-                    }
+                    notifier(session,"daps_addresses")
                     return result
                 }
                 is DAPSStaff -> {

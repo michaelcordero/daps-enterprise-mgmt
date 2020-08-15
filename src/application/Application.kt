@@ -16,6 +16,8 @@ import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.readText
 import io.ktor.http.content.CachingOptions
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
@@ -247,7 +249,17 @@ fun Application.module() {  //testing: Boolean = false
                 connections[sessionId] = this
                 try {
                     while (true) {
-                        // conversation moved...
+                        when (val frame = incoming.receive()) {
+                            is Frame.Text -> {
+                                val text = frame.readText()
+                                // Send message to all the connections, except the messenger connection.
+                                for (conn in connections.values) {
+                                    if (conn != this) {
+                                        conn.outgoing.send(Frame.Text(text))
+                                    }
+                                }
+                            }
+                        }
                     }
                 } catch (e: ClosedReceiveChannelException) {
                     log.info("connection closed. ignore.")
