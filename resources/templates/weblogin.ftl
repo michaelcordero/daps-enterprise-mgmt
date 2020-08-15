@@ -8,7 +8,7 @@
     <form class="form-login" action="/weblogin" method="post" enctype="application/x-www-form-urlencoded">
         <#--noinspection CheckImageSize-->
         <img class="mb-4" src="/static/images/daps_logo.png" width="80" height="80" alt="logo">
-        <h3 class="h3 mb-3 font-weight-normal">DAPS Enterprise</h3>
+        <h3 class="h3 mb-3 font-weight-normal">Dental Auxiliary Placement Services</h3>
         <#if error??>
             <p class="error" style="color: indianred">${error}</p>
         </#if>

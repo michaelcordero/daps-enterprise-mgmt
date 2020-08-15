@@ -28,7 +28,7 @@
             <#--                    <use xlink:href="#ion-ios-pulse-strong"></use>-->
             <#--                </svg>-->
             <#--                <img src="/static/images/daps_logo.png" alt="daps logo">-->
-            DAPS Enterprise Management
+            Dental Auxiliary Placement Services
         </a>
         <div class="sidebar-content">
             <div class="sidebar-user">
