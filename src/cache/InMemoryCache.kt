@@ -714,7 +714,6 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         } catch (e: Exception) {
             log.error("Update failed", e)
         }
-        throw IllegalArgumentException("Unknown Object")
     }
 
     // Intentional read-access only maps

@@ -110,7 +110,7 @@
                     {label: 'Client #', name: 'client_num', attr: {required: true}},
                     {label: 'Employee #', name: 'employee_num', attr: {required: true}},
                     {label: 'Wdate', name: 'wdate'},
-                    {label: 'Hours', name: 'hours'},
+                    {label: 'Hours', name: 'hours', attr: {required: true}},
                     {label: 'Start Time', name: 'start_time'},
                     {label: 'End Time', name: 'end_time'},
                     {label: 'DAPS Fee', name: 'daps_fee'},
