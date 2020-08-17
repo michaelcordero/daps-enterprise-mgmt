@@ -7,7 +7,7 @@ interface DataCache {
     /**
      * All of these methods write to the database and write to the cache, ensuring the app is in a consistent state.
      */
-    fun <T> add(obj: T, session: DAPSSession): Int
+    fun <T> add(obj: T, session: DAPSSession): T
     fun <T> edit(obj: T, session: DAPSSession)
     fun <T> remove(obj: T, session: DAPSSession)
     fun billings_map(): Map<Int,Billing>

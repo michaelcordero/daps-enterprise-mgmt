@@ -2,7 +2,7 @@ package cache
 
 import application.connections
 import database.queries.DataQuery
-import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
 import model.*
 import org.slf4j.Logger
@@ -165,7 +165,8 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
     }
 
 
-    override fun <T> add(obj: T, session: DAPSSession): Int {
+    @Suppress("unchecked_cast")
+    override fun <T> add(obj: T, session: DAPSSession): T {
         try {
             when (obj) {
                 is AccountRep -> {
@@ -174,169 +175,171 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 is Billing -> {
                     val result: Int = dq.createBilling(obj)
                     val billing: Billing = obj.copy(counter = result)
-                    billings[billing.counter] = billing
                     CoroutineScope(Dispatchers.IO).launch {
+                        billings[billing.counter] = billing
                         notifier(session, "billings")
                     }
-                    return result
+                    return billing as T
                 }
                 is BillType -> {
                     // skip...
-                    return -1
+//                    return object
                 }
                 is ClientFile -> {
                     val result: Int = dq.createClientFile(obj)
                     val cf: ClientFile = obj.copy(client_num = result)
-                    clientFiles[cf.client_num] = cf
                     CoroutineScope(Dispatchers.IO).launch {
+                        clientFiles[cf.client_num] = cf
                         notifier(session, "clients")
                     }
-                    return result
+                    return cf as T
                 }
                 is ClientNote -> {
                     val result: Int = dq.createClientNotes(obj)
                     val cn = obj.copy(client_note_key = result)
-                    clientNotes[cn.client_note_key] = cn
                     CoroutineScope(Dispatchers.IO).launch {
+                        clientNotes[cn.client_note_key] = cn
                         notifier(session, "client_notes")
                     }
-                    return result
+                    return cn as T
                 }
                 is ClientPermNotes -> {
                     val result = dq.createClientPermNotes(obj)
                     val cpn = obj.copy(id = result)
-                    clientPermNotes[cpn.id] = cpn
                     CoroutineScope(Dispatchers.IO).launch {
+                        clientPermNotes[cpn.id] = cpn
                         notifier(session, "client_perm_notes")
                     }
-                    return result
+                    return cpn as T
                 }
                 is DAPSAddress -> {
                     val result = dq.createDAPSAddress(obj)
                     val da = obj.copy(mailing_list_id = result)
-                    dapsAddress[da.mailing_list_id] = da
                     CoroutineScope(Dispatchers.IO).launch {
+                        dapsAddress[da.mailing_list_id] = da
                         notifier(session, "daps_addresses")
                     }
-                    return result
+                    return da as T
                 }
                 is DAPSStaff -> {
                     // TODO: Revisit this one
                     dq.insertDAPSStaff(obj)
-                    dapsStaff[obj.initial] = obj
-                    return 0
+                    CoroutineScope(Dispatchers.IO).launch {
+                        dapsStaff[obj.initial] = obj
+                    }
+                    return obj
                 }
                 is DAPSStaffMessage -> {
                     val result = dq.createDAPSStaffMessages(obj)
                     val dsm = obj.copy(staff_messages_key = result)
-                    dapsStaffMessages[dsm.staff_messages_key] = dsm
                     CoroutineScope(Dispatchers.IO).launch {
+                        dapsStaffMessages[dsm.staff_messages_key] = dsm
                         notifier(session, "daps_staff_messages")
                     }
-                    return result
+                    return dsm as T
                 }
                 is InterviewGuide -> {
                     val result = dq.createInterviewGuide(obj)
                     val ig = obj.copy(id = result)
-                    interviewGuides[ig.id] = ig
                     CoroutineScope(Dispatchers.IO).launch {
+                        interviewGuides[ig.id] = ig
                         notifier(session, "interview_guides")
                     }
-                    return result
+                    return ig as T
                 }
                 is JobFunction -> {
                     // skip
-                    return -1
+//                    return -1
                 }
                 is PasteErrors -> {
                     // TODO: Revisit
                     dq.insertPasteErrors(obj)
-                    pasteErrors[obj.ref_num] = obj
                     CoroutineScope(Dispatchers.IO).launch {
+                        pasteErrors[obj.ref_num] = obj
                         notifier(session, "paste_errors")
                     }
-                    return 0
+                    return obj
                 }
                 is Payment -> {
                     // TODO: Revisit
                     dq.insertPayment(obj)
-                    payments[obj.ref_num] = obj
                     CoroutineScope(Dispatchers.IO).launch {
+                        payments[obj.ref_num] = obj
                         notifier(session, "payments")
                     }
-                    return 0
+                    return obj
                 }
                 is PermNote -> {
                     val result = dq.createPermNotes(obj)
                     val pn = obj.copy(id = result)
-                    permNotes[pn.id] = pn
                     CoroutineScope(Dispatchers.IO).launch {
+                        permNotes[pn.id] = pn
                         notifier(session, "perm_notes")
                     }
-                    return result
+                    return pn as T
                 }
                 is PermReqNote -> {
                     val result = dq.createPermReqNotes(obj)
                     val prn = obj.copy(id = result)
-                    permReqNotes[prn.id] = prn
                     CoroutineScope(Dispatchers.IO).launch {
+                        permReqNotes[prn.id] = prn
                         notifier(session, "perm_req_notes")
                     }
-                    return result
+                    return prn as T
                 }
                 is TempNote -> {
                     val result = dq.createTempNote(obj)
                     val tn = obj.copy(temp_note_key = result)
-                    tempNotes[tn.temp_note_key] = tn
                     CoroutineScope(Dispatchers.IO).launch {
+                        tempNotes[tn.temp_note_key] = tn
                         notifier(session, "tempnotes")
                     }
-                    return result
+                    return tn as T
                 }
                 is TempsAvail4Work -> {
                     val result = dq.createTempAvail4Work(obj)
                     val ta4w = obj.copy(rec_num = result)
-                    tempsAvail4Work[ta4w.rec_num] = ta4w
                     CoroutineScope(Dispatchers.IO).launch {
+                        tempsAvail4Work[ta4w.rec_num] = ta4w
                         notifier(session, "temps_avail_for_work")
                     }
-                    return result
+                    return ta4w as T
                 }
                 is Temp -> {
                     val result = dq.createTemps(obj)
                     val temp = obj.copy(emp_num = result)
-                    temps[temp.emp_num] = temp
                     CoroutineScope(Dispatchers.IO).launch {
+                        temps[temp.emp_num] = temp
                         notifier(session, "temps")
                     }
-                    return result
+                    return temp as T
                 }
                 is User -> {
                     val result = dq.addUser(obj)
                     val user = obj.copy(id = result)
-                    users[user.id] = user
                     CoroutineScope(Dispatchers.IO).launch {
+                        users[user.id] = user
                         notifier(session, "users")
                     }
-                    return result.toInt()
+                    return user as T
                 }
                 is WONotes -> {
                     val result = dq.createWONotes(obj)
                     val wonote = obj.copy(id = result)
-                    woNotes[wonote.id] = wonote
                     CoroutineScope(Dispatchers.IO).launch {
+                        woNotes[wonote.id] = wonote
                         notifier(session, "work_order_notes")
                     }
-                    return result
+                    return wonote as T
                 }
                 is WorkOrder -> {
                     val result = dq.createWorkOrder(obj)
                     val wo = obj.copy(wo_number = result)
-                    workOrders[wo.wo_number] = wo
                     CoroutineScope(Dispatchers.IO).launch {
+                        workOrders[wo.wo_number] = wo
                         notifier(session, "work_orders")
                     }
-                    return result
+                    return wo as T
                 }
             }
         } catch (e: Exception) {

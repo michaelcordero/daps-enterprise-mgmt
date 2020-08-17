@@ -2,15 +2,14 @@ package routes.api
 
 import application.cache
 import application.log
-import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
+import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.locations.*
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import io.ktor.util.*
 import model.ClientFile
 import security.DAPSSession
 import kotlin.time.ExperimentalTime
@@ -61,8 +60,7 @@ fun Route.clients() {
             val clientFile: ClientFile = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val session: DAPSSession? = call.sessions.get<DAPSSession>()
-                val result: Int = cache.add(clientFile,session!!)
-                val cfr = cache.client_files_map()[result]
+                val cfr: ClientFile = cache.add(clientFile,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(cfr)))
             }
             log.info("Response took: ${time.duration}")

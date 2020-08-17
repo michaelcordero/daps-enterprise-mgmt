@@ -2,15 +2,14 @@ package routes.api
 
 import application.cache
 import application.log
-import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
+import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.locations.*
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import io.ktor.util.*
 import model.PermReqNote
 import security.DAPSSession
 import kotlin.time.ExperimentalTime
@@ -45,8 +44,7 @@ fun Route.perm_req_notes() {
             val perm_req_note: PermReqNote = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val session: DAPSSession? = call.sessions.get<DAPSSession>()
-                val result: Int = cache.add(perm_req_note,session!!)
-                val prn = cache.perm_req_notes_map()[result]
+                val prn: PermReqNote = cache.add(perm_req_note,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(prn)))
             }
             log.info("Response took: ${time.duration}")
