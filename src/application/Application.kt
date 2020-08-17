@@ -109,7 +109,7 @@ fun Application.module() {  //testing: Boolean = false
             skipWhen { call ->
                 try {
                     val session = call.sessions.get<DAPSSession>()
-                    dapsJWT.verifier.verify(session?.token)
+                    dapsJWT.verifier.verify(session?.sessionId)
                     return@skipWhen true
                 } catch (e: Exception){
                     return@skipWhen false
@@ -245,7 +245,7 @@ fun Application.module() {  //testing: Boolean = false
             // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
             // real time updates of the data, and alert messages, if the data save failed.
             webSocket("/update") {
-                val sessionId: String? = this.call.sessions.get<DAPSSession>()?.token
+                val sessionId: String? = this.call.sessions.get<DAPSSession>()?.sessionId
                 connections[sessionId] = this
                 try {
                     while (true) {

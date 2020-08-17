@@ -22,7 +22,7 @@ class WebLogout
 fun Route.weblogout() {
     get<WebLogout> {
         val session = call.sessions.get<DAPSSession>()
-        session?.token = null
+        session?.sessionId = null
         call.sessions.clear<DAPSSession>()
         call.respond(FreeMarkerContent("weblogin.ftl", mapOf("presenter" to WebLoginPresenter()), "someetag"))
     }

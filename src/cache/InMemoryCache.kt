@@ -132,14 +132,14 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
             if (throwable != null) {
                 map.replace(key, old)
                 CoroutineScope(Dispatchers.IO).launch {
-                    connections[session.token]?.outgoing?.send(Frame.Text("alert:${route}"))
+                    connections[session.sessionId]?.outgoing?.send(Frame.Text("alert:${route}"))
                 }
             }
             // Success Case, tell the others.
             else {
                 CoroutineScope(Dispatchers.IO).launch {
                     connections.entries.forEach { entry ->
-                        if (entry.key != session.token) {
+                        if (entry.key != session.sessionId) {
                             entry.value.outgoing.send(Frame.Text(route))
                         }
                     }
@@ -158,7 +158,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
      */
     private suspend fun notifier(session: DAPSSession, route: String) {
         connections.entries.forEach {
-            if (it.key != session.token) {
+            if (it.key != session.sessionId) {
                 it.value.outgoing.send(Frame.Text(route))
             }
         }

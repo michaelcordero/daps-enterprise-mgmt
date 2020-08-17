@@ -37,7 +37,7 @@ fun Route.register(presenter: RegisterPresenter) {
     post<Register>{
         // get current user from session data if any
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session?.token != null ) return@post call.redirect(Welcome())
+        if (session?.sessionId != null ) return@post call.redirect(Welcome())
 
         // get post data
         val registration = call.receive<Parameters>()

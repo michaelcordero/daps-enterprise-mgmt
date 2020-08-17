@@ -25,7 +25,7 @@ fun Route.index() {
     // If the user has not already been authenticated we want to redirect to the login page otherwise dashboard.
     get<Index> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session?.token != null ) {
+        if (session?.sessionId != null ) {
             call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId, "presenter" to WelcomePresenter()), "welcome-etag"))
         } else {
             call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null, "presenter" to WebLoginPresenter()), "web-login-etag"))
