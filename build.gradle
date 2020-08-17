@@ -44,11 +44,9 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
-//    runtime group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.3.71'
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "io.ktor:ktor-websockets:$ktor_version"
-//    compile "io.ktor.features.ContentNegotiation:$ktor_version"
     compile "io.ktor:ktor-auth-jwt:$ktor_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
@@ -58,14 +56,7 @@ dependencies {
     compile "io.ktor:ktor-freemarker:$ktor_version"
     compile "io.ktor:ktor-webjars:$ktor_version"
     compile "com.h2database:h2:$h2_version"
-//    compile "biz.paluch.redis:lettuce:$lettuce_version"
-    compile "com.mchange:c3p0:$c3p0_version"
-//    compile "org.webjars:jquery:$jquery_version"
-//    compile "org.webjars:bootstrap:$bootstrap_version"
-//    compile "org.webjars:popper.js:$popperjs_version"
-//    compile "org.webjars:datatables:$datatables_version"
-//    compile "org.webjars:datatables-plugins:$datatables_version"
-//    compile "org.webjars:momentjs:$momentjs_version"
+    compile "com.zaxxer:HikariCP:$hikari_cp_version"
     compile "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
     compile "org.jetbrains.exposed:exposed-core:$exposed_version"
     compile "org.jetbrains.exposed:exposed-java-time:$exposed_version"
@@ -101,37 +92,6 @@ jar {
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
-
-//task concert(type: JavaExec) {
-//    group = "Execution"
-//    description = "run both the ui & backend"
-//    classpath = sourceSets.main.runtimeClasspath
-//    main = 'application.ApplicationKt'
-//}
-
-//task npm(type: Exec) {
-////    commandLine "$projectDir/react-ui/node_modules/.bin/webpack", "app/index.js", "$buildDir/js/bundle.js"
-//    workingDir "$projectDir/react-ui"
-//    commandLine("npm")
-//    args("start")
-//    standardOutput = new ByteArrayOutputStream()
-//
-////    startScripts
-//}
-// This background stuff is being tracked at https://github.com/gradle/gradle/issues/1367
-//task background(type: Exec) {
-//    workingDir "$projectDir"
-//    commandLine "./gradlew", "run", "&"
-//    standardOutput = new ByteArrayOutputStream()
-//}
-//WorkQueue workQueue = workerExecutor.processIsolation() {
-//    ProcessWorkerSpec spec ->
-//        forkOptions {
-//            JavaForkOptions options ->
-//                options.maxHeapSize = "512m"
-//        }
-//}
-
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
 //jar {
 //    manifest {
