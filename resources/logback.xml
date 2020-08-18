@@ -12,5 +12,5 @@
     <logger name="ktor.application" level="INFO" />
     <logger name="org.jetbrains.exposed" level="INFO" />
     <logger name="org.h2" level="INFO" />
-    <logger name="com.zaxxer" level="INFO" />
+    <logger name="com.zaxxer" level="OFF" />
 </configuration>

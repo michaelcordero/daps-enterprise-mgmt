@@ -3,7 +3,10 @@ package cache
 import application.connections
 import database.queries.DataQuery
 import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import model.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -42,71 +45,63 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
      * takes up about 1.5 GB's. So we're good.
      */
     init {
-        runBlocking {
-            val jobs: MutableList<Job> = mutableListOf()
-            withContext(Dispatchers.IO) {
-                log.info("Adding data to cache...")
-                jobs.addAll(
-                    mutableListOf(
-                        launch {
-                            billings = ConcurrentHashMap(dq.allBilling().associateBy { it.counter }.toMutableMap())
-                        },
-                        launch {
-                            clientFiles =
-                                ConcurrentHashMap(dq.allClientFiles().associateBy { it.client_num }.toMutableMap())
-                        },
-                        launch {
-                            clientNotes =
-                                ConcurrentHashMap(dq.allClientNotes().associateBy { it.client_note_key }.toMutableMap())
-                        },
+        CoroutineScope(Dispatchers.IO).launch {
+            log.info("Adding data to cache...")
+            launch {
+                billings = ConcurrentHashMap(dq.allBilling().associateBy { it.counter }.toMutableMap())
+            }
+            launch {
+                clientFiles =
+                    ConcurrentHashMap(dq.allClientFiles().associateBy { it.client_num }.toMutableMap())
+            }
+            launch {
+                clientNotes =
+                    ConcurrentHashMap(dq.allClientNotes().associateBy { it.client_note_key }.toMutableMap())
+            }
 //                        launch { clientPermNotes= dq.allClientPermNotes().toMutableList() },
-                        launch {
-                            dapsAddress =
-                                ConcurrentHashMap(dq.allDAPSAddress().associateBy { it.mailing_list_id }.toMutableMap())
-                        },
-                        launch {
-                            dapsStaffMessages =
-                                ConcurrentHashMap(dq.allDAPSStaffMessages().associateBy { it.staff_messages_key }
-                                    .toMutableMap())
-                        },
-                        launch {
-                            dapsStaff = ConcurrentHashMap(dq.allDAPSStaff().associateBy { it.initial }.toMutableMap())
-                        },
-                        launch {
-                            interviewGuides =
-                                ConcurrentHashMap(dq.allInterviewGuides().associateBy { it.id }.toMutableMap())
-                        },
-                        launch {
-                            pasteErrors =
-                                ConcurrentHashMap(dq.allPasteErrors().associateBy { it.ref_num }.toMutableMap())
-                        },
-                        launch {
-                            payments = ConcurrentHashMap(dq.allPayments().associateBy { it.ref_num }.toMutableMap())
-                        },
-                        launch {
-                            permNotes = ConcurrentHashMap(dq.allPermNotes().associateBy { it.id }.toMutableMap())
-                        },
-                        launch {
-                            permReqNotes = ConcurrentHashMap(dq.allPermReqNotes().associateBy { it.id }.toMutableMap())
-                        },
-                        launch {
-                            tempNotes =
-                                ConcurrentHashMap(dq.allTempNotes().associateBy { it.temp_note_key }.toMutableMap())
-                        },
-                        launch {
-                            tempsAvail4Work =
-                                ConcurrentHashMap(dq.allTempsAvail4Work().associateBy { it.rec_num }.toMutableMap())
-                        },
-                        launch { temps = ConcurrentHashMap(dq.allTemps().associateBy { it.emp_num }.toMutableMap()) },
-                        launch { users = ConcurrentHashMap(dq.allUsers().associateBy { it.id }.toMutableMap()) },
-                        launch { woNotes = ConcurrentHashMap(dq.allWONotes().associateBy { it.id }.toMutableMap()) },
-                        launch {
-                            workOrders =
-                                ConcurrentHashMap(dq.allWorkOrders().associateBy { it.wo_number }.toMutableMap())
-                        }
-                    )
-                )
-                jobs.joinAll()
+            launch {
+                dapsAddress =
+                    ConcurrentHashMap(dq.allDAPSAddress().associateBy { it.mailing_list_id }.toMutableMap())
+            }
+            launch {
+                dapsStaffMessages =
+                    ConcurrentHashMap(dq.allDAPSStaffMessages().associateBy { it.staff_messages_key }
+                        .toMutableMap())
+            }
+            launch {
+                dapsStaff = ConcurrentHashMap(dq.allDAPSStaff().associateBy { it.initial }.toMutableMap())
+            }
+            launch {
+                interviewGuides =
+                    ConcurrentHashMap(dq.allInterviewGuides().associateBy { it.id }.toMutableMap())
+            }
+            launch {
+                pasteErrors =
+                    ConcurrentHashMap(dq.allPasteErrors().associateBy { it.ref_num }.toMutableMap())
+            }
+            launch {
+                payments = ConcurrentHashMap(dq.allPayments().associateBy { it.ref_num }.toMutableMap())
+            }
+            launch {
+                permNotes = ConcurrentHashMap(dq.allPermNotes().associateBy { it.id }.toMutableMap())
+            }
+            launch {
+                permReqNotes = ConcurrentHashMap(dq.allPermReqNotes().associateBy { it.id }.toMutableMap())
+            }
+            launch {
+                tempNotes =
+                    ConcurrentHashMap(dq.allTempNotes().associateBy { it.temp_note_key }.toMutableMap())
+            }
+            launch {
+                tempsAvail4Work =
+                    ConcurrentHashMap(dq.allTempsAvail4Work().associateBy { it.rec_num }.toMutableMap())
+            }
+            launch { temps = ConcurrentHashMap(dq.allTemps().associateBy { it.emp_num }.toMutableMap()) }
+            launch { users = ConcurrentHashMap(dq.allUsers().associateBy { it.id }.toMutableMap()) }
+            launch { woNotes = ConcurrentHashMap(dq.allWONotes().associateBy { it.id }.toMutableMap()) }
+            launch {
+                workOrders =
+                    ConcurrentHashMap(dq.allWorkOrders().associateBy { it.wo_number }.toMutableMap())
             }
         }
     }
