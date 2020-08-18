@@ -3,10 +3,7 @@ package cache
 import application.connections
 import database.queries.DataQuery
 import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import model.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -45,8 +42,8 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
      * takes up about 1.5 GB's. So we're good.
      */
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            log.info("Adding data to cache...")
+        runBlocking {
+            log.info("BEGIN: initializing cache...")
             launch {
                 billings = ConcurrentHashMap(dq.allBilling().associateBy { it.counter }.toMutableMap())
             }
@@ -96,13 +93,21 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 tempsAvail4Work =
                     ConcurrentHashMap(dq.allTempsAvail4Work().associateBy { it.rec_num }.toMutableMap())
             }
-            launch { temps = ConcurrentHashMap(dq.allTemps().associateBy { it.emp_num }.toMutableMap()) }
-            launch { users = ConcurrentHashMap(dq.allUsers().associateBy { it.id }.toMutableMap()) }
-            launch { woNotes = ConcurrentHashMap(dq.allWONotes().associateBy { it.id }.toMutableMap()) }
+            launch {
+                temps = ConcurrentHashMap(dq.allTemps().associateBy { it.emp_num }.toMutableMap())
+            }
+            launch {
+                users = ConcurrentHashMap(dq.allUsers().associateBy { it.id }.toMutableMap())
+            }
+            launch {
+                woNotes = ConcurrentHashMap(dq.allWONotes().associateBy { it.id }.toMutableMap())
+            }
             launch {
                 workOrders =
                     ConcurrentHashMap(dq.allWorkOrders().associateBy { it.wo_number }.toMutableMap())
             }
+        }.invokeOnCompletion {
+            log.info("END: finished initializing cache...")
         }
     }
 
