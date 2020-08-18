@@ -154,7 +154,8 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
      * Therefore, this method does just that.
      * @param session we need the session id, so we can broadcast to the other web socket sessions, and not the creating
      * session of the new row, because his view will be updated already.
-     * @param route tells the listening web session socket connections,
+     * @param route tells the listening web session socket connections, if the update applies to their view, i.e.
+     * which table their currently viewing.
      */
     private suspend fun notifier(session: DAPSSession, route: String) {
         connections.entries.forEach {
