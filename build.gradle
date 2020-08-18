@@ -63,7 +63,7 @@ dependencies {
     compile "org.jetbrains.exposed:exposed-dao:$exposed_version"
     compile 'me.tongfei:progressbar:0.8.1'
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
-    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit5', version: '1.3.72'
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version"
 }
 
 
