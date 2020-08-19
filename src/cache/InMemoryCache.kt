@@ -1,6 +1,9 @@
 package cache
 
 import application.connections
+import cache.JSONRouteValues.*
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import database.queries.DataQuery
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.*
@@ -113,34 +116,47 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
 
     /**
      * The purpose of this method is to check if an exception occurred in an asynchronous write thread
-     * whose data change failed. Hopefully it will never have to be called.
+     * whose data change failed. If the write does fail, the cache will be reverted in the session that originated the
+     * change, but not in the other sessions. If the write succeeds, the other sessions who happen to be viewing the
+     * same data (i.e. web page), will see their table update to the newest data.
      * @param job = represents the asynchronous thread
      * @param key = usually the primary key of the data table
      * @param old = the previous value to be re-written to the cache
      * @param map = the cached representation of the data
+     * @param route = the alias for the data table that's been changed
+     * @param session = Session object holding the sessionId which will map the appropriate connections
      */
     private fun <K, V> exchequer(
         job: Job,
         key: K,
         old: V,
         map: MutableMap<K, V>,
-        route: String,
+        route: JSONRouteValues,
         session: DAPSSession
     ) {
         job.invokeOnCompletion { throwable ->
             // Fail Case
             if (throwable != null) {
                 map.replace(key, old)
+                val mapper = ObjectMapper()
+                val json_object: ObjectNode = mapper.createObjectNode()
+                json_object.put(JSONActionKeys.ALERT.name, route.name)
+                json_object.put(JSONActionKeys.ERROR.name, throwable.message.toString())
+                val message: String = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json_object)
                 CoroutineScope(Dispatchers.IO).launch {
-                    connections[session.sessionId]?.outgoing?.send(Frame.Text("alert:${route}"))
+                    connections[session.sessionId]?.outgoing?.send(Frame.Text(message))
                 }
             }
             // Success Case, tell the others.
             else {
+                val mapper = ObjectMapper()
+                val json_object: ObjectNode = mapper.createObjectNode()
+                json_object.put(JSONActionKeys.UPDATE.name, route.name)
+                val message: String = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json_object)
                 CoroutineScope(Dispatchers.IO).launch {
                     connections.entries.forEach { entry ->
                         if (entry.key != session.sessionId) {
-                            entry.value.outgoing.send(Frame.Text(route))
+                            entry.value.outgoing.send(Frame.Text(message))
                         }
                     }
                 }
@@ -157,15 +173,27 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
      * @param route tells the listening web session socket connections, if the update applies to their view, i.e.
      * which table their currently viewing.
      */
-    private suspend fun notifier(session: DAPSSession, route: String) {
-        connections.entries.forEach {
-            if (it.key != session.sessionId) {
-                it.value.outgoing.send(Frame.Text(route))
+    private fun notifier(session: DAPSSession, route: JSONRouteValues) {
+        val mapper = ObjectMapper()
+        val json_object: ObjectNode = mapper.createObjectNode()
+        json_object.put(JSONActionKeys.UPDATE.name, route.name)
+        val message: String = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json_object)
+        CoroutineScope(Dispatchers.IO).launch {
+            connections.entries.forEach {
+                if (it.key != session.sessionId) {
+                    it.value.outgoing.send(Frame.Text(message))
+                }
             }
         }
     }
 
-
+    /**
+     * The add method persists the passed in DAPS data object, writing to the database first, for the primary key, then
+     * writing to the cache, and notifying other connections in another co-routine (thread).
+     * @param obj The object to be written
+     * @param session We need the session object, so we can know which session id requested this change, so that we may
+     * route the update or error messages appropriately.
+     */
     @Suppress("unchecked_cast")
     override fun <T> add(obj: T, session: DAPSSession): T {
         try {
@@ -176,9 +204,9 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 is Billing -> {
                     val result: Int = dq.createBilling(obj)
                     val billing: Billing = obj.copy(counter = result)
+                    billings[billing.counter] = billing
                     CoroutineScope(Dispatchers.IO).launch {
-                        billings[billing.counter] = billing
-                        notifier(session, "billings")
+                        notifier(session, BILLINGS)
                     }
                     return billing as T
                 }
@@ -189,62 +217,63 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 is ClientFile -> {
                     val result: Int = dq.createClientFile(obj)
                     val cf: ClientFile = obj.copy(client_num = result)
+                    clientFiles[cf.client_num] = cf
                     CoroutineScope(Dispatchers.IO).launch {
-                        clientFiles[cf.client_num] = cf
-                        notifier(session, "clients")
+                        notifier(session, CLIENTS)
                     }
                     return cf as T
                 }
                 is ClientNote -> {
                     val result: Int = dq.createClientNotes(obj)
                     val cn = obj.copy(client_note_key = result)
+                    clientNotes[cn.client_note_key] = cn
                     CoroutineScope(Dispatchers.IO).launch {
-                        clientNotes[cn.client_note_key] = cn
-                        notifier(session, "client_notes")
+                        notifier(session, CLIENT_NOTES)
                     }
                     return cn as T
                 }
                 is ClientPermNotes -> {
                     val result = dq.createClientPermNotes(obj)
                     val cpn = obj.copy(id = result)
+                    clientPermNotes[cpn.id] = cpn
                     CoroutineScope(Dispatchers.IO).launch {
-                        clientPermNotes[cpn.id] = cpn
-                        notifier(session, "client_perm_notes")
+                        notifier(session, CLIENT_PERM_NOTES)
                     }
                     return cpn as T
                 }
                 is DAPSAddress -> {
                     val result = dq.createDAPSAddress(obj)
                     val da = obj.copy(mailing_list_id = result)
+                    dapsAddress[da.mailing_list_id] = da
                     CoroutineScope(Dispatchers.IO).launch {
-                        dapsAddress[da.mailing_list_id] = da
-                        notifier(session, "daps_addresses")
+                        notifier(session, DAPS_ADDRESSES)
                     }
                     return da as T
                 }
                 is DAPSStaff -> {
                     // TODO: Revisit this one
                     dq.insertDAPSStaff(obj)
+                    dapsStaff[obj.initial] = obj
                     CoroutineScope(Dispatchers.IO).launch {
-                        dapsStaff[obj.initial] = obj
+                        notifier(session,DAPS_STAFFS)
                     }
                     return obj
                 }
                 is DAPSStaffMessage -> {
                     val result = dq.createDAPSStaffMessages(obj)
                     val dsm = obj.copy(staff_messages_key = result)
+                    dapsStaffMessages[dsm.staff_messages_key] = dsm
                     CoroutineScope(Dispatchers.IO).launch {
-                        dapsStaffMessages[dsm.staff_messages_key] = dsm
-                        notifier(session, "daps_staff_messages")
+                        notifier(session, DAPS_STAFF_MESSAGES)
                     }
                     return dsm as T
                 }
                 is InterviewGuide -> {
                     val result = dq.createInterviewGuide(obj)
                     val ig = obj.copy(id = result)
+                    interviewGuides[ig.id] = ig
                     CoroutineScope(Dispatchers.IO).launch {
-                        interviewGuides[ig.id] = ig
-                        notifier(session, "interview_guides")
+                        notifier(session, INTERVIEW_GUIDES)
                     }
                     return ig as T
                 }
@@ -255,90 +284,90 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 is PasteErrors -> {
                     // TODO: Revisit
                     dq.insertPasteErrors(obj)
+                    pasteErrors[obj.ref_num] = obj
                     CoroutineScope(Dispatchers.IO).launch {
-                        pasteErrors[obj.ref_num] = obj
-                        notifier(session, "paste_errors")
+                        notifier(session, PASTE_ERRORS)
                     }
                     return obj
                 }
                 is Payment -> {
                     // TODO: Revisit
                     dq.insertPayment(obj)
+                    payments[obj.ref_num] = obj
                     CoroutineScope(Dispatchers.IO).launch {
-                        payments[obj.ref_num] = obj
-                        notifier(session, "payments")
+                        notifier(session, PAYMENTS)
                     }
                     return obj
                 }
                 is PermNote -> {
                     val result = dq.createPermNotes(obj)
                     val pn = obj.copy(id = result)
+                    permNotes[pn.id] = pn
                     CoroutineScope(Dispatchers.IO).launch {
-                        permNotes[pn.id] = pn
-                        notifier(session, "perm_notes")
+                        notifier(session, PERM_NOTES)
                     }
                     return pn as T
                 }
                 is PermReqNote -> {
                     val result = dq.createPermReqNotes(obj)
                     val prn = obj.copy(id = result)
+                    permReqNotes[prn.id] = prn
                     CoroutineScope(Dispatchers.IO).launch {
-                        permReqNotes[prn.id] = prn
-                        notifier(session, "perm_req_notes")
+                        notifier(session, PERM_REQ_NOTES)
                     }
                     return prn as T
                 }
                 is TempNote -> {
                     val result = dq.createTempNote(obj)
                     val tn = obj.copy(temp_note_key = result)
+                    tempNotes[tn.temp_note_key] = tn
                     CoroutineScope(Dispatchers.IO).launch {
-                        tempNotes[tn.temp_note_key] = tn
-                        notifier(session, "tempnotes")
+                        notifier(session, TEMP_NOTES)
                     }
                     return tn as T
                 }
                 is TempsAvail4Work -> {
                     val result = dq.createTempAvail4Work(obj)
                     val ta4w = obj.copy(rec_num = result)
+                    tempsAvail4Work[ta4w.rec_num] = ta4w
                     CoroutineScope(Dispatchers.IO).launch {
-                        tempsAvail4Work[ta4w.rec_num] = ta4w
-                        notifier(session, "temps_avail_for_work")
+                        notifier(session, TEMPS_AVAIL_FOR_WORKS)
                     }
                     return ta4w as T
                 }
                 is Temp -> {
                     val result = dq.createTemps(obj)
                     val temp = obj.copy(emp_num = result)
+                    temps[temp.emp_num] = temp
                     CoroutineScope(Dispatchers.IO).launch {
-                        temps[temp.emp_num] = temp
-                        notifier(session, "temps")
+                        notifier(session, TEMPS)
                     }
                     return temp as T
                 }
                 is User -> {
                     val result = dq.addUser(obj)
                     val user = obj.copy(id = result)
+                    users[user.id] = user
                     CoroutineScope(Dispatchers.IO).launch {
-                        users[user.id] = user
-                        notifier(session, "users")
+                        notifier(session, USERS)
                     }
                     return user as T
                 }
                 is WONotes -> {
                     val result = dq.createWONotes(obj)
                     val wonote = obj.copy(id = result)
+                    woNotes[wonote.id] = wonote
                     CoroutineScope(Dispatchers.IO).launch {
-                        woNotes[wonote.id] = wonote
-                        notifier(session, "work_order_notes")
+                        notifier(session, WORK_ORDER_NOTES)
                     }
                     return wonote as T
                 }
                 is WorkOrder -> {
                     val result = dq.createWorkOrder(obj)
                     val wo = obj.copy(wo_number = result)
+                    workOrders[wo.wo_number] = wo
                     CoroutineScope(Dispatchers.IO).launch {
-                        workOrders[wo.wo_number] = wo
-                        notifier(session, "work_orders")
+                        notifier(session, WORK_ORDERS)
                     }
                     return wo as T
                 }
@@ -349,6 +378,13 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         throw IllegalArgumentException("Unknown Object")
     }
 
+    /**
+     * The edit method modifies the record currently held in the database and cache, updating the cache first for
+     * performance. If the update to the database fails for any reason, the cache is then rolled back to be holding the
+     * original object. If the update succeeds, other connections are notified to update.
+     * @param obj The object to be persisted
+     * @param session The session holds the session id, so the update or error messages are routed appropriately.
+     */
     override fun <T> edit(obj: T, session: DAPSSession) {
         try {
             when (obj) {
@@ -360,7 +396,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(launch {
                             dq.updateBilling(obj)
-                        }, obj.counter, old!!, billings, "billings", session)
+                        }, obj.counter, old!!, billings, BILLINGS, session)
                     }
                 }
                 is BillType -> {
@@ -371,7 +407,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateClientFile(obj) },
-                            obj.client_num, old!!, clientFiles, "clients",
+                            obj.client_num, old!!, clientFiles, CLIENTS,
                             session
                         )
                     }
@@ -381,7 +417,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateClientNotes(obj) },
-                            obj.client_note_key, old!!, clientNotes, "client_notes",
+                            obj.client_note_key, old!!, clientNotes, CLIENT_NOTES,
                             session
                         )
                     }
@@ -391,7 +427,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateClientPermNote(obj) },
-                            obj.id, old!!, clientPermNotes, "client_perm_notes",
+                            obj.id, old!!, clientPermNotes, CLIENT_PERM_NOTES,
                             session
                         )
                     }
@@ -401,7 +437,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateDAPSAddress(obj) },
-                            obj.mailing_list_id, old!!, dapsAddress, "daps_addresses",
+                            obj.mailing_list_id, old!!, dapsAddress, DAPS_ADDRESSES,
                             session
                         )
                     }
@@ -411,7 +447,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateDAPSStaff(obj) },
-                            obj.initial, old!!, dapsStaff, "daps_staff",
+                            obj.initial, old!!, dapsStaff, DAPS_STAFFS,
                             session
                         )
                     }
@@ -421,7 +457,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateDAPSStaffMessages(obj) },
-                            obj.staff_messages_key, old!!, dapsStaffMessages, "daps_staff_messages", session
+                            obj.staff_messages_key, old!!, dapsStaffMessages, DAPS_STAFF_MESSAGES, session
                         )
                     }
                 }
@@ -430,7 +466,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateInterviewGuide(obj) },
-                            obj.id, old!!, interviewGuides, "interview_guides",
+                            obj.id, old!!, interviewGuides, INTERVIEW_GUIDES,
                             session
                         )
                     }
@@ -443,7 +479,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updatePasteErrors(obj) },
-                            obj.ref_num, old!!, pasteErrors, "paste_errors", session
+                            obj.ref_num, old!!, pasteErrors, PASTE_ERRORS, session
                         )
                     }
                 }
@@ -452,7 +488,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updatePayment(obj) },
-                            obj.ref_num, old!!, payments, "payments", session
+                            obj.ref_num, old!!, payments, PAYMENTS, session
                         )
                     }
                 }
@@ -461,7 +497,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updatePermNotes(obj) },
-                            obj.id, old!!, permNotes, "perm_notes", session
+                            obj.id, old!!, permNotes, PERM_NOTES, session
                         )
                     }
                 }
@@ -470,7 +506,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updatePermReqNote(obj) },
-                            obj.id, old!!, permReqNotes, "perm_req_notes", session
+                            obj.id, old!!, permReqNotes, PERM_REQ_NOTES, session
                         )
                     }
                 }
@@ -479,7 +515,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateTempNote(obj) },
-                            obj.temp_note_key, old!!, tempNotes, "tempnotes", session
+                            obj.temp_note_key, old!!, tempNotes,TEMP_NOTES, session
                         )
                     }
                 }
@@ -488,7 +524,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateTemp(obj) },
-                            obj.emp_num, old!!, temps, "temps", session
+                            obj.emp_num, old!!, temps, TEMPS, session
                         )
                     }
                 }
@@ -497,7 +533,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateTempAvail4Work(obj) },
-                            obj.rec_num, old!!, tempsAvail4Work, "temps_avail_for_work", session
+                            obj.rec_num, old!!, tempsAvail4Work, TEMPS_AVAIL_FOR_WORKS, session
                         )
                     }
                 }
@@ -506,7 +542,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateUser(obj) },
-                            obj.id, old!!, users, "users", session
+                            obj.id, old!!, users, USERS, session
                         )
                     }
                 }
@@ -515,7 +551,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateWONotes(obj) },
-                            obj.id, old!!, woNotes, "work_order_notes", session
+                            obj.id, old!!, woNotes, WORK_ORDER_NOTES, session
                         )
                     }
                 }
@@ -524,7 +560,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateWorkOrder(obj) },
-                            obj.wo_number, old!!, workOrders, "work_orders", session
+                            obj.wo_number, old!!, workOrders, WORK_ORDERS, session
                         )
                     }
                 }
@@ -535,6 +571,11 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         }
     }
 
+    /**
+     * The remove object removes the requested object from the database and cache.
+     * @param obj The object to be removed
+     * @param session The session holds the id, so update/error messages are routed to the appropriate connections.
+     */
     override fun <T> remove(obj: T, session: DAPSSession) {
         try {
             when (obj) {
@@ -546,7 +587,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteBilling(obj.counter) },
-                            obj.counter, old!!, billings, "billings", session
+                            obj.counter, old!!, billings, BILLINGS, session
                         )
                     }
                 }
@@ -558,7 +599,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteClientFile(obj.client_num) },
-                            obj.client_num, old!!, clientFiles, "clients",
+                            obj.client_num, old!!, clientFiles, CLIENTS,
                             session
                         )
                     }
@@ -568,7 +609,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteClientNote(obj.client_note_key!!) },
-                            obj.client_note_key, old!!, clientNotes, "client_notes", session
+                            obj.client_note_key, old!!, clientNotes, CLIENT_NOTES, session
                         )
                     }
                 }
@@ -577,7 +618,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteClientPermNote(obj.id) },
-                            obj.id, old!!, clientPermNotes, "client_perm_notes", session
+                            obj.id, old!!, clientPermNotes, CLIENT_PERM_NOTES, session
                         )
                     }
                 }
@@ -586,7 +627,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteDAPSAddress(obj.mailing_list_id!!) },
-                            obj.mailing_list_id, old!!, dapsAddress, "daps_addresses",
+                            obj.mailing_list_id, old!!, dapsAddress, DAPS_ADDRESSES,
                             session
                         )
                     }
@@ -597,7 +638,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteDAPSStaff(obj) },
-                            obj.initial, old!!, dapsStaff, "daps_staff", session
+                            obj.initial, old!!, dapsStaff, DAPS_STAFFS, session
                         )
                     }
                 }
@@ -606,7 +647,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteDAPSStaffMessages(obj.staff_messages_key!!) },
-                            obj.staff_messages_key, old!!, dapsStaffMessages, "daps_staff_messages", session
+                            obj.staff_messages_key, old!!, dapsStaffMessages, DAPS_STAFF_MESSAGES, session
                         )
                     }
                 }
@@ -615,7 +656,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteInterviewGuide(obj.id!!) },
-                            obj.id, old!!, interviewGuides, "interview_guides", session
+                            obj.id, old!!, interviewGuides, INTERVIEW_GUIDES, session
                         )
                     }
                 }
@@ -628,7 +669,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deletePasteErrors(obj) },
-                            obj.ref_num, old!!, pasteErrors, "paste_errors", session
+                            obj.ref_num, old!!, pasteErrors, PASTE_ERRORS, session
                         )
                     }
                 }
@@ -638,7 +679,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deletePayment(obj) },
-                            obj.ref_num, old!!, payments, "payments", session
+                            obj.ref_num, old!!, payments, PAYMENTS, session
                         )
                     }
                 }
@@ -647,7 +688,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deletePermNotes(obj.id!!) },
-                            obj.id, old!!, permNotes, "perm_notes", session
+                            obj.id, old!!, permNotes, PERM_NOTES, session
                         )
                     }
                 }
@@ -656,7 +697,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deletePermReqNote(obj.id!!) },
-                            obj.id, old!!, permReqNotes, "perm_req_notes", session
+                            obj.id, old!!, permReqNotes, PERM_REQ_NOTES, session
                         )
                     }
                 }
@@ -665,7 +706,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteTempNote(obj.temp_note_key!!) },
-                            obj.temp_note_key, old!!, tempNotes, "tempnotes", session
+                            obj.temp_note_key, old!!, tempNotes, TEMP_NOTES, session
                         )
                     }
                 }
@@ -674,7 +715,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteTemp(obj.emp_num) },
-                            obj.emp_num, old!!, temps, "temps", session
+                            obj.emp_num, old!!, temps, TEMPS, session
                         )
                     }
                 }
@@ -683,7 +724,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteTempAvail4Work(obj.rec_num) },
-                            obj.rec_num, old!!, tempsAvail4Work, "temps_avail_for_work", session
+                            obj.rec_num, old!!, tempsAvail4Work, TEMPS_AVAIL_FOR_WORKS, session
                         )
                     }
                 }
@@ -692,7 +733,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteUser(obj.id) },
-                            obj.id, old!!, users, "users", session
+                            obj.id, old!!, users, USERS, session
                         )
                     }
                 }
@@ -701,7 +742,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteWONote(obj.id) },
-                            obj.id, old!!, woNotes, "work_order_notes", session
+                            obj.id, old!!, woNotes, WORK_ORDER_NOTES, session
                         )
                     }
                 }
@@ -710,7 +751,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteWorkOrder(obj.wo_number) },
-                            obj.wo_number, old!!, workOrders, "work_orders", session
+                            obj.wo_number, old!!, workOrders, WORK_ORDERS, session
                         )
                     }
                 }

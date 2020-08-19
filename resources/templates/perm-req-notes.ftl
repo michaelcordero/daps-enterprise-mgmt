@@ -39,15 +39,16 @@
         $(function () {
             const web_socket = new WebSocket('ws://${presenter.host+':'+presenter.port}/update', ['http'])
             // Realtime Update Event
-            web_socket.onmessage = function (event) {
-                // Additional server logic prevents this from locally updating which would be redundant.
-                if (event.data === 'perm_req_notes') {
+            web_socket.onmessage = function(event) {
+                // Expected server message
+                let event_data = JSON.parse(event.data)
+                if(event_data['UPDATE'] === 'PERM_REQ_NOTES') {
                     table.ajax.reload(null, false)
-                } else if (event.data === 'alert:perm_req_notes') {
-                    alert('Data save change failed. Reverting data.')
+                } else if (event_data['ALERT'] === 'PERM_REQ_NOTES') {
+                    alert(`Data save failed. Reverting data. \nCause: `+event_data['ERROR'])
                     table.ajax.reload(null, false)
                 }
-            }
+            };
             // Datatables Editor
             const editor = new $.fn.dataTable.Editor({
                 ajax: {
