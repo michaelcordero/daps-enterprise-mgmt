@@ -194,7 +194,6 @@ fun Application.module() {  //testing: Boolean = false
     install(WebSockets)
     install(Webjars) {
         path = "/webjars" //defaults to /webjars
-        zone = ZoneId.systemDefault() //defaults to ZoneId.systemDefault()
     }
     routing {
         // static content
