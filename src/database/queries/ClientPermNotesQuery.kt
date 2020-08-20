@@ -1,6 +1,5 @@
 package database.queries
 
-import database.tables.ClientNotesTable
 import database.tables.ClientPermNotesTable
 import model.ClientPermNotes
 import org.jetbrains.exposed.sql.*
@@ -43,7 +42,7 @@ val db: Database
 
     fun allClientPermNotes() : List<ClientPermNotes> {
         return transaction(db) {
-            ClientNotesTable.selectAll().toList()
+            ClientPermNotesTable.selectAll().toList()
         }.map {
             ClientPermNotes(
                 it[ClientPermNotesTable.ID],

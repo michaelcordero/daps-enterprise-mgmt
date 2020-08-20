@@ -58,7 +58,9 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 clientNotes =
                     ConcurrentHashMap(dq.allClientNotes().associateBy { it.client_note_key }.toMutableMap())
             }
-//                        launch { clientPermNotes= dq.allClientPermNotes().toMutableList() },
+            launch {
+                clientPermNotes= ConcurrentHashMap(dq.allClientPermNotes().associateBy { it.id }.toMutableMap())
+            }
             launch {
                 dapsAddress =
                     ConcurrentHashMap(dq.allDAPSAddress().associateBy { it.mailing_list_id }.toMutableMap())
