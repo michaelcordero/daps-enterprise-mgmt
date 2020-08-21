@@ -2,7 +2,7 @@ package utilities
 
 import database.LocalDataQuery
 import database.queries.DataQuery
-import io.ktor.utils.io.errors.IOException
+import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.*
 import me.tongfei.progressbar.ProgressBar
 import me.tongfei.progressbar.ProgressBarStyle
@@ -63,7 +63,7 @@ suspend fun process(directory: File) {
                                         .also { pb.step() }
                                     "ClientNotes.csv" -> dq.insertClientNotes(ClientNote(resultSet))
                                         .also { pb.step() }
-                                    "ClientPermNotes.csv" -> dq.insertClientPermNotes(ClientPermNotes(resultSet))
+                                    "ClientPermNotes.csv" -> dq.insertClientPermNotes(ClientPermNote(resultSet))
                                         .also { pb.step() }
                                     "DAPS Staff Messages.csv" -> dq.insertDAPSStaffMessages(
                                         DAPSStaffMessage(

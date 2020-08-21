@@ -6,23 +6,23 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.util.*
-import presenters.WebClientNotesPresenter
+import presenters.WebClientPermNotesPresenter
 import java.time.LocalDateTime
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-@Location("/webclientnotes")
-class WebClientNotes
+@Location("/webclientpermnotes")
+class WebClientPermNotes
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.webclientnotes(presenter: WebClientNotesPresenter) {
-    get<WebClientNotes> {
+fun Route.webclientpermnotes(presenter: WebClientPermNotesPresenter) {
+    get<WebClientPermNotes> {
         call.respond(
             FreeMarkerContent(
-                "client-notes.ftl",
+                "client-perm-notes.ftl",
                 mapOf("presenter" to presenter),
-                "client-notes-e-tag:${LocalDateTime.now()}"
+                "client-perm-notes-e-tag:${LocalDateTime.now()}"
             )
         )
     }

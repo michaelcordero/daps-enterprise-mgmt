@@ -19,7 +19,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
     private lateinit var billings: MutableMap<Int, Billing>
     private lateinit var clientFiles: MutableMap<Int, ClientFile>
     private lateinit var clientNotes: MutableMap<Int?, ClientNote>
-    private lateinit var clientPermNotes: MutableMap<Int, ClientPermNotes>
+    private lateinit var clientPermNotes: MutableMap<Int, ClientPermNote>
     private lateinit var dapsAddress: MutableMap<Int?, DAPSAddress>
     private lateinit var dapsStaffMessages: MutableMap<Int?, DAPSStaffMessage>
     private lateinit var dapsStaff: MutableMap<String?, DAPSStaff>
@@ -234,7 +234,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     }
                     return cn as T
                 }
-                is ClientPermNotes -> {
+                is ClientPermNote -> {
                     val result = dq.createClientPermNotes(obj)
                     val cpn = obj.copy(id = result)
                     clientPermNotes[cpn.id] = cpn
@@ -424,7 +424,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                         )
                     }
                 }
-                is ClientPermNotes -> {
+                is ClientPermNote -> {
                     val old = clientPermNotes.replace(obj.id, obj)
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
@@ -615,7 +615,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                         )
                     }
                 }
-                is ClientPermNotes -> {
+                is ClientPermNote -> {
                     val old = clientPermNotes.remove(obj.id)
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
@@ -780,7 +780,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         return clientNotes
     }
 
-    override fun client_perm_notes_map(): Map<Int, ClientPermNotes> {
+    override fun client_perm_notes_map(): Map<Int, ClientPermNote> {
         return clientPermNotes
     }
 

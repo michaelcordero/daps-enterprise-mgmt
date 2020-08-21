@@ -11,38 +11,23 @@ import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.auth.jwt.jwt
+import io.ktor.auth.jwt.*
 import io.ktor.features.*
-import io.ktor.freemarker.FreeMarker
-import io.ktor.http.CacheControl
-import io.ktor.http.ContentType
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.cio.websocket.readText
-import io.ktor.http.content.CachingOptions
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.jackson.JacksonConverter
-import io.ktor.jackson.jackson
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.locations.locations
-import io.ktor.request.host
-import io.ktor.request.port
-import io.ktor.response.respondRedirect
-import io.ktor.routing.route
-import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import io.ktor.server.netty.NettyApplicationEngine
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
-import io.ktor.webjars.Webjars
-import io.ktor.websocket.DefaultWebSocketServerSession
-import io.ktor.websocket.WebSockets
-import io.ktor.websocket.webSocket
+import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.http.cio.websocket.*
+import io.ktor.http.content.*
+import io.ktor.jackson.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.sessions.*
+import io.ktor.util.*
+import io.ktor.webjars.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import model.User
 import org.slf4j.Logger
@@ -54,7 +39,7 @@ import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
-import java.time.ZoneId
+import kotlin.collections.set
 import kotlin.time.ExperimentalTime
 
 
@@ -216,6 +201,7 @@ fun Application.module() {  //testing: Boolean = false
                 billings()
                 clients()
                 client_notes()
+                client_perm_notes()
                 daps_staff_messages()
                 daps_staff()
                 interview_guides()
@@ -229,6 +215,7 @@ fun Application.module() {  //testing: Boolean = false
             webbillings(WebBillingsPresenter())
             webclients(WebClientsPresenter())
             webclientnotes(WebClientNotesPresenter())
+            webclientpermnotes(WebClientPermNotesPresenter())
             webdapsstaffmessages(WebDAPSStaffMessagesPresenter())
             webdapsstaff(WebDAPSStaffPresenter())
             webinterviewguide(WebInterviewGuidePresenter())
@@ -277,6 +264,7 @@ fun Application.module() {  //testing: Boolean = false
                 billings()
                 client_notes()
                 clients()
+                client_perm_notes()
                 daps_staff_messages()
                 interview_guides()
                 payments()

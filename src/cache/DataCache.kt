@@ -14,7 +14,7 @@ interface DataCache {
     fun bill_types_map(): Map<String,BillType>
     fun client_files_map(): Map<Int,ClientFile>
     fun client_notes_map(): Map<Int?,ClientNote>
-    fun client_perm_notes_map(): Map<Int,ClientPermNotes>
+    fun client_perm_notes_map(): Map<Int,ClientPermNote>
     fun daps_address_map(): Map<Int?,DAPSAddress>
     fun daps_staff_messages_map(): Map<Int?,DAPSStaffMessage>
     fun daps_staff_map(): Map<String?,DAPSStaff>
