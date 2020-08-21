@@ -333,7 +333,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     val ta4w = obj.copy(rec_num = result)
                     tempsAvail4Work[ta4w.rec_num] = ta4w
                     CoroutineScope(Dispatchers.IO).launch {
-                        notifier(session, TEMPS_AVAIL_FOR_WORKS)
+                        notifier(session, TEMPS_AVAILABLE_FOR_WORK)
                     }
                     return ta4w as T
                 }
@@ -535,7 +535,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.updateTempAvail4Work(obj) },
-                            obj.rec_num, old!!, tempsAvail4Work, TEMPS_AVAIL_FOR_WORKS, session
+                            obj.rec_num, old!!, tempsAvail4Work, TEMPS_AVAILABLE_FOR_WORK, session
                         )
                     }
                 }
@@ -726,7 +726,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
                             launch { dq.deleteTempAvail4Work(obj.rec_num) },
-                            obj.rec_num, old!!, tempsAvail4Work, TEMPS_AVAIL_FOR_WORKS, session
+                            obj.rec_num, old!!, tempsAvail4Work, TEMPS_AVAILABLE_FOR_WORK, session
                         )
                     }
                 }

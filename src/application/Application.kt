@@ -209,6 +209,7 @@ fun Application.module() {  //testing: Boolean = false
                 perm_notes()
                 perm_req_notes()
                 tempnotes()
+                temps_available_for_work()
                 temps()
             }
             welcome(WelcomePresenter())
@@ -223,6 +224,7 @@ fun Application.module() {  //testing: Boolean = false
             webpermnotes(WebPermNotesPresenter())
             webpermreqnotes(WebPermReqNotesPresenter())
             webtempnotes(WebTempNotesPresenter())
+            webtempsavailableforwork(WebTempsAvailableForWorkPresenter())
             webtemps(WebTempsPresenter())
             web_apex_charts(WebChartsPresenter())
             web_traditional_charts(WebChartsPresenter())
@@ -272,6 +274,7 @@ fun Application.module() {  //testing: Boolean = false
                 perm_req_notes()
                 temps()
                 tempnotes()
+                temps_available_for_work()
             }
         }
     }

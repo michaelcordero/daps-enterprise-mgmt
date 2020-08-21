@@ -84,7 +84,7 @@
                         <li class="sidebar-item"><a class="sidebar-link" href="/webpermnotes">Perm Notes</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webpermreqnotes">Perm Req Notes</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
-                        <li class="sidebar-item"><a class="sidebar-link" href="/webtempsavail4work">Temps Available For Work</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webtempsavailableforwork">Temps Available For Work</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtemps">Temps</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webusers">Users</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webwonotes">WO Notes</a></li>
