@@ -211,6 +211,7 @@ fun Application.module() {  //testing: Boolean = false
                 tempnotes()
                 temps_available_for_work()
                 temps()
+                work_orders()
             }
             welcome(WelcomePresenter())
             webbillings(WebBillingsPresenter())
@@ -226,6 +227,7 @@ fun Application.module() {  //testing: Boolean = false
             webtempnotes(WebTempNotesPresenter())
             webtempsavailableforwork(WebTempsAvailableForWorkPresenter())
             webtemps(WebTempsPresenter())
+            webworkorders(WebWorkOrdersPresenter())
             web_apex_charts(WebChartsPresenter())
             web_traditional_charts(WebChartsPresenter())
             webdocumentation(WebDocumentationPresenter())
@@ -275,6 +277,7 @@ fun Application.module() {  //testing: Boolean = false
                 temps()
                 tempnotes()
                 temps_available_for_work()
+                work_orders()
             }
         }
     }
