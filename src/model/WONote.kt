@@ -11,7 +11,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class WONotes
+data class WONote
     @JsonCreator constructor(
         @JsonProperty(value = "id", required = true)
         val id: Int,

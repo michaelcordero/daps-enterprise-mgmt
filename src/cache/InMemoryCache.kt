@@ -32,7 +32,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
     private lateinit var tempsAvail4Work: MutableMap<Int?, TempsAvail4Work>
     private lateinit var temps: MutableMap<Int?, Temp>
     private lateinit var users: MutableMap<Long?, User>
-    private lateinit var woNotes: MutableMap<Int?, WONotes>
+    private lateinit var woNotes: MutableMap<Int?, WONote>
     private lateinit var workOrders: MutableMap<Int?, WorkOrder>
 
     /**
@@ -355,7 +355,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     }
                     return user as T
                 }
-                is WONotes -> {
+                is WONote -> {
                     val result = dq.createWONotes(obj)
                     val wonote = obj.copy(id = result)
                     woNotes[wonote.id] = wonote
@@ -548,7 +548,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                         )
                     }
                 }
-                is WONotes -> {
+                is WONote -> {
                     val old = woNotes.replace(obj.id, obj)
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
@@ -739,7 +739,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                         )
                     }
                 }
-                is WONotes -> {
+                is WONote -> {
                     val old = woNotes.remove(obj.id)
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
@@ -832,7 +832,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         return users
     }
 
-    override fun wo_notes_map(): Map<Int?, WONotes> {
+    override fun wo_notes_map(): Map<Int?, WONote> {
         return woNotes
     }
 

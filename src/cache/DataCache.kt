@@ -27,6 +27,6 @@ interface DataCache {
     fun temps_avail_for_work_map(): Map<Int?,TempsAvail4Work>
     fun temps_map(): Map<Int?,Temp>
     fun users_map(): Map<Long?,User>
-    fun wo_notes_map(): Map<Int?,WONotes>
+    fun wo_notes_map(): Map<Int?,WONote>
     fun work_orders_map(): Map<Int?,WorkOrder>
 }

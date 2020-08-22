@@ -90,7 +90,7 @@ suspend fun process(directory: File) {
                                     "Temps.csv" -> dq.insertTemp(Temp(resultSet)).also { pb.step() }
                                     "TempsAvail4Work.csv" -> dq.insertTempAvail4Work(TempsAvail4Work(resultSet))
                                         .also { pb.step() }
-                                    "WOnotes.csv" -> dq.insertWONotes(WONotes(resultSet)).also { pb.step() }
+                                    "WOnotes.csv" -> dq.insertWONotes(WONote(resultSet)).also { pb.step() }
                                     "WorkOrder.csv" -> dq.insertWorkOrder(WorkOrder(resultSet))
                                         .also { pb.step() }
                                 }
