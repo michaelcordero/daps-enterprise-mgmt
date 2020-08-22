@@ -24,7 +24,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
     private lateinit var dapsStaffMessages: MutableMap<Int?, DAPSStaffMessage>
     private lateinit var dapsStaff: MutableMap<String?, DAPSStaff>
     private lateinit var interviewGuides: MutableMap<Int?, InterviewGuide>
-    private lateinit var pasteErrors: MutableMap<String?, PasteErrors>
+    private lateinit var pasteErrors: MutableMap<String?, PasteError>
     private lateinit var payments: MutableMap<String?, Payment>
     private lateinit var permNotes: MutableMap<Int?, PermNote>
     private lateinit var permReqNotes: MutableMap<Int?, PermReqNote>
@@ -283,7 +283,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                     // skip
 //                    return -1
                 }
-                is PasteErrors -> {
+                is PasteError -> {
                     // TODO: Revisit
                     dq.insertPasteErrors(obj)
                     pasteErrors[obj.ref_num] = obj
@@ -476,7 +476,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 is JobFunction -> {
                     // skip...
                 }
-                is PasteErrors -> {
+                is PasteError -> {
                     val old = pasteErrors.replace(obj.ref_num, obj)
                     CoroutineScope(Dispatchers.IO).launch {
                         exchequer(
@@ -665,7 +665,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
                 is JobFunction -> {
                     // skip...
                 }
-                is PasteErrors -> {
+                is PasteError -> {
                     // TODO: Add primary key
                     val old = pasteErrors.remove(obj.ref_num)
                     CoroutineScope(Dispatchers.IO).launch {
@@ -800,7 +800,7 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         return interviewGuides
     }
 
-    override fun paste_errors_map(): Map<String?, PasteErrors> {
+    override fun paste_errors_map(): Map<String?, PasteError> {
         return pasteErrors
     }
 

@@ -13,7 +13,7 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class PasteErrors
+data class PasteError
     @JsonCreator constructor(
         @JsonProperty(value = "client_num", required = true)
         val client_num: Int,

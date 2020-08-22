@@ -19,7 +19,7 @@ interface DataCache {
     fun daps_staff_messages_map(): Map<Int?,DAPSStaffMessage>
     fun daps_staff_map(): Map<String?,DAPSStaff>
     fun interview_guides_map(): Map<Int?,InterviewGuide>
-    fun paste_errors_map(): Map<String?,PasteErrors>
+    fun paste_errors_map(): Map<String?,PasteError>
     fun payments_map(): Map<String?,Payment>
     fun perm_notes_map(): Map<Int?,PermNote>
     fun perm_req_notes_map(): Map<Int?,PermReqNote>
