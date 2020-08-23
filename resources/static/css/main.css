@@ -3,7 +3,7 @@
 /*Custom Variables*/
 
 
-input:required:invalid, input:focus:invalid {
+input:required:invalid, input:focus:invalid, p.error {
       /*background-image: url(/images/invalid.png);*/
       border-color: indianred;
       background-position: right top;

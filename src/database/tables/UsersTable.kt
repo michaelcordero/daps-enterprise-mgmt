@@ -9,4 +9,5 @@ object UsersTable : Table() {
     val first_name = varchar("first_name", 256)
     val last_name = varchar("last_name", 256)
     val passwordHash = varchar("password_hash", 64)
+    val role = varchar("role",19)
 }

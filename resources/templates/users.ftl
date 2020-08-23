@@ -7,7 +7,7 @@
         <ul>
             <#list users as user>
                 <li> UserFirstName: ${user.first_name} | UserLastName: ${user.last_name}
-                    | UserEmail:  ${user.email} | UserPassword: ${user.passwordHash }</li>
+                    | UserEmail:  ${user.email} | UserPassword: ${user.passwordHash } | Role: ${user.role}</li>
                 <#else>
                     <p> No users </p>
             </#list>

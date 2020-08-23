@@ -2,24 +2,19 @@ package routes.web
 
 import application.dapsJWT
 import application.redirect
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.http.Parameters
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.locations.*
 import io.ktor.locations.post
-import io.ktor.request.receive
-import io.ktor.response.respond
+import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.sessions.*
+import io.ktor.util.*
 import model.User
 import presenters.RegisterPresenter
+import security.DAPSRole
 import security.DAPSSession
 
 @KtorExperimentalLocationsAPI
@@ -34,10 +29,10 @@ data class Register(
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.register(presenter: RegisterPresenter) {
-    post<Register>{
+    post<Register> {
         // get current user from session data if any
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session?.sessionId != null ) return@post call.redirect(Welcome())
+        if (session?.sessionId != null) return@post call.redirect(Welcome())
 
         // get post data
         val registration = call.receive<Parameters>()
@@ -45,26 +40,40 @@ fun Route.register(presenter: RegisterPresenter) {
         val last_name: String = registration["last_name"] ?: return@post call.redirect(it)
         val email: String = registration["email"] ?: return@post call.redirect(it)
         val password: String = registration["password"] ?: return@post call.redirect(it)
+        val registration_key: String = registration["key"] ?: return@post call.redirect(it)
 
         // do biz work
         try {
             val token = dapsJWT.sign(email)
-            call.sessions.set(DAPSSession(email,token))
+            call.sessions.set(DAPSSession(email, token))
             val updated_session = call.sessions.get<DAPSSession>()
-            presenter.createUser(first_name, last_name, email, password, updated_session!!)
+            presenter.createUser(first_name, last_name, email, password, updated_session!!, registration_key)
             call.redirect(Welcome())
         } catch (e: Exception) {
             val error = Register(last_name, email, password)
+            val invalid_session: DAPSSession? = call.sessions.get<DAPSSession>()
+            invalid_session?.sessionId = null
+            call.sessions.clear<DAPSSession>()
             application.log.error("failed to register user", e)
-            call.redirect(error.copy(error = e.cause.toString()))
+            call.redirect(error.copy(error = e.message.toString()))
         }
     }
 
     get<Register> {
-            call.respond(FreeMarkerContent("register.ftl", mapOf("page_user" to User(0L,
-                it.email, it.first_name,
-                it.last_name,""
-            ), "error" to it.error, "validator" to RegisterPresenter.Validator ,"presenter" to RegisterPresenter() ), "some-etag"))
+        call.respond(
+            FreeMarkerContent(
+                "register.ftl", mapOf(
+                    "page_user" to User(
+                        0L,
+                        it.email, it.first_name,
+                        it.last_name, "", DAPSRole.CLIENT
+                    ),
+                    "error" to it.error,
+                    "validator" to RegisterPresenter.Validator,
+                    "presenter" to RegisterPresenter()
+                ), "some-etag"
+            )
+        )
     }
 }
 

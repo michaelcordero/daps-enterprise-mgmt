@@ -13,7 +13,7 @@
                 <#--noinspection HtmlUnknownTarget-->
                 <form action="/register" method="post" enctype="application/x-www-form-urlencoded">
                     <#if error??>
-                        <p class="error">${error}</p>
+                        <p style="color: indianred">${error}</p>
                     </#if>
                     <div class="form-group">
                         <label for="first_name">First Name</label>
@@ -39,6 +39,12 @@
                                pattern="${validator.password_pattern.toString()}"
                                oninvalid="setCustomValidity('${validator.password_validation_message()}')"
                                onchange="try{setCustomValidity('')}catch(e){}">
+                    </div>
+                    <div class="form-group">
+                        <label for="key">Registration Key</label>
+                        <input class="form-control form-control-lg" type="text" id="key" name="key" maxlength="19"
+                               placeholder="Please enter registration key" required
+                               pattern="${validator.registration_key_pattern.toString()}">
                     </div>
                     <div class="text-center mt-3">
                         <input class="btn btn-lg btn-primary" type="submit" value="Register">
