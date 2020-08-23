@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.PasteErrorsTable
-import model.PasteErrors
+import model.PasteError
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ interface PasteErrorsQuery {
     /**
      * Create
      */
-    fun insertPasteErrors(pe: PasteErrors) {
+    fun insertPasteErrors(pe: PasteError) {
         transaction (db) {
             PasteErrorsTable.insert {
                 it[client_num] = pe.client_num
@@ -27,11 +27,11 @@ interface PasteErrorsQuery {
     /**
      * Read
      */
-    fun allPasteErrors(): List<PasteErrors> {
+    fun allPasteErrors(): List<PasteError> {
         return transaction(db) {
             PasteErrorsTable.selectAll().toList()
         }.map {
-            PasteErrors(
+            PasteError(
                 it[PasteErrorsTable.client_num],
                 it[PasteErrorsTable.pmt_type],
                 it[PasteErrorsTable.ref_num],
@@ -45,7 +45,7 @@ interface PasteErrorsQuery {
      * Update
      */
 
-    fun updatePasteErrors(pe: PasteErrors): Int {
+    fun updatePasteErrors(pe: PasteError): Int {
         return transaction (db) {
             PasteErrorsTable.update ({
                 PasteErrorsTable.client_num.eq(pe.client_num) and
@@ -64,7 +64,7 @@ interface PasteErrorsQuery {
      * Delete
      */
 
-    fun deletePasteErrors(pe: PasteErrors): Int {
+    fun deletePasteErrors(pe: PasteError): Int {
         return transaction (db) {
             PasteErrorsTable.deleteWhere {
                 PasteErrorsTable.client_num.eq(pe.client_num) and

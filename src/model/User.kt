@@ -2,6 +2,7 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import security.DAPSRole
 import java.io.Serializable
 
 data class User
@@ -15,5 +16,7 @@ data class User
     @JsonProperty(value = "last_name", required = true)
     val last_name: String,
     @JsonProperty(value = "passwordHash", required = true)
-    val passwordHash: String
+    val passwordHash: String,
+    @JsonProperty(value = "role", required = true)
+    val role: DAPSRole
 ) : Serializable

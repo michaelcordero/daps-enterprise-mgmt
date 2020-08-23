@@ -11,6 +11,7 @@ import io.ktor.routing.Route
 import io.ktor.sessions.get
 import io.ktor.sessions.sessions
 import model.User
+import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
 import security.DAPSSession
 
@@ -28,12 +29,12 @@ fun Route.welcome(presenter: WelcomePresenter) {
         if (session != null) {
             val user: User? = presenter.user(session.emailId)
             if(user != null ){
-                call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user), "welcome-e-tag"))
+                call.respond(FreeMarkerContent("welcome.ftl", mapOf("user" to user, "presenter" to presenter), "welcome-e-tag"))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "User not found!")
             }
         } else {
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null), "welcome-e-tag"))
+            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null, "presenter" to WebLoginPresenter()), "welcome-e-tag"))
         }
     }
 }

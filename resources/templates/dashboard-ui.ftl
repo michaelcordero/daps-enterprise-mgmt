@@ -8,18 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="DAPS Enterprise Management System">
     <title>Dental Auxiliary Placement Service</title>
-    <!-- PICK ONE OF THE STYLES BELOW -->
-<#--    <link href="/static/css/modern.css" rel="stylesheet">-->
-<#--    <link href="/static/css/classic.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="/static/css/dark.css" >
-<#--    <link href="/static/css/light.css" rel="stylesheet">-->
     <link rel="stylesheet" href="/static/css/main.css">
 <#--    Pre-compiled Datatables Editor CSS -->
 <#--    <link rel="stylesheet" href="/static/css/editor.dataTables.min.css">-->
     <link rel="stylesheet" href="/static/css/editor.bootstrap4.min.css">
-<#--    <link rel="stylesheet" href="/static/css/editor.foundation.min.css">-->
-<#--    <link rel="stylesheet" href="/static/css/editor.jqueryui.min.css">-->
-<#--    <link rel="stylesheet" href="/static/css/editor.semanticui.min.css">-->
 <#--    Spark UI-->
     <script src="/static/js/settings.js"></script>
     <script src="/static/js/app.js"></script>
@@ -36,7 +28,7 @@
             <#--                    <use xlink:href="#ion-ios-pulse-strong"></use>-->
             <#--                </svg>-->
             <#--                <img src="/static/images/daps_logo.png" alt="daps logo">-->
-            DAPS Enterprise Management
+            Dental Auxiliary Placement Services
         </a>
         <div class="sidebar-content">
             <div class="sidebar-user">
@@ -64,14 +56,14 @@
                     Elements
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" data-toggle="collapse" class="sidebar-link collapsed">
+                    <a href="#charts" data-toggle="collapse" class="sidebar-link collapsed">
                         <i class="align-middle mr-2 fas fa-fw fa-chart-pie">l</i> <span class="align-middle">Charts</span>
                         <#--                            <span class="sidebar-badge badge badge-pill badge-primary">New</span>-->
                     </a>
-                    <#--                        <ul id="charts" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">-->
-                    <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/charts-chartjs.html">Chart.js</a></li>-->
-                    <#--                            <li class="sidebar-item"><a class="sidebar-link" href="/static/docs/charts-apexcharts.html">ApexCharts</a></li>-->
-                    <#--                        </ul>-->
+                                            <ul id="charts" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                                                <li class="sidebar-item"><a class="sidebar-link" href="/web-traditional-charts">Traditional Charts</a></li>
+                                                <li class="sidebar-item"><a class="sidebar-link" href="/web-apex-charts">Apex Charts</a></li>
+                                            </ul>
                 </li>
 
                 <li class="sidebar-item">
@@ -81,8 +73,22 @@
                     <ul id="tables" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                         <li class="sidebar-item"><a class="sidebar-link" href="/webbillings">Billings</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webclients">Clients</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webclientnotes">Client Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webclientpermnotes">Client Perm Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webdapsaddresses">DAPS Addresses</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webdapsstaffmessages">DAPS Staff Messages</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webdapsstaff">DAPS Staff</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webinterviewguide">Interview Guide</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpasteerrors">Paste Errors</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpayments">Payments</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpermnotes">Perm Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webpermreqnotes">Perm Req Notes</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtempnotes">TempNotes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webtempsavailableforwork">Temps Available For Work</a></li>
                         <li class="sidebar-item"><a class="sidebar-link" href="/webtemps">Temps</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webusers">Users</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webworkordernotes">WO Notes</a></li>
+                        <li class="sidebar-item"><a class="sidebar-link" href="/webworkorders">Work Orders</a></li>
                     </ul>
                 </li>
                 <li class="sidebar-item">

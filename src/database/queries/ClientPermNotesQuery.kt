@@ -1,8 +1,7 @@
 package database.queries
 
-import database.tables.ClientNotesTable
 import database.tables.ClientPermNotesTable
-import model.ClientPermNotes
+import model.ClientPermNote
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -13,7 +12,7 @@ val db: Database
     /**
      * Create
      */
-    fun createClientPermNotes(cpn: ClientPermNotes): Int {
+    fun createClientPermNotes(cpn: ClientPermNote): Int {
         return transaction (db) {
             ClientPermNotesTable.insert {
 //                it[id] = cpn.id auto-increment
@@ -25,7 +24,7 @@ val db: Database
         } get ClientPermNotesTable.ID
     }
 
-    fun insertClientPermNotes(cpn: ClientPermNotes) {
+    fun insertClientPermNotes(cpn: ClientPermNote) {
         transaction (db) {
             ClientPermNotesTable.insert {
                 it[ID] = cpn.id
@@ -41,11 +40,11 @@ val db: Database
      * Read
      */
 
-    fun allClientPermNotes() : List<ClientPermNotes> {
+    fun allClientPermNotes() : List<ClientPermNote> {
         return transaction(db) {
-            ClientNotesTable.selectAll().toList()
+            ClientPermNotesTable.selectAll().toList()
         }.map {
-            ClientPermNotes(
+            ClientPermNote(
                 it[ClientPermNotesTable.ID],
                 it[ClientPermNotesTable.client_num],
                 it[ClientPermNotesTable.wo_num],
@@ -59,7 +58,7 @@ val db: Database
      * Update
      */
 
-    fun updateClientPermNote(cpn: ClientPermNotes): Int {
+    fun updateClientPermNote(cpn: ClientPermNote): Int {
         return transaction(db) {
             ClientPermNotesTable.update({
                 ClientPermNotesTable.ID.eq(cpn.id) and ClientPermNotesTable.client_num.eq(cpn.client_num)

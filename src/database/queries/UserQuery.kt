@@ -4,6 +4,7 @@ import database.tables.UsersTable
 import model.User
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
+import security.DAPSRole
 
 /**
  * This interface provides the methods for application users' sql operations. Instead of going with the delegate object
@@ -28,7 +29,8 @@ interface UserQuery {
                             it[UsersTable.email],
                             it[UsersTable.first_name],
                             it[UsersTable.last_name],
-                            it[UsersTable.passwordHash]
+                            it[UsersTable.passwordHash],
+                            DAPSRole.values().first{ role -> role.key == it[UsersTable.role]}
                         )
                     } else {
                         null
@@ -41,10 +43,19 @@ interface UserQuery {
     /**
      * Attempt to get user by using the [email].
      */
-    fun userByEmail(email: String ): User? {
+    fun userByEmail(email: String): User? {
         return transaction(db) {
             UsersTable.select { UsersTable.email.eq(email) }
-                .map { User(it[UsersTable.ID], email, it[UsersTable.first_name], it[UsersTable.last_name], it[UsersTable.passwordHash]) }
+                .map {
+                    User(
+                        it[UsersTable.ID],
+                        email,
+                        it[UsersTable.first_name],
+                        it[UsersTable.last_name],
+                        it[UsersTable.passwordHash],
+                        DAPSRole.values().first{ role -> role.key == it[UsersTable.role]}
+                    )
+                }
                 .singleOrNull()
         }
     }
@@ -60,7 +71,8 @@ interface UserQuery {
             it[UsersTable.email],
             it[UsersTable.first_name],
             it[UsersTable.last_name],
-            it[UsersTable.passwordHash]
+            it[UsersTable.passwordHash],
+            DAPSRole.values().first{ role -> role.key == it[UsersTable.role]}
         )
     }
 
@@ -75,6 +87,7 @@ interface UserQuery {
                 it[last_name] = user.last_name
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
+                it[role] = user.role.key
             }
         } get UsersTable.ID
     }
@@ -86,11 +99,12 @@ interface UserQuery {
         return transaction(db) {
             UsersTable.update({
                 UsersTable.ID.eq(user.id)
-            }){
+            }) {
                 it[ID] = user.id
                 it[first_name] = user.first_name
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
+                it[role] = user.role.key
             }
         }
     }
@@ -98,7 +112,7 @@ interface UserQuery {
     /**
      * Removes user
      */
-    fun deleteUser(userId: Long ): Int {
+    fun deleteUser(userId: Long): Int {
         return transaction(db) {
             UsersTable.deleteWhere { UsersTable.ID.eq(userId) }
         }

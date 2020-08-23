@@ -1,18 +1,13 @@
 package routes.web
 
-import io.ktor.application.call
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.util.*
 import presenters.WebTempNotesPresenter
-import security.DAPSSession
+import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
@@ -21,17 +16,8 @@ class WebTempNotes
 
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
-fun Route.webtempnotes(presenter: WebTempNotesPresenter){
-    get<WebTempNotes>{
-        try {
-            val session: DAPSSession? = call.sessions.get<DAPSSession>()
-            if (session != null) {
-                call.respond(FreeMarkerContent("tempnotes.ftl", mapOf("presenter" to presenter), "tempnotes-e-tag"))
-            } else {
-                call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "web-tempnotes-e-tag"))
-            }
-        } catch(e: Exception) {
-            call.respond(status = HttpStatusCode.BadRequest, message = "Bad Request: $e")
-        }
+fun Route.webtempnotes(presenter: WebTempNotesPresenter) {
+    get<WebTempNotes> {
+        call.respond(FreeMarkerContent("tempnotes.ftl", mapOf("presenter" to presenter), "tempnotes-e-tag:${LocalDateTime.now()}"))
     }
 }

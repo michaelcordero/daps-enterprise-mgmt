@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.WONotesTable
-import model.WONotes
+import model.WONote
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ interface WONotesQuery {
     /**
      * Create
      */
-    fun createWONotes(won: WONotes): Int {
+    fun createWONotes(won: WONote): Int {
         return transaction (db) {
             WONotesTable.insert {
                 // id will be auto-incremented
@@ -25,7 +25,7 @@ interface WONotesQuery {
         } get WONotesTable.ID
     }
 
-    fun insertWONotes(won: WONotes) {
+    fun insertWONotes(won: WONote) {
         transaction (db) {
             WONotesTable.insert {
                 it[ID] = won.id
@@ -42,11 +42,11 @@ interface WONotesQuery {
      * Read
      */
 
-    fun allWONotes(): List<WONotes> {
+    fun allWONotes(): List<WONote> {
         return transaction (db) {
             WONotesTable.selectAll().toList()
         }.map {
-            WONotes(
+            WONote(
                 it[WONotesTable.ID],
                 it[WONotesTable.wo_number],
                 it[WONotesTable.note_date],
@@ -57,13 +57,13 @@ interface WONotesQuery {
         }
     }
 
-    fun readWONotes(id: Int): WONotes {
+    fun readWONotes(id: Int): WONote {
         return transaction (db) {
             WONotesTable.select {
                 WONotesTable.ID.eq(id)
             }
         }.map {
-            WONotes(
+            WONote(
                 it[WONotesTable.ID],
                 it[WONotesTable.wo_number],
                 it[WONotesTable.note_date],
@@ -78,7 +78,7 @@ interface WONotesQuery {
      * Update
      */
 
-    fun updateWONotes(won: WONotes): Int {
+    fun updateWONotes(won: WONote): Int {
         return transaction (db) {
             WONotesTable.update({
                 WONotesTable.ID.eq(won.id)

@@ -1,31 +1,32 @@
 package cache
 
 import model.*
+import security.DAPSSession
 
 interface DataCache {
     /**
      * All of these methods write to the database and write to the cache, ensuring the app is in a consistent state.
      */
-    fun <T> add(obj: T): Int
-    fun <T> edit(obj: T): Int
-    fun <T> remove(obj: T): Int
-    fun allBilling(): List<Billing>
-    fun allBillTypes(): List<BillType>
-    fun allClientFiles(): List<ClientFile>
-    fun allClientNotes(): List<ClientNotes>
-    fun allClientPermNotes(): List<ClientPermNotes>
-    fun allDAPSAddress(): List<DAPSAddress>
-    fun allDAPSStaffMessages(): List<DAPSStaffMessages>
-    fun allDAPSStaff(): List<DAPSStaff>
-    fun allInterviewGuides(): List<InterviewGuide>
-    fun allPasteErrors(): List<PasteErrors>
-    fun allPayments(): List<Payment>
-    fun allPermNotes(): List<PermNotes>
-    fun allPermReqNotes(): List<PermReqNotes>
-    fun allTempNotes(): List<TempNotes>
-    fun allTempsAvail4Work(): List<TempsAvail4Work>
-    fun allTemps(): List<Temps>
-    fun allUsers(): List<User>
-    fun allWONotes(): List<WONotes>
-    fun allWorkOrders(): List<WorkOrder>
+    fun <T> add(obj: T, session: DAPSSession): T
+    fun <T> edit(obj: T, session: DAPSSession)
+    fun <T> remove(obj: T, session: DAPSSession)
+    fun billings_map(): Map<Int,Billing>
+    fun bill_types_map(): Map<String,BillType>
+    fun client_files_map(): Map<Int,ClientFile>
+    fun client_notes_map(): Map<Int?,ClientNote>
+    fun client_perm_notes_map(): Map<Int,ClientPermNote>
+    fun daps_address_map(): Map<Int?,DAPSAddress>
+    fun daps_staff_messages_map(): Map<Int?,DAPSStaffMessage>
+    fun daps_staff_map(): Map<String?,DAPSStaff>
+    fun interview_guides_map(): Map<Int?,InterviewGuide>
+    fun paste_errors_map(): Map<String?,PasteError>
+    fun payments_map(): Map<String?,Payment>
+    fun perm_notes_map(): Map<Int?,PermNote>
+    fun perm_req_notes_map(): Map<Int?,PermReqNote>
+    fun temp_notes_map(): Map<Int?,TempNote>
+    fun temps_avail_for_work_map(): Map<Int?,TempsAvail4Work>
+    fun temps_map(): Map<Int?,Temp>
+    fun users_map(): Map<Long?,User>
+    fun wo_notes_map(): Map<Int?,WONote>
+    fun work_orders_map(): Map<Int?,WorkOrder>
 }

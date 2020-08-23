@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.ClientNotesTable
-import model.ClientNotes
+import model.ClientNote
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -11,7 +11,7 @@ val db: Database
     /**
      * Create
      */
-    fun createClientNotes(cn: ClientNotes): Int {
+    fun createClientNotes(cn: ClientNote): Int {
         return transaction (db) {
             ClientNotesTable.insert {
                 // it[clientnotekey] = cn.client_note_key auto-incremented
@@ -23,7 +23,7 @@ val db: Database
         } get ClientNotesTable.clientnotekey
     }
 
-    fun insertClientNotes(cn: ClientNotes) {
+    fun insertClientNotes(cn: ClientNote) {
         transaction (db) {
             ClientNotesTable.insert {
                 it[clientnotekey] = cn.client_note_key!!
@@ -39,11 +39,11 @@ val db: Database
      * Read
      */
 
-    fun allClientNotes(): List<ClientNotes> {
+    fun allClientNotes(): List<ClientNote> {
         return transaction (db) {
             ClientNotesTable.selectAll().toMutableList()
         }.map {
-            ClientNotes(
+            ClientNote(
                 it[ClientNotesTable.client_num],
                 it[ClientNotesTable.notedate],
                 it[ClientNotesTable.initial],
@@ -55,12 +55,12 @@ val db: Database
 
     // DOES NOT WORK!
     // Traced the bug to ThreadLocalTransactionManager.kt::163. Deferred to Slack channel.
-    fun readClientsNotesByClientNum(client_num: Int): List<ClientNotes?> = transaction(db) {
+    fun readClientsNotesByClientNum(client_num: Int): List<ClientNote?> = transaction(db) {
             ClientNotesTable.select {
                 ClientNotesTable.client_num.eq(client_num)
             }
         }.mapNotNull {
-            ClientNotes(
+            ClientNote(
                 it[ClientNotesTable.client_num],
                 it[ClientNotesTable.notedate],
                 it[ClientNotesTable.initial],
@@ -69,12 +69,12 @@ val db: Database
             )
         }
 
-    fun readClientNoteByKey(clientNoteKey: Int): ClientNotes? {
+    fun readClientNoteByKey(clientNoteKey: Int): ClientNote? {
         return transaction (db) {
             ClientNotesTable.select {
                 ClientNotesTable.clientnotekey.eq(clientNoteKey)
             }.map {
-                ClientNotes(
+                ClientNote(
                     it[ClientNotesTable.client_num],
                     it[ClientNotesTable.notedate],
                     it[ClientNotesTable.initial],
@@ -85,12 +85,12 @@ val db: Database
         }
     }
 
-    fun readClientNotesByInitial(initial: String): List<ClientNotes> {
+    fun readClientNotesByInitial(initial: String): List<ClientNote> {
         return transaction (db) {
             ClientNotesTable.select {
                 ClientNotesTable.initial.eq(initial)
             }.mapNotNull {
-                ClientNotes(
+                ClientNote(
                         it[ClientNotesTable.client_num],
                         it[ClientNotesTable.notedate],
                         it[ClientNotesTable.initial],
@@ -105,7 +105,7 @@ val db: Database
      * Update
      */
 
-    fun updateClientNotes(cn: ClientNotes): Int {
+    fun updateClientNotes(cn: ClientNote): Int {
         return transaction (db) {
             ClientNotesTable.update({
                 ClientNotesTable.client_num.eq(cn.client_num) and

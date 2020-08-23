@@ -1,7 +1,7 @@
 package database.queries
 
 import database.tables.TempsTable
-import model.Temps
+import model.Temp
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -12,7 +12,7 @@ interface TempsQuery {
     /**
      * Create
      */
-    fun createTemps(t: Temps): Int {
+    fun createTemps(t: Temp): Int {
         return transaction (db) {
             TempsTable.insert {
                 // emp_num will be auto-incremented
@@ -83,7 +83,7 @@ interface TempsQuery {
         }
     }
 
-    fun insertTemp(t: Temps) {
+    fun insertTemp(t: Temp) {
         transaction (db) {
             TempsTable.insert {
                 it[emp_num] = t.emp_num
@@ -158,11 +158,11 @@ interface TempsQuery {
      * Read
      */
 
-    fun allTemps(): List<Temps> {
+    fun allTemps(): List<Temp> {
         return transaction (db) {
             TempsTable.selectAll().toList()
         }.map {
-            Temps(
+            Temp(
                 it[TempsTable.emp_num],
                 it[TempsTable.type_a],
                 it[TempsTable.type_b],
@@ -231,12 +231,12 @@ interface TempsQuery {
         }
     }
 
-    fun readTemp(emp_num: Int): Temps {
+    fun readTemp(emp_num: Int): Temp {
         return transaction (db) {
             TempsTable.select {
                 TempsTable.emp_num.eq(emp_num)
             }.map {
-                Temps(
+                Temp(
                     it[TempsTable.emp_num],
                     it[TempsTable.type_a],
                     it[TempsTable.type_b],
@@ -310,7 +310,7 @@ interface TempsQuery {
      * Update
      */
 
-    fun updateTemp(t: Temps): Int {
+    fun updateTemp(t: Temp): Int {
         return transaction (db) {
             TempsTable.update({
                 TempsTable.emp_num.eq(t.emp_num)

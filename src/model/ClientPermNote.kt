@@ -6,7 +6,7 @@ import database.tables.ClientPermNotesTable
 import java.io.Serializable
 import java.sql.ResultSet
 
-data class ClientPermNotes
+data class ClientPermNote
 @JsonCreator constructor(
     @JsonProperty(value = "id", required = true) val id: Int,
     val client_num: Int?, val wo_num: Int?,

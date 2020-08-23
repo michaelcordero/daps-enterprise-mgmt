@@ -2,8 +2,12 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.TempsTable
+import model.deserializers.BooleanDeserializer
+import model.deserializers.DoubleDeserializer
+import model.deserializers.LocalDateDeserializer
 import model.serializers.BooleanSerializer
 import model.serializers.DoubleSerializer
 import model.serializers.LocalDateSerializer
@@ -11,13 +15,14 @@ import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
-data class Temps
+data class Temp
 @JsonCreator constructor(
     @JsonProperty(value = "emp_num", required = true)
     val emp_num: Int,
     val type_a: String?,
     val type_b: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val status: Boolean?,
     val firstname: String?,
     val lastname: String?,
@@ -32,34 +37,46 @@ data class Temps
     val wphone: String?,
     val wext: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val callwork: Boolean?,
     val fax: String?,
     val cellphone: String?,
     val social_sec_num: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val daps_start: Timestamp?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val daps_dollar: Double?,
     val hourly_rate: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val chart_complete: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val license_file: Boolean?,
     val license: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val license_date: Timestamp?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val malp_ins: Boolean?,
     val mapl_info: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val exper_since: Timestamp?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val photo_id: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val work_auth: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val ref_check: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val cont_sub_lic: Boolean?,
     val exper_type: String?,
     val emergency_contact: String?,
@@ -68,27 +85,38 @@ data class Temps
     val preferences: String?,
     val dislikes: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val temp_needs: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val perm_needs: Boolean?,
     val computer: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val oncall: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_m: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_t: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_w: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_r: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_f: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_s: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_u: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val avail_nos: Boolean?,
     val pref_loc: String?,
     val max_miles: String?,
@@ -96,17 +124,23 @@ data class Temps
     val notes: String?,
     val account_rep: String?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val account_rep_enddate: Timestamp?,
     val perm_notes: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val set_flag: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val yes_list: Boolean?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val resident_alien: Boolean?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val resident_alien_exp: Timestamp?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val filler_two: Double?
 ) : Serializable {
     constructor(result_set: ResultSet) : this(

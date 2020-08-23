@@ -2,20 +2,37 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.InterviewGuideTable
+import model.deserializers.BooleanDeserializer
+import model.deserializers.LocalDateDeserializer
+import model.serializers.BooleanSerializer
+import model.serializers.LocalDateSerializer
 import java.io.Serializable
 import java.sql.ResultSet
 import java.sql.Timestamp
 
 data class InterviewGuide
 @JsonCreator constructor(
-    val id: Int?, @JsonProperty(value = "client_num", required = true)
-    val client_num: Int, val client_contact: String?,
+    val id: Int?,
+    @JsonProperty(value = "client_num", required = true)
+    val client_num: Int,
+    val client_contact: String?,
     @JsonProperty(value = "employee_num", required = true)
-    val employee_num: Int, val employee_name: String?,
-    val referral_date: Timestamp?, val referral_notes: String?,
-    val interview_complete: Boolean?, val interview_notes: String?,
-    val wo_number: Int?, val emp_notes_id: Int?, val client_notes_id: Int?
+    val employee_num: Int,
+    val employee_name: String?,
+    @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
+    val referral_date: Timestamp?,
+    val referral_notes: String?,
+    @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
+    val interview_complete: Boolean?,
+    val interview_notes: String?,
+    val wo_number: Int?,
+    val emp_notes_id: Int?,
+    val client_notes_id: Int?
 ) : Serializable {
     constructor(resultSet: ResultSet) : this(
         resultSet.getInt(InterviewGuideTable.ID.name),

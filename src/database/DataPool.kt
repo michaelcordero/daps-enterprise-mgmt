@@ -1,16 +1,14 @@
 package database
-import com.mchange.v2.c3p0.ComboPooledDataSource
-import org.h2.Driver
+import com.zaxxer.hikari.HikariDataSource
 import java.io.File
 
 class DataPool {
     // File where the database is to be stored.
     val dir: File = File("build/db")
     // Pool of JDBC Connections used
-    val pool: ComboPooledDataSource = ComboPooledDataSource().apply {
-        driverClass = Driver::class.java.name
+    val pool: HikariDataSource = HikariDataSource().apply {
         jdbcUrl = "jdbc:h2:file:${dir.canonicalFile.absolutePath}"
-        user = ""
+        username = ""
         password = ""
     }
 }

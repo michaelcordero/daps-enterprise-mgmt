@@ -2,7 +2,7 @@ package utilities
 
 import database.LocalDataQuery
 import database.queries.DataQuery
-import io.ktor.utils.io.errors.IOException
+import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.*
 import me.tongfei.progressbar.ProgressBar
 import me.tongfei.progressbar.ProgressBarStyle
@@ -61,12 +61,12 @@ suspend fun process(directory: File) {
                                     "Billing.csv" -> dq.insertBilling(Billing(resultSet)).also { pb.step() }
                                     "ClientFile.csv" -> dq.insertClientFile(ClientFile(resultSet))
                                         .also { pb.step() }
-                                    "ClientNotes.csv" -> dq.insertClientNotes(ClientNotes(resultSet))
+                                    "ClientNotes.csv" -> dq.insertClientNotes(ClientNote(resultSet))
                                         .also { pb.step() }
-                                    "ClientPermNotes.csv" -> dq.insertClientPermNotes(ClientPermNotes(resultSet))
+                                    "ClientPermNotes.csv" -> dq.insertClientPermNotes(ClientPermNote(resultSet))
                                         .also { pb.step() }
                                     "DAPS Staff Messages.csv" -> dq.insertDAPSStaffMessages(
-                                        DAPSStaffMessages(
+                                        DAPSStaffMessage(
                                             resultSet
                                         )
                                     )
@@ -78,19 +78,19 @@ suspend fun process(directory: File) {
                                     "InterviewGuide.csv" -> dq.insertInterviewGuide(InterviewGuide(resultSet))
                                         .also { pb.step() }
                                     "JobFunctionDropDown.csv" -> (JobFunction(resultSet)).also { pb.step() }
-                                    "Paste Errors.csv" -> dq.insertPasteErrors(PasteErrors(resultSet))
+                                    "Paste Errors.csv" -> dq.insertPasteErrors(PasteError(resultSet))
                                         .also { pb.step() }
                                     "Payment.csv" -> dq.insertPayment(Payment(resultSet)).also { pb.step() }
-                                    "PermNotes.csv" -> dq.insertPermNotes(PermNotes(resultSet))
+                                    "PermNotes.csv" -> dq.insertPermNotes(PermNote(resultSet))
                                         .also { pb.step() }
-                                    "PermReqNotes.csv" -> dq.insertPermReqNotes(PermReqNotes(resultSet))
+                                    "PermReqNotes.csv" -> dq.insertPermReqNotes(PermReqNote(resultSet))
                                         .also { pb.step() }
-                                    "TempNotes.csv" -> dq.insertTempNote(TempNotes(resultSet))
+                                    "TempNotes.csv" -> dq.insertTempNote(TempNote(resultSet))
                                         .also { pb.step() }
-                                    "Temps.csv" -> dq.insertTemp(Temps(resultSet)).also { pb.step() }
+                                    "Temps.csv" -> dq.insertTemp(Temp(resultSet)).also { pb.step() }
                                     "TempsAvail4Work.csv" -> dq.insertTempAvail4Work(TempsAvail4Work(resultSet))
                                         .also { pb.step() }
-                                    "WOnotes.csv" -> dq.insertWONotes(WONotes(resultSet)).also { pb.step() }
+                                    "WOnotes.csv" -> dq.insertWONotes(WONote(resultSet)).also { pb.step() }
                                     "WorkOrder.csv" -> dq.insertWorkOrder(WorkOrder(resultSet))
                                         .also { pb.step() }
                                 }

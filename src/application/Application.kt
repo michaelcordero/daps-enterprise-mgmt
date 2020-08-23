@@ -11,31 +11,24 @@ import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.auth.jwt.jwt
+import io.ktor.auth.jwt.*
 import io.ktor.features.*
-import io.ktor.freemarker.FreeMarker
-import io.ktor.http.ContentType
-import io.ktor.http.content.resources
-import io.ktor.http.content.static
-import io.ktor.jackson.JacksonConverter
-import io.ktor.jackson.jackson
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.locations.locations
-import io.ktor.request.host
-import io.ktor.request.port
-import io.ktor.response.respondRedirect
-import io.ktor.routing.route
-import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import io.ktor.server.netty.NettyApplicationEngine
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
-import io.ktor.webjars.Webjars
+import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.http.cio.websocket.*
+import io.ktor.http.content.*
+import io.ktor.jackson.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.sessions.*
+import io.ktor.util.*
+import io.ktor.webjars.*
+import io.ktor.websocket.*
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import model.User
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -46,7 +39,7 @@ import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
-import java.time.ZoneId
+import kotlin.collections.set
 import kotlin.time.ExperimentalTime
 
 
@@ -54,20 +47,27 @@ val log: Logger = LoggerFactory.getLogger(Application::class.java)
 val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
-
+val theme: Theme = Theme.LIGHT
+val host = System.getProperty("host") ?: "localhost"
+//NetworkInterface.getNetworkInterfaces()
+//.toList().stream()
+//.flatMap { i -> i.interfaceAddresses.stream() }
+//.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
+//.toList().first().address.hostAddress.toString()
+val port = System.getProperty("port") ?: "8080"
+val connections: MutableMap<String?,DefaultWebSocketServerSession> = mutableMapOf()
 
 @ExperimentalTime
 @ExperimentalStdlibApi
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun main(args: Array<String>) {
-    // In production these values will be passed in via command line or system properties (i.e. VM Options).
     log.info("Program started with args: %s".format(args.joinToString(" ")))
     log.info("Starting server...")
     val server: NettyApplicationEngine = embeddedServer(
         factory = Netty,
-        host = "localhost",
-        port = 8080,
+        host = host,
+        port = port.toInt(),
         watchPaths = listOf("daps-enterprise-mgmt"),
         module = Application::module
     )
@@ -93,7 +93,8 @@ fun Application.module() {  //testing: Boolean = false
         basic("web") {
             skipWhen { call ->
                 try {
-                    dapsJWT.verifier.verify(call.sessions.get<DAPSSession>()?.token)
+                    val session = call.sessions.get<DAPSSession>()
+                    dapsJWT.verifier.verify(session?.sessionId)
                     return@skipWhen true
                 } catch (e: Exception){
                     return@skipWhen false
@@ -104,9 +105,9 @@ fun Application.module() {  //testing: Boolean = false
             userParamName = "emailId"
             passwordParamName = "password"
             validate {
-                val user: User? = cache.allUsers()
+                val user: User? = cache.users_map().values
                     .find { user -> user.email == it.name && user.passwordHash == DAPSSecurity.hash(it.password) }
-                if (user != null) { // sessions.get<DAPSSession>()?.token != null
+                if (user != null) {
                     UserIdPrincipal(it.name)
                 } else {
                     null
@@ -134,7 +135,7 @@ fun Application.module() {  //testing: Boolean = false
     // This adds automatically Date and Server headers to each response
     install(DefaultHeaders)
     // This feature enables truly open access across domain boundaries
-    install(CORS) {
+//    install(CORS) {
 //        host("localhost:4000") to specify client app
 //        anyHost()
 //        method(HttpMethod.Options)
@@ -145,7 +146,7 @@ fun Application.module() {  //testing: Boolean = false
 //        method(HttpMethod.Patch)
 //        header(HttpHeaders.Authorization)
 //        allowCredentials = true
-    }
+//    }
     // This uses use the logger to log every call (request/response)
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
@@ -153,28 +154,31 @@ fun Application.module() {  //testing: Boolean = false
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
     // cache control
-//    install(CachingHeaders) {
-//        options {
-//            when(it.contentType?.withoutParameters()) {
-//                ContentType.Text.JavaScript -> CachingOptions(cacheControl = CacheControl)
-//                else -> null
-//            }
-//        }
-//    }
+    install(CachingHeaders) {
+        options {
+//            CachingOptions(CacheControl.NoCache(CacheControl.Visibility.Private))
+            when(it.contentType?.withoutParameters()) {
+                ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.Html -> CachingOptions(CacheControl.NoCache(CacheControl.Visibility.Private))
+                else -> null
+            }
+        }
+    }
     // SESSION cookie
     install(Sessions) {
-        cookie<DAPSSession>("SESSION") {
+        cookie<DAPSSession>("DAPS_SESSION_ID") {
             cookie.path = "/"
         }
     }
-    install(StatusPages) { statuses(this) }
+    install(StatusPages) { statuses(WebStatusPresenter(this)) }
     install(Locations)
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
+    install(WebSockets)
     install(Webjars) {
         path = "/webjars" //defaults to /webjars
-        zone = ZoneId.systemDefault() //defaults to ZoneId.systemDefault()
     }
     routing {
         // static content
@@ -183,39 +187,103 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // None authentication
-        register(RegisterPresenter(cache, dapsJWT))
+        register(RegisterPresenter())
         index()
         weblogout()
-//         clients(cache)  // TODO: leaving this here, so i can continue to experiment with the node.js app
         // Initial web authentication
         authenticate("form") {
-            weblogin(WebLoginPresenter(cache, dapsJWT))
+            weblogin(WebLoginPresenter())
         }
         // Web authentication
+        // comment out to experiment with the node.js app
         authenticate("web") {
             route("/web") {
-                clients(cache)
-                billings(cache)
-                tempnotes(cache)
-                temps(cache)
+                billings()
+                clients()
+                client_notes()
+                client_perm_notes()
+                daps_staff_messages()
+                daps_staff()
+                interview_guides()
+                paste_errors()
+                payments()
+                perm_notes()
+                perm_req_notes()
+                tempnotes()
+                temps_available_for_work()
+                temps()
+                work_order_notes()
+                work_orders()
             }
             welcome(WelcomePresenter())
-            users(cache)
-            webclients(WebClientsPresenter())
             webbillings(WebBillingsPresenter())
+            webclients(WebClientsPresenter())
+            webclientnotes(WebClientNotesPresenter())
+            webclientpermnotes(WebClientPermNotesPresenter())
+            webdapsstaffmessages(WebDAPSStaffMessagesPresenter())
+            webdapsstaff(WebDAPSStaffPresenter())
+            webinterviewguide(WebInterviewGuidePresenter())
+            webpasteerrors(WebPasteErrorsPresenter())
+            webpayments(WebPaymentsPresenter())
+            webpermnotes(WebPermNotesPresenter())
+            webpermreqnotes(WebPermReqNotesPresenter())
             webtempnotes(WebTempNotesPresenter())
-            webtemps()
+            webtempsavailableforwork(WebTempsAvailableForWorkPresenter())
+            webtemps(WebTempsPresenter())
+            webworkorders(WebWorkOrdersPresenter())
+            webworkordernotes(WebWorkOrderNotesPresenter())
+            web_apex_charts(WebChartsPresenter())
+            web_traditional_charts(WebChartsPresenter())
+            webdocumentation(WebDocumentationPresenter())
+            users()
+            // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
+            // real time updates of the data, and alert messages, if the data save failed.
+            webSocket("/update") {
+                val sessionId: String? = this.call.sessions.get<DAPSSession>()?.sessionId
+                connections[sessionId] = this
+                try {
+                    while (true) {
+                        when (val frame = incoming.receive()) {
+                            is Frame.Text -> {
+                                val text = frame.readText()
+                                // Send message to all the connections, except the messenger connection.
+                                for (conn in connections.values) {
+                                    if (conn != this) {
+                                        conn.outgoing.send(Frame.Text(text))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (e: ClosedReceiveChannelException) {
+                    log.info("connection closed. ignore.")
+                }
+                finally {
+                    connections.remove(sessionId)
+                }
+            }
         }
         // API authentication
         route("/api") {
-            login(cache, dapsJWT)
+            login()
         }
         authenticate("api") {
             route("/api") {
-                clients(cache)
-                billings(cache)
-                clientNotes(cache)
-                temps(cache)
+                billings()
+                client_notes()
+                clients()
+                client_perm_notes()
+                daps_staff_messages()
+                interview_guides()
+                paste_errors()
+                payments()
+                perm_notes()
+                perm_req_notes()
+                temps()
+                tempnotes()
+                temps_available_for_work()
+                work_order_notes()
+                work_orders()
             }
         }
     }

@@ -2,8 +2,13 @@ package model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import database.tables.BillingTable
+import model.deserializers.BooleanDeserializer
+import model.deserializers.DoubleDeserializer
+import model.deserializers.LocalDateDeserializer
+import model.deserializers.LocalTimeDeserializer
 import model.serializers.BooleanSerializer
 import model.serializers.DoubleSerializer
 import model.serializers.LocalDateSerializer
@@ -20,31 +25,42 @@ data class Billing @JsonCreator constructor(
     @JsonProperty(value = "employee_num", required = true)
     val employee_num: Int,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val wdate: Timestamp?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val hours: Double,
     @JsonSerialize(using = LocalTimeSerializer::class)
+    @JsonDeserialize(using = LocalTimeDeserializer::class)
     val start_time: Timestamp?,
     @JsonSerialize(using = LocalTimeSerializer::class)
+    @JsonDeserialize(using = LocalTimeDeserializer::class)
     val end_time: Timestamp?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val daps_fee: Double?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val total_fee: Double?,
     val worktype: String?,
     val work_order_num: Int?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val open: Boolean?,
     val pmt1: String?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val apamt1: Double?,
     val pmt2: String?,
     @JsonSerialize(using = DoubleSerializer::class)
+    @JsonDeserialize(using = DoubleDeserializer::class)
     val apamt2: Double?,
     val notesp: String?,
     @JsonSerialize(using = BooleanSerializer::class)
+    @JsonDeserialize(using = BooleanDeserializer::class)
     val pending: Boolean?,
     @JsonSerialize(using = LocalDateSerializer::class)
+    @JsonDeserialize(using = LocalDateDeserializer::class)
     val assigned_date: Timestamp?,
     val assigned_by: String?,
     val service_category: String?

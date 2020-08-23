@@ -5,11 +5,13 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version")
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'org.jetbrains.dokka'
 
 group 'com.daps.ent'
 version '0.0.1'
@@ -40,13 +42,12 @@ repositories {
 }
 
 dependencies {
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
-//    runtime group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.3.71'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines"
-    implementation "io.ktor:ktor-jackson:$ktor_version"
-    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
-//    compile "io.ktor.features.ContentNegotiation:$ktor_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines"
+    compile "io.ktor:ktor-jackson:$ktor_version"
+    compile "io.ktor:ktor-websockets:$ktor_version"
+    compile "io.ktor:ktor-auth-jwt:$ktor_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "io.ktor:ktor-server-core:$ktor_version"
@@ -55,79 +56,60 @@ dependencies {
     compile "io.ktor:ktor-freemarker:$ktor_version"
     compile "io.ktor:ktor-webjars:$ktor_version"
     compile "com.h2database:h2:$h2_version"
-//    compile "biz.paluch.redis:lettuce:$lettuce_version"
-    compile "com.mchange:c3p0:$c3p0_version"
-//    compile "org.webjars:jquery:$jquery_version"
-//    compile "org.webjars:bootstrap:$bootstrap_version"
-//    compile "org.webjars:popper.js:$popperjs_version"
-//    compile "org.webjars:datatables:$datatables_version"
-//    compile "org.webjars:datatables-plugins:$datatables_version"
-//    compile "org.webjars:momentjs:$momentjs_version"
+    compile "com.zaxxer:HikariCP:$hikari_cp_version"
     compile "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
     compile "org.jetbrains.exposed:exposed-core:$exposed_version"
     compile "org.jetbrains.exposed:exposed-java-time:$exposed_version"
     compile "org.jetbrains.exposed:exposed-dao:$exposed_version"
     compile 'me.tongfei:progressbar:0.8.1'
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
-    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-test-junit5', version: '1.3.72'
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version"
 }
+
+
+//task npm(type: Exec) {
+//    workingDir "$projectDir/react-front-end"
+////    commandLine 'npm', 'run', 'build'
+//    commandLine 'npm', 'run','start'
+//}
+// To run from command line:
+// ./gradlew run -Phost=localhost -Pport=5000
+//run() {
+////    run.dependsOn npm
+//    if (project.hasProperty("host")) {
+//        systemProperties["host"] = host
+//    }
+//    if (project.hasProperty("port")) {
+//        systemProperties["port"] = port
+//    }
+//}
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
-//jar {
-//    manifest {
-//        attributes 'Main-Class': 'application.ApplicationKt'
-//    }
-//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//}
-
-//task concert(type: JavaExec) {
-//    group = "Execution"
-//    description = "run both the ui & backend"
-//    classpath = sourceSets.main.runtimeClasspath
-//    main = 'application.ApplicationKt'
-//}
-
-//task npm(type: Exec) {
-////    commandLine "$projectDir/react-ui/node_modules/.bin/webpack", "app/index.js", "$buildDir/js/bundle.js"
-//    workingDir "$projectDir/react-ui"
-//    commandLine("npm")
-//    args("start")
-//    standardOutput = new ByteArrayOutputStream()
-//
-////    startScripts
-//}
-// This background stuff is being tracked at https://github.com/gradle/gradle/issues/1367
-//task background(type: Exec) {
-//    workingDir "$projectDir"
-//    commandLine "./gradlew", "run", "&"
-//    standardOutput = new ByteArrayOutputStream()
-//}
-//WorkQueue workQueue = workerExecutor.processIsolation() {
-//    ProcessWorkerSpec spec ->
-//        forkOptions {
-//            JavaForkOptions options ->
-//                options.maxHeapSize = "512m"
-//        }
-//}
-
-// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
 jar {
     manifest {
-        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+        attributes 'Main-Class': 'application.ApplicationKt'
     }
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
+//jar {
+//    manifest {
+//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+//    }
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//}
 
 /**
  * To run from command line:
  * ./gradlew csv --args=/Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
  * UPDATE: No longer using this because {@link JavaExec} does not support backslash escape characters, which are used
  * in the process method for status updates. :/
+ * UPDATE #2: This task now uses progressbar dependency, so i'm not sure if that fixed it or updating to Gradle 6.3.
  */
-//task csv(type: JavaExec) {
-//    group = "Execution"
-//    description = "Run the H2exCSVKt main class"
-//    classpath = sourceSets.main.runtimeClasspath
-//    main = 'utilities.H2exCSVKt'
-//}
+task csv(type: JavaExec) {
+    group = "Execution"
+    description = "Run the H2exCSVKt main class"
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'utilities.H2exCSVKt'
+}

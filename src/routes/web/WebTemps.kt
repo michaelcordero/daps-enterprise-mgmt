@@ -1,16 +1,13 @@
 package routes.web
 
-import io.ktor.application.call
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
-import security.DAPSSession
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.util.*
+import presenters.WebTempsPresenter
+import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
@@ -19,13 +16,14 @@ class WebTemps
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.webtemps() {
-get<WebTemps> {
-    val session: DAPSSession? = call.sessions.get<DAPSSession>()
-    if (session != null) {
-        call.respond(FreeMarkerContent("temps.ftl", null, "web-temps-tag"))
-    } else {
-        call.respond(FreeMarkerContent("weblogin.ftl", mapOf("user" to "null"), "webclient-e-tag"))
+fun Route.webtemps(presenter: WebTempsPresenter) {
+    get<WebTemps> {
+        call.respond(
+            FreeMarkerContent(
+                "temps.ftl",
+                mapOf("presenter" to presenter),
+                "web-temps-e-tag:${LocalDateTime.now()}"
+            )
+        )
     }
-}
 }

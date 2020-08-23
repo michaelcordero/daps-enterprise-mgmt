@@ -1,6 +1,7 @@
 package routes.api
 
-import cache.DataCache
+import application.cache
+import application.dapsJWT
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
@@ -12,7 +13,6 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.util.KtorExperimentalAPI
 import model.User
-import security.DAPSJWT
 import security.DAPSSecurity
 
 @KtorExperimentalLocationsAPI
@@ -25,16 +25,16 @@ class Logout
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
-fun Route.login(cache: DataCache, dapsjwt: DAPSJWT) {
+fun Route.login() {
     post<Login> {
         val post = call.receive<Parameters>()
-        val user: User? = cache.allUsers().find { user ->
+        val user: User? = cache.users_map().values.find { user ->
             user.email == post["user"] ?: "" && user.passwordHash == DAPSSecurity.hash(
                 post["password"] ?: ""
             )
         }
         if (user != null) {
-            call.respond(mapOf("token" to dapsjwt.sign(user.email)))
+            call.respond(mapOf("token" to dapsJWT.sign(user.email)))
         } else {
             call.respond(status = HttpStatusCode.Unauthorized, message = "invalid credentials")
         }
