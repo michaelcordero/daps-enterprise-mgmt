@@ -187,8 +187,9 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // None authentication
-        register(RegisterPresenter())
         index()
+        register(RegisterPresenter())
+        webresetpassword(WebResetPasswordPresenter())
         weblogout()
         // Initial web authentication
         authenticate("form") {
