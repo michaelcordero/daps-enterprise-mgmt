@@ -18,5 +18,6 @@ enum class JSONRouteValues {
     TEMPS_AVAILABLE_FOR_WORK,
     USERS,
     WORK_ORDER_NOTES,
-    WORK_ORDERS
+    WORK_ORDERS,
+    RESET_PASSWORD
 }
