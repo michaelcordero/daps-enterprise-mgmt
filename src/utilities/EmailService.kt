@@ -25,7 +25,7 @@ object EmailService {
             to = mutableMapOf(user.email to user.first_name+" "+user.last_name)
             html = "<h1>This is a password reset notification for ${user.first_name+" "+user.last_name}</h1>\n" +
                     "<p>Your new password has been reset to: $password </p>" +
-                    "<p>You may change it in the DAPS application at anytime. Under the view profile page.</p>"
+                    "<p>You may change it in the DAPS application at anytime, under the view profile page.</p>"
         }.sendAsync()
     }
 }
