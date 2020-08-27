@@ -8,7 +8,7 @@ import security.DAPSSession
 import kotlin.random.Random
 
 @KtorExperimentalAPI
-class RegisterPresenter : AbstractPresenter() {
+open class RegisterPresenter : AbstractPresenter() {
 
     fun createUser(
         first_name: String,

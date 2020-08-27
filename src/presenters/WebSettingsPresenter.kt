@@ -1,3 +1,3 @@
 package presenters
 
-class WebSettingsPresenter: AbstractPresenter()
+class WebSettingsPresenter: RegisterPresenter()

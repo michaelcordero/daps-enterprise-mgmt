@@ -102,6 +102,7 @@ interface UserQuery {
             }) {
                 it[ID] = user.id
                 it[first_name] = user.first_name
+                it[last_name] = user.last_name
                 it[email] = user.email
                 it[passwordHash] = user.passwordHash
                 it[role] = user.role.key
