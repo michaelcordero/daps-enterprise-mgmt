@@ -20,11 +20,11 @@ object EmailService {
     fun send_email(user: User,password: String): Job {
        return mailer.compose().apply {
             fromEmail = "corderosoft@gmail.com"
-            fromName = "DAPS Application"
-            subject = "PASSWORD RESET"
+            fromName = "Dental Auxiliary Placement Services"
+            subject = "Password Reset"
             to = mutableMapOf(user.email to user.first_name+" "+user.last_name)
-            html = "<h1>This is a password reset notification for ${user.first_name+" "+user.last_name}</h1>\n" +
-                    "<p>Your new password has been reset to: $password </p>" +
+            html = "<p>This is a password reset notification for ${user.first_name+" "+user.last_name}<p>\n" +
+                    "<p>Your new password has been reset to: <b>$password</b></p>" +
                     "<p>You may change it in the DAPS application at anytime, under the settings page.</p>"
         }.sendAsync()
     }

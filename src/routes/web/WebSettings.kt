@@ -68,48 +68,52 @@ fun Route.websettings(presenter: WebSettingsPresenter) {
                     // Verify inputs
                     val verify_password: String = post["verify_password"] ?: return@post call.redirect(it)
                     val current_password: String = post["current_password"] ?: return@post call.redirect(it)
-                    if (DAPSSecurity.hash(current_password) != old_user.passwordHash) {
-                        call.respond(
-                            FreeMarkerContent(
-                                "settings.ftl",
-                                mapOf(
-                                    "presenter" to presenter,
-                                    "user" to old_user,
-                                    "validator" to RegisterPresenter.Validator,
-                                    "error" to "incorrect current password"
-                                ),
-                                "settings-etag:${LocalDateTime.now()}"
+                    when {
+                        DAPSSecurity.hash(current_password) != old_user.passwordHash -> {
+                            call.respond(
+                                FreeMarkerContent(
+                                    "settings.ftl",
+                                    mapOf(
+                                        "presenter" to presenter,
+                                        "user" to old_user,
+                                        "validator" to RegisterPresenter.Validator,
+                                        "error" to "incorrect current password"
+                                    ),
+                                    "settings-etag:${LocalDateTime.now()}"
+                                )
                             )
-                        )
-                    } else if (verify_password != new_password) {
-                        call.respond(
-                            FreeMarkerContent(
-                                "settings.ftl",
-                                mapOf(
-                                    "presenter" to presenter,
-                                    "user" to old_user,
-                                    "validator" to RegisterPresenter.Validator,
-                                    "error" to "verify password & new password(s) do not match"
-                                ),
-                                "settings-etag:${LocalDateTime.now()}"
+                        }
+                        verify_password != new_password -> {
+                            call.respond(
+                                FreeMarkerContent(
+                                    "settings.ftl",
+                                    mapOf(
+                                        "presenter" to presenter,
+                                        "user" to old_user,
+                                        "validator" to RegisterPresenter.Validator,
+                                        "error" to "verify password & new password(s) do not match"
+                                    ),
+                                    "settings-etag:${LocalDateTime.now()}"
+                                )
                             )
-                        )
-                    } else {
-                        val edited_user: User = old_user.copy(passwordHash = DAPSSecurity.hash(new_password))
-                        cache.edit(edited_user, session!!)
-                        val saved_user: User = cache.users_map()[edited_user.id] ?: error("could not find user")
-                        call.respond(
-                            FreeMarkerContent(
-                                "settings.ftl",
-                                mapOf(
-                                    "presenter" to presenter,
-                                    "user" to saved_user,
-                                    "validator" to RegisterPresenter.Validator,
-                                    "password_updated" to "password updated"
-                                ),
-                                "settings-etag:${LocalDateTime.now()}"
+                        }
+                        else -> {
+                            val edited_user: User = old_user.copy(passwordHash = DAPSSecurity.hash(new_password))
+                            cache.edit(edited_user, session!!)
+                            val saved_user: User = cache.users_map()[edited_user.id] ?: error("could not find user")
+                            call.respond(
+                                FreeMarkerContent(
+                                    "settings.ftl",
+                                    mapOf(
+                                        "presenter" to presenter,
+                                        "user" to saved_user,
+                                        "validator" to RegisterPresenter.Validator,
+                                        "password_updated" to "password updated"
+                                    ),
+                                    "settings-etag:${LocalDateTime.now()}"
+                                )
                             )
-                        )
+                        }
                     }
                 } else {
                     // We're changing other attributes
