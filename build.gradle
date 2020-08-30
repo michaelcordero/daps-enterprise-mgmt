@@ -39,6 +39,7 @@ repositories {
     mavenLocal()
     jcenter()
     maven { url 'https://kotlin.bintray.com/ktor' }
+    maven { url 'https://dl.bintray.com/icerockdev/backend'}
 }
 
 dependencies {
@@ -62,6 +63,7 @@ dependencies {
     compile "org.jetbrains.exposed:exposed-java-time:$exposed_version"
     compile "org.jetbrains.exposed:exposed-dao:$exposed_version"
     compile 'me.tongfei:progressbar:0.8.1'
+    compile "com.icerockdev.service:email-service:0.0.3"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version"
 }

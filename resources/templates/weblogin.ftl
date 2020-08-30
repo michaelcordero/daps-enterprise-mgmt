@@ -23,7 +23,7 @@
         <input type="password" id="password" name="password" class="form-control" placeholder="Password">
         </div>
         <#--noinspection HtmlUnknownTarget,HtmlUnknownTarget-->
-        <a href="/password" class="links">Forgot Password? </a>
+        <a href="/reset_password" class="links">Forgot Password? </a>
         <div class="checkbox mb-3">
             <label>
                 <input type="checkbox" value="remember-me"> Remember me

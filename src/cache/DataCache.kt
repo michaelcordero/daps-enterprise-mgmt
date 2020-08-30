@@ -10,6 +10,7 @@ interface DataCache {
     fun <T> add(obj: T, session: DAPSSession): T
     fun <T> edit(obj: T, session: DAPSSession)
     fun <T> remove(obj: T, session: DAPSSession)
+    fun reset_password(email: String)
     fun billings_map(): Map<Int,Billing>
     fun bill_types_map(): Map<String,BillType>
     fun client_files_map(): Map<Int,ClientFile>

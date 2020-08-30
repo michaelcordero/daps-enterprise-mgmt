@@ -1,16 +1,21 @@
 package cache
 
+import application.cache
 import application.connections
 import cache.JSONRouteValues.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import database.queries.DataQuery
 import io.ktor.http.cio.websocket.*
+import io.ktor.util.*
 import kotlinx.coroutines.*
 import model.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import security.DAPSSecurity
 import security.DAPSSession
+import utilities.EmailService
+import utilities.RandomPassword
 import java.util.concurrent.ConcurrentHashMap
 
 val log: Logger = LoggerFactory.getLogger(InMemoryCache::class.java)
@@ -760,6 +765,29 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
             }
         } catch (e: Exception) {
             log.error("Update failed", e)
+        }
+    }
+
+    @KtorExperimentalAPI
+    override fun reset_password(email: String) {
+        // Find the user
+        val old_user: User = cache.users_map().values.first { u -> u.email == email }
+        // Generate Password
+        val password: String = RandomPassword.password()
+        // Change the password
+        val new_user: User = old_user.copy(passwordHash = DAPSSecurity.hash(password))
+        // Write to the database
+        dq.updateUser(new_user)
+        // Write to cache
+        users.replace(old_user.id, new_user)
+        // Send the email
+        CoroutineScope(Dispatchers.IO).launch {
+            val job = EmailService.send_email(new_user,password)
+            job.invokeOnCompletion { throwable ->
+                if (throwable != null) {
+                    log.info("Email failed. Cause: $throwable.message")
+                }
+            }
         }
     }
 

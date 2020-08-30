@@ -187,8 +187,9 @@ fun Application.module() {  //testing: Boolean = false
             resources("static")
         }
         // None authentication
-        register(RegisterPresenter())
         index()
+        register(RegisterPresenter())
+        webresetpassword(WebResetPasswordPresenter())
         weblogout()
         // Initial web authentication
         authenticate("form") {
@@ -235,6 +236,7 @@ fun Application.module() {  //testing: Boolean = false
             web_apex_charts(WebChartsPresenter())
             web_traditional_charts(WebChartsPresenter())
             webdocumentation(WebDocumentationPresenter())
+            websettings(WebSettingsPresenter())
             users()
             // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
             // real time updates of the data, and alert messages, if the data save failed.
