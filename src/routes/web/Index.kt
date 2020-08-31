@@ -1,14 +1,13 @@
 package routes.web
 
-import io.ktor.application.call
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
+import application.cache
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import model.User
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
 import security.DAPSSession
@@ -25,10 +24,23 @@ fun Route.index() {
     // If the user has not already been authenticated we want to redirect to the login page otherwise dashboard.
     get<Index> {
         val session: DAPSSession? = call.sessions.get<DAPSSession>()
-        if (session?.sessionId != null ) {
-            call.respond(FreeMarkerContent("welcome.ftl", mapOf("emailId" to session.emailId, "presenter" to WelcomePresenter()), "welcome-etag"))
+        if (session?.sessionId != null) {
+            val user: User? = cache.users_map().values.find { user -> user.email == session.emailId }
+            call.respond(
+                FreeMarkerContent(
+                    "welcome.ftl",
+                    mapOf("emailId" to session.emailId, "presenter" to WelcomePresenter(), "user" to user),
+                    "welcome-etag"
+                )
+            )
         } else {
-            call.respond(FreeMarkerContent("weblogin.ftl", mapOf("emailId" to null, "presenter" to WebLoginPresenter()), "web-login-etag"))
+            call.respond(
+                FreeMarkerContent(
+                    "weblogin.ftl",
+                    mapOf("emailId" to null, "presenter" to WebLoginPresenter()),
+                    "web-login-etag"
+                )
+            )
         }
     }
 }
