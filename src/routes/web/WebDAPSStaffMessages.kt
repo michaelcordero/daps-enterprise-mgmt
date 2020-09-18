@@ -1,14 +1,13 @@
 package routes.web
 
-import io.ktor.application.call
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.util.*
 import presenters.WebDAPSStaffMessagesPresenter
+import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
 @KtorExperimentalAPI
@@ -23,7 +22,7 @@ fun Route.webdapsstaffmessages(presenter: WebDAPSStaffMessagesPresenter) {
                 FreeMarkerContent(
                     "daps-staff-messages.ftl",
                     mapOf("presenter" to presenter),
-                    "daps-staff-messages-e-tag"
+                    "daps-staff-messages-e-tag:${LocalDateTime.now()}"
                 )
             )
     }

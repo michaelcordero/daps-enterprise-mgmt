@@ -16,6 +16,7 @@ import model.User
 import presenters.RegisterPresenter
 import security.DAPSRole
 import security.DAPSSession
+import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
 @Location("/register")
@@ -71,7 +72,7 @@ fun Route.register(presenter: RegisterPresenter) {
                     "error" to it.error,
                     "validator" to RegisterPresenter.Validator,
                     "presenter" to RegisterPresenter()
-                ), "some-etag"
+                ), "register-etag:${LocalDateTime.now()}"
             )
         )
     }

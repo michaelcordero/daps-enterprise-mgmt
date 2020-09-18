@@ -11,6 +11,7 @@ import model.User
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
 import security.DAPSSession
+import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
 @Location("")
@@ -30,7 +31,7 @@ fun Route.index() {
                 FreeMarkerContent(
                     "welcome.ftl",
                     mapOf("emailId" to session.emailId, "presenter" to WelcomePresenter(), "user" to user),
-                    "welcome-etag"
+                    "welcome-etag:${LocalDateTime.now()}"
                 )
             )
         } else {
@@ -38,7 +39,7 @@ fun Route.index() {
                 FreeMarkerContent(
                     "weblogin.ftl",
                     mapOf("emailId" to null, "presenter" to WebLoginPresenter()),
-                    "web-login-etag"
+                    "web-login-etag:${LocalDateTime.now()}"
                 )
             )
         }
