@@ -16,7 +16,7 @@
     <script src="/static/js/settings.js"></script>
     <script src="/static/js/app.js"></script>
 </head>
-<body>
+<body onunload="">
 <div class="splash active">
     <div class="splash-icon"></div>
 </div>

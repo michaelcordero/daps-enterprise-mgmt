@@ -35,7 +35,7 @@
             <div class="cloud"></div>
         </div>
     </div>
-    <body>
+    <body onunload="">
     <div id="layout" style="z-index: 1">
         <div class="content-subhead" id="main">
             <div class="header">

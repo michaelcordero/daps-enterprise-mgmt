@@ -39,7 +39,6 @@ import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
-import java.time.ZonedDateTime
 import kotlin.collections.set
 import kotlin.time.ExperimentalTime
 
@@ -160,7 +159,7 @@ fun Application.module() {  //testing: Boolean = false
     // cache control
     install(CachingHeaders) {
         options {
-            CachingOptions(CacheControl.NoStore(null), expires = ZonedDateTime.now())
+            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
 //            CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 0, mustRevalidate = true, visibility = CacheControl.Visibility.Public))
         }
     }
