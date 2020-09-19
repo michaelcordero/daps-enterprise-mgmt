@@ -39,6 +39,7 @@ import security.DAPSJWT
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
+import java.time.ZonedDateTime
 import kotlin.collections.set
 import kotlin.time.ExperimentalTime
 
@@ -94,8 +95,7 @@ fun Application.module() {  //testing: Boolean = false
             skipWhen { call ->
                 try {
                     val session = call.sessions.get<DAPSSession>()
-                    dapsJWT.verifier.verify(session?.sessionId)
-                    return@skipWhen true
+                    return@skipWhen session != null
                 } catch (e: Exception){
                     return@skipWhen false
                 }
@@ -133,10 +133,14 @@ fun Application.module() {  //testing: Boolean = false
         }
     }
     // This adds automatically Date and Server headers to each response
-    install(DefaultHeaders)
+    install(DefaultHeaders) {
+//        header("Cache-Control", "no-cache, no-store, must-revalidate")
+//        header("Pragma", "no-cache")
+//        header("Expires", "0")
+    }
     // This feature enables truly open access across domain boundaries
 //    install(CORS) {
-//        host("localhost:4000") to specify client app
+        //host("localhost:4000") //to specify client app
 //        anyHost()
 //        method(HttpMethod.Options)
 //        method(HttpMethod.Get)
@@ -156,7 +160,8 @@ fun Application.module() {  //testing: Boolean = false
     // cache control
     install(CachingHeaders) {
         options {
-            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+            CachingOptions(CacheControl.NoStore(null), expires = ZonedDateTime.now())
+//            CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 0, mustRevalidate = true, visibility = CacheControl.Visibility.Public))
         }
     }
     // SESSION cookie
@@ -185,6 +190,7 @@ fun Application.module() {  //testing: Boolean = false
         register(RegisterPresenter())
         webresetpassword(WebResetPasswordPresenter())
         weblogout()
+        session()
         // Initial web authentication
         authenticate("form") {
             weblogin(WebLoginPresenter())
