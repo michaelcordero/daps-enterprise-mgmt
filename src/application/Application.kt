@@ -159,7 +159,12 @@ fun Application.module() {  //testing: Boolean = false
     // cache control
     install(CachingHeaders) {
         options {
-            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+            when(it.contentType?.withoutParameters()) {
+                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                else -> CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+            }
+//            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
 //            CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 0, mustRevalidate = true, visibility = CacheControl.Visibility.Public))
         }
     }
