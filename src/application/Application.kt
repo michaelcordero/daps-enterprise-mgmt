@@ -209,6 +209,7 @@ fun Application.module() {  //testing: Boolean = false
                 temps()
                 work_order_notes()
                 work_orders()
+                users()
             }
             welcome(WelcomePresenter())
             webbillings(WebBillingsPresenter())
@@ -231,7 +232,7 @@ fun Application.module() {  //testing: Boolean = false
             web_traditional_charts(WebChartsPresenter())
             webdocumentation(WebDocumentationPresenter())
             websettings(WebSettingsPresenter())
-            users()
+            webusers(WebUsersPresenter())
             // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
             // real time updates of the data, and alert messages, if the data save failed.
             webSocket("/update") {
@@ -280,6 +281,7 @@ fun Application.module() {  //testing: Boolean = false
                 temps_available_for_work()
                 work_order_notes()
                 work_orders()
+                users()
             }
         }
     }
