@@ -36,6 +36,7 @@ import presenters.*
 import routes.api.*
 import routes.web.*
 import security.DAPSJWT
+import security.DAPSRole
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
@@ -96,6 +97,17 @@ fun Application.module() {  //testing: Boolean = false
                     val session = call.sessions.get<DAPSSession>()
                     dapsJWT.verifier.verify(session?.sessionId)
                     return@skipWhen true
+                } catch (e: Exception){
+                    return@skipWhen false
+                }
+            }
+        }
+        basic("admin") {
+            skipWhen { call ->
+                try {
+                    val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                    val user: User? = cache.users_map().values.find { user -> user.email == session?.emailId }
+                    return@skipWhen user?.role == DAPSRole.ADMIN
                 } catch (e: Exception){
                     return@skipWhen false
                 }
@@ -232,7 +244,9 @@ fun Application.module() {  //testing: Boolean = false
             web_traditional_charts(WebChartsPresenter())
             webdocumentation(WebDocumentationPresenter())
             websettings(WebSettingsPresenter())
-            webusers(WebUsersPresenter())
+            authenticate("admin") {
+                webusers(WebUsersPresenter())
+            }
             // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
             // real time updates of the data, and alert messages, if the data save failed.
             webSocket("/update") {
