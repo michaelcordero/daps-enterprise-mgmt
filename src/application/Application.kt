@@ -167,8 +167,12 @@ fun Application.module() {  //testing: Boolean = false
     install(PartialContent)
     // cache control
     install(CachingHeaders) {
-        options {
-            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+        options { outgoing ->
+            when(outgoing.contentType?.withoutParameters()) {
+                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                else -> CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+            }
         }
     }
     // SESSION cookie
