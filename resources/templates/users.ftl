@@ -18,7 +18,7 @@
                                 <th>Id</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
-                                <th>Password Hash</th>
+<#--                                <th>Password</th>-->
                                 <th>Email </th>
                                 <th>Role</th>
                             </tr>
@@ -93,7 +93,7 @@
                     {label: 'Id', name: 'id'},
                     {label: 'First Name', name: 'first_name'},
                     {label: 'Last Name', name: 'last_name'},
-                    {label: 'Password', name: 'passwordHash'},
+                    {label: 'Password', name: 'passwordHash', type: 'password'},
                     {label: 'Email', name: 'email'},
                     {label: 'Role', name: 'role'},
                 ]
@@ -113,7 +113,7 @@
                         {data: "id"},
                         {data: "first_name"},
                         {data: "last_name"},
-                        {data: "passwordHash"},
+                        // {data: "passwordHash"},
                         {data: "email"},
                         {data: "role"},
                     ],
