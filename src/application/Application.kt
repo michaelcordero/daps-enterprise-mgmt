@@ -36,6 +36,7 @@ import presenters.*
 import routes.api.*
 import routes.web.*
 import security.DAPSJWT
+import security.DAPSRole
 import security.DAPSSecurity
 import security.DAPSSession
 import server.statuses
@@ -101,6 +102,17 @@ fun Application.module() {  //testing: Boolean = false
                 }
             }
         }
+        basic("admin") {
+            skipWhen { call ->
+                try {
+                    val session: DAPSSession? = call.sessions.get<DAPSSession>()
+                    val user: User? = cache.users_map().values.find { user -> user.email == session?.emailId }
+                    return@skipWhen user?.role == DAPSRole.ADMIN
+                } catch (e: Exception){
+                    return@skipWhen false
+                }
+            }
+        }
         form("form") {
             userParamName = "emailId"
             passwordParamName = "password"
@@ -155,8 +167,12 @@ fun Application.module() {  //testing: Boolean = false
     install(PartialContent)
     // cache control
     install(CachingHeaders) {
-        options {
-            CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+        options { outgoing ->
+            when(outgoing.contentType?.withoutParameters()) {
+                ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
+                else -> CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
+            }
         }
     }
     // SESSION cookie
@@ -209,6 +225,7 @@ fun Application.module() {  //testing: Boolean = false
                 temps()
                 work_order_notes()
                 work_orders()
+                users()
             }
             welcome(WelcomePresenter())
             webbillings(WebBillingsPresenter())
@@ -231,7 +248,9 @@ fun Application.module() {  //testing: Boolean = false
             web_traditional_charts(WebChartsPresenter())
             webdocumentation(WebDocumentationPresenter())
             websettings(WebSettingsPresenter())
-            users()
+            authenticate("admin") {
+                webusers(WebUsersPresenter())
+            }
             // WebSocket only handles adding/removing connections. InMemoryCache is the central location for
             // real time updates of the data, and alert messages, if the data save failed.
             webSocket("/update") {
@@ -280,6 +299,7 @@ fun Application.module() {  //testing: Boolean = false
                 temps_available_for_work()
                 work_order_notes()
                 work_orders()
+                users()
             }
         }
     }

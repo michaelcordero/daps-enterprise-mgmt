@@ -4,7 +4,8 @@ import java.io.File
 
 class DataPool {
     // File where the database is to be stored.
-    val dir: File = File("build/db")
+    private val database_directory: String = System.getProperty("database") ?: "build/db" // clean up with Docker implementation
+    val dir: File = File( database_directory )
     // Pool of JDBC Connections used
     val pool: HikariDataSource = HikariDataSource().apply {
         jdbcUrl = "jdbc:h2:file:${dir.canonicalFile.absolutePath}"
