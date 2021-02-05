@@ -9,7 +9,7 @@ import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalTime
 
-class JavaLocalTimeColumnType : ColumnType(), IDateColumnType {
+class JavaLocalTimeColumnType(override val hasTimePart: Boolean) : ColumnType(), IDateColumnType {
     override fun sqlType(): String {
         return currentDialect.dataTypeProvider.dateTimeType()
     }
@@ -35,5 +35,5 @@ class JavaLocalTimeColumnType : ColumnType(), IDateColumnType {
 /**
  * A LocalTime column to store only time
  */
-fun Table.localtime(name: String): Column<LocalTime> = registerColumn(name, JavaLocalTimeColumnType())
+fun Table.localtime(name: String): Column<LocalTime> = registerColumn(name, JavaLocalTimeColumnType(true))
 
