@@ -26,7 +26,12 @@ version '0.0.1'
 mainClassName = 'application.ApplicationKt'
 /* In fact Kotlin is building a class to encapsulate your main function,
    named with the same name of your file - with Title Case. */
-
+// experimental Kotlin feature. Turn off for now.
+//compileKotlin {
+//    kotlinOptions.useIR = true
+//}
+// how to update gradle wrapper
+// ./gradlew wrapper --gradle-version 4.6 --distribution-type all
 
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']
