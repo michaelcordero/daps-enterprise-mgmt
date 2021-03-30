@@ -49,13 +49,13 @@ val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.LIGHT
-val host = System.getProperty("host") ?: "localhost"
+val host = System.getProperty("host") ?: "0.0.0.0"
 //NetworkInterface.getNetworkInterfaces()
 //.toList().stream()
 //.flatMap { i -> i.interfaceAddresses.stream() }
 //.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
 //.toList().first().address.hostAddress.toString()
-val port = System.getProperty("port") ?: "8080"
+val port = System.getProperty("port") ?: "80"
 val connections: MutableMap<String?,DefaultWebSocketServerSession> = mutableMapOf()
 
 @ExperimentalTime
