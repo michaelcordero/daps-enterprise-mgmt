@@ -55,7 +55,7 @@ val host = System.getProperty("host") ?: "0.0.0.0"
 //.flatMap { i -> i.interfaceAddresses.stream() }
 //.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
 //.toList().first().address.hostAddress.toString()
-val port = System.getProperty("port") ?: "80"
+val port = System.getProperty("port") ?: "8080"
 val connections: MutableMap<String?,DefaultWebSocketServerSession> = mutableMapOf()
 
 @ExperimentalTime
