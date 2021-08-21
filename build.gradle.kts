@@ -104,27 +104,20 @@ dependencies {
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
-//tasks.register("jar", Jar::class.java) {
-//    manifest {
-//       // attributes = 'Main-Class': 'application.ApplicationKt'
-//        attributes("Main-Class: application.ApplicationKt")
-//    }
-////    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
-////    from { configurations.implementation.get().allDependencies.stream().collect()}
-//}
-//tasks.getByName<Jar>("jar") {
-//    manifest {
-//        attributes("Main-class: application.ApplicationKt")
-//    }
-//    from ( configurations.implementation.get().allDependencies )
-//}
+tasks.jar {
+    manifest {
+        attributes(Pair("Main-Class", "application.ApplicationKt"))
+    }
+    from (configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it)})
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 /**
  * To run from command line:
  * ./gradlew csv --args=/Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
  * UPDATE: No longer using this because {@link JavaExec} does not support backslash escape characters, which are used
  * in the process method for status updates. :/
- * UPDATE #2: This task now uses progressbar dependency, so i'm not sure if that fixed it or updating to Gradle 6.3.
+ * UPDATE #2: This task now uses progressbar dependency, so I'm not sure if that fixed it or updating to Gradle 6.3.
  */
 tasks.register("csv", JavaExec::class.java) {
         group = "Execution"
