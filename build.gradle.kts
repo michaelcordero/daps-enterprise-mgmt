@@ -129,5 +129,5 @@ tasks.register("csv", JavaExec::class.java) {
         group = "Execution"
         description = "Run the H2exCSVKt main class"
         classpath = sourceSets.main.get().runtimeClasspath
-        main = "utilities.H2exCSVKt"
+        mainClass.set("utilities.H2exCSVKt")
 }
