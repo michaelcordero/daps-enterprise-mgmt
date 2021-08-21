@@ -125,9 +125,9 @@ dependencies {
  * in the process method for status updates. :/
  * UPDATE #2: This task now uses progressbar dependency, so i'm not sure if that fixed it or updating to Gradle 6.3.
  */
-//task csv(type: JavaExec) {
-//    group = "Execution"
-//    description = "Run the H2exCSVKt main class"
-//    classpath = sourceSets.main.runtimeClasspath
-//    main = 'utilities.H2exCSVKt'
-//}
+tasks.register("csv", JavaExec::class.java) {
+        group = "Execution"
+        description = "Run the H2exCSVKt main class"
+        classpath = sourceSets.main.get().runtimeClasspath
+        main = "utilities.H2exCSVKt"
+}
