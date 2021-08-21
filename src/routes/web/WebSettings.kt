@@ -7,11 +7,11 @@ import io.ktor.application.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
-import io.ktor.util.*
 import model.User
 import presenters.RegisterPresenter
 import presenters.WebSettingsPresenter
@@ -23,11 +23,9 @@ import kotlin.time.TimedValue
 import kotlin.time.measureTimedValue
 
 @KtorExperimentalLocationsAPI
-@KtorExperimentalAPI
 @Location("/websettings")
 data class WebSettings(val error: String = "")
 
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 @ExperimentalTime
 fun Route.websettings(presenter: WebSettingsPresenter) {

@@ -80,8 +80,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("me.tongfei:progressbar:0.8.1")
     implementation("com.icerockdev.service:email-service:0.1.1")
-    implementation("io.ktor:ktor-server-tests:$ktor_version")
-    implementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version")
 }
 
 

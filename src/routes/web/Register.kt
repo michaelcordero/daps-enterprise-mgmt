@@ -11,7 +11,6 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.Route
 import io.ktor.sessions.*
-import io.ktor.util.*
 import model.User
 import presenters.RegisterPresenter
 import security.DAPSRole
@@ -26,7 +25,6 @@ data class Register(
     val error: String = ""
 )
 
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.register(presenter: RegisterPresenter) {
     post<Register> {

@@ -1,22 +1,19 @@
 package routes.web
 
-import io.ktor.application.call
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
 import presenters.WebDAPSStaffPresenter
 import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
-@KtorExperimentalAPI
+
 @Location("/webdapsstaff")
 class WebDAPSStaff
 
-@KtorExperimentalAPI
+
 @KtorExperimentalLocationsAPI
 fun Route.webdapsstaff(presenter: WebDAPSStaffPresenter) {
     get<WebDAPSStaff> {

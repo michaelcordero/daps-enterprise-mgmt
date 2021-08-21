@@ -5,11 +5,12 @@ import application.log
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
+import io.ktor.locations.put
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
-import io.ktor.util.*
 import model.PermNote
 import security.DAPSSession
 import kotlin.time.ExperimentalTime
@@ -18,12 +19,10 @@ import kotlin.time.measureTimedValue
 
 
 @KtorExperimentalLocationsAPI
-@KtorExperimentalAPI
 @Location("/perm_notes")
 class PermNotes
 
 @ExperimentalTime
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.perm_notes() {
     get<PermNotes> {

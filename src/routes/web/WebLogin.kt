@@ -1,20 +1,15 @@
 package routes.web
 
 import application.dapsJWT
-import io.ktor.application.call
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.principal
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.locations.*
 import io.ktor.locations.post
-import io.ktor.response.respond
+import io.ktor.response.*
 import io.ktor.routing.Route
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.sessions.*
 import model.User
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter
@@ -24,7 +19,7 @@ import security.DAPSSession
 @Location("/weblogin")
 data class WebLogin (val emailId: String = "", val error: String = "")
 
-@KtorExperimentalAPI
+
 @KtorExperimentalLocationsAPI
 fun Route.weblogin(presenter: WebLoginPresenter) {
     get<WebLogin> {

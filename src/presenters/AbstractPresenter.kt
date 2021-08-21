@@ -2,7 +2,6 @@ package presenters
 
 import application.Theme
 import application.cache
-import io.ktor.util.KtorExperimentalAPI
 import model.User
 import security.DAPSSecurity
 
@@ -14,7 +13,6 @@ abstract class AbstractPresenter {
         return cache.users_map().filter { map -> map.value.email == email }.values.firstOrNull()
     }
 
-    @KtorExperimentalAPI
     fun hashPassword(password: String): String {
         return DAPSSecurity.hash(password)
     }

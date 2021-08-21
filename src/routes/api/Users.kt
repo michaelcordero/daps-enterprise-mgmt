@@ -5,11 +5,12 @@ import application.log
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
+import io.ktor.locations.put
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
-import io.ktor.util.*
 import model.User
 import security.DAPSRole
 import security.DAPSSecurity
@@ -22,7 +23,6 @@ import kotlin.time.measureTimedValue
 @KtorExperimentalLocationsAPI
 @Location("/users")
 class Users {
-    @KtorExperimentalAPI
     companion object Processor {
         fun processUser(user_input: User) : User {
             var passwordHash: String = user_input.passwordHash
@@ -53,7 +53,6 @@ class Users {
 }
 
 @ExperimentalTime
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.users() {
     // READ HTTP METHOD
@@ -77,7 +76,7 @@ fun Route.users() {
             val user_input: User = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val session: DAPSSession? = call.sessions.get<DAPSSession>()
-                val saved: User? = cache.add(Users.processUser(user_input), session!!)
+                val saved: User = cache.add(Users.processUser(user_input), session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")

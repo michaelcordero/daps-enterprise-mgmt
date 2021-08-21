@@ -1,13 +1,12 @@
 package server
 
 import application.log
-import io.ktor.application.call
-import io.ktor.freemarker.FreeMarkerContent
-import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.request.uri
-import io.ktor.response.respond
-import io.ktor.response.respondText
+import io.ktor.application.*
+import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
 import presenters.WebLoginPresenter
 import presenters.WebStatusPresenter
 

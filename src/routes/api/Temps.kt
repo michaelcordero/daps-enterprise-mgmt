@@ -5,11 +5,12 @@ import application.log
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
+import io.ktor.locations.put
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
-import io.ktor.util.*
 import model.Temp
 import security.DAPSSession
 import kotlin.time.ExperimentalTime
@@ -21,7 +22,6 @@ import kotlin.time.measureTimedValue
 class Temps
 
 @ExperimentalTime
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.temps() {
     // READ HTTP Method
@@ -44,7 +44,7 @@ fun Route.temps() {
             val temp: Temp = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val session: DAPSSession? = call.sessions.get<DAPSSession>()
-                val saved: Temp? = cache.add(temp,session!!)
+                val saved: Temp = cache.add(temp,session!!)
                 call.respond(status = HttpStatusCode.OK, message = mapOf("data" to listOf(saved)))
             }
             log.info("Response took: ${time.duration}")

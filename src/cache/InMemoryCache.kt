@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import database.queries.DataQuery
 import io.ktor.http.cio.websocket.*
-import io.ktor.util.*
 import kotlinx.coroutines.*
 import model.*
 import org.slf4j.Logger
@@ -768,7 +767,6 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         }
     }
 
-    @KtorExperimentalAPI
     override fun reset_password(email: String) {
         // Find the user
         val old_user: User = cache.users_map().values.first { u -> u.email == email }

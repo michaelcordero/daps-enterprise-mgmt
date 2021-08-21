@@ -5,16 +5,15 @@ import io.ktor.freemarker.*
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.util.*
 import presenters.WebClientNotesPresenter
 import java.time.LocalDateTime
 
-@KtorExperimentalAPI
+
 @KtorExperimentalLocationsAPI
 @Location("/webclientnotes")
 class WebClientNotes
 
-@KtorExperimentalAPI
+
 @KtorExperimentalLocationsAPI
 fun Route.webclientnotes(presenter: WebClientNotesPresenter) {
     get<WebClientNotes> {

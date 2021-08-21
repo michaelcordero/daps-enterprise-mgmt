@@ -25,7 +25,6 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.sessions.*
-import io.ktor.util.*
 import io.ktor.webjars.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -60,7 +59,6 @@ val connections: MutableMap<String?,DefaultWebSocketServerSession> = mutableMapO
 
 @ExperimentalTime
 @ExperimentalStdlibApi
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun main(args: Array<String>) {
     log.info("Program started with args: %s".format(args.joinToString(" ")))
@@ -76,7 +74,6 @@ fun main(args: Array<String>) {
 }
 
 @ExperimentalTime
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf
 //@JvmOverloads
@@ -159,7 +156,7 @@ fun Application.module() {  //testing: Boolean = false
 //        header(HttpHeaders.Authorization)
 //        allowCredentials = true
 //    }
-    // This uses use the logger to log every call (request/response)
+    // This uses the logger to log every call (request/response)
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
