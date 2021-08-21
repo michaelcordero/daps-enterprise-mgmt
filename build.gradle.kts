@@ -104,18 +104,19 @@ dependencies {
 
 // To run from command line with java execute:
 // ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar
-//jar {
+//tasks.register("jar", Jar::class.java) {
 //    manifest {
-//        attributes 'Main-Class': 'application.ApplicationKt'
+//       // attributes = 'Main-Class': 'application.ApplicationKt'
+//        attributes("Main-Class: application.ApplicationKt")
 //    }
-//    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
+////    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
+////    from { configurations.implementation.get().allDependencies.stream().collect()}
 //}
-// ./gradlew jar && java -jar ./build/libs/daps-enterprise-mgmt-0.0.1.jar /Users/michaelcordero/Documents/DAPS_Migrations/daps-csv
-//jar {
+//tasks.getByName<Jar>("jar") {
 //    manifest {
-//        attributes 'Main-Class' : 'utilities.H2exCSVKt'
+//        attributes("Main-class: application.ApplicationKt")
 //    }
-//    from { configurations.implementation.collect { it.isDirectory() ? it : zipTree(it) } }
+//    from ( configurations.implementation.get().allDependencies )
 //}
 
 /**
