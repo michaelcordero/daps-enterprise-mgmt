@@ -9,7 +9,7 @@ val dokka_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.5.21"
     id("org.jetbrains.dokka") version "1.4.30"
 }
 
