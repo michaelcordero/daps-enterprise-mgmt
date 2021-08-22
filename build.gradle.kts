@@ -6,6 +6,9 @@ val exposed_version: String by project
 val h2_version: String by project
 val hikari_cp_version: String by project
 val dokka_version: String by project
+val progress_bar_version: String by project
+val email_service_version: String by project
+val commons_codec_version: String by project
 
 plugins {
     application
@@ -78,10 +81,10 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("me.tongfei:progressbar:0.8.1")
-    implementation("com.icerockdev.service:email-service:0.1.1")
+    implementation("me.tongfei:progressbar:$progress_bar_version")
+    implementation("com.icerockdev.service:email-service:$email_service_version")
+    implementation("commons-codec:commons-codec:$commons_codec_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version")
 }
 
 
@@ -108,7 +111,8 @@ tasks.jar {
     manifest {
         attributes(Pair("Main-Class", "application.ApplicationKt"))
     }
-    from (configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it)})
+    from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) },
+        configurations.testCompileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
@@ -120,8 +124,8 @@ tasks.jar {
  * UPDATE #2: This task now uses progressbar dependency, so I'm not sure if that fixed it or updating to Gradle 6.3.
  */
 tasks.register("csv", JavaExec::class.java) {
-        group = "Execution"
-        description = "Run the H2exCSVKt main class"
-        classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("utilities.H2exCSVKt")
+    group = "Execution"
+    description = "Run the H2exCSVKt main class"
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("utilities.H2exCSVKt")
 }
