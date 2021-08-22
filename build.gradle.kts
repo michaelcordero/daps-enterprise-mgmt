@@ -81,7 +81,6 @@ dependencies {
     implementation("me.tongfei:progressbar:0.8.1")
     implementation("com.icerockdev.service:email-service:0.1.1")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:$kotlin_version")
 }
 
 
