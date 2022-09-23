@@ -265,6 +265,8 @@ fun Application.module() {  //testing: Boolean = false
                                     }
                                 }
                             }
+
+                            else -> {}
                         }
                     }
                 } catch (e: ClosedReceiveChannelException) {

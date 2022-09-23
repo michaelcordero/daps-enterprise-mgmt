@@ -13,7 +13,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import security.DAPSSecurity
 import security.DAPSSession
-import utilities.EmailService
+//import utilities.EmailService
 import utilities.RandomPassword
 import java.util.concurrent.ConcurrentHashMap
 
@@ -780,12 +780,12 @@ class InMemoryCache(private val dq: DataQuery) : DataCache {
         users.replace(old_user.id, new_user)
         // Send the email
         CoroutineScope(Dispatchers.IO).launch {
-            val job = EmailService.send_email(new_user,password)
-            job.invokeOnCompletion { throwable ->
-                if (throwable != null) {
-                    log.info("Email failed. Cause: $throwable.message")
-                }
-            }
+//            val job = EmailService.send_email(new_user,password)
+//            job.invokeOnCompletion { throwable ->
+//                if (throwable != null) {
+//                    log.info("Email failed. Cause: $throwable.message")
+//                }
+//            }
         }
     }
 

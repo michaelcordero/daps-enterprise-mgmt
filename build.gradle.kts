@@ -12,7 +12,7 @@ val commons_codec_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.5.21"
+    kotlin("jvm") version "1.7.0"
     id("org.jetbrains.dokka") version "1.4.30"
 }
 
