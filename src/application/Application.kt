@@ -48,7 +48,7 @@ val dapsJWT: DAPSJWT = DAPSJWT("secret-jwt")
 val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.LIGHT
-val host = System.getProperty("host") ?: "0.0.0.0"
+val host = System.getProperty("host") ?: "localhost"
 //NetworkInterface.getNetworkInterfaces()
 //.toList().stream()
 //.flatMap { i -> i.interfaceAddresses.stream() }
