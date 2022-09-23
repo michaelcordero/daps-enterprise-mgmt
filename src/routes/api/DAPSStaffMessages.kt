@@ -78,7 +78,7 @@ fun Route.daps_staff_messages() {
     delete<DAPSStaffMessages> {
         try {
             log.info("DELETE /daps_staff_messages requested")
-            val dsm: DAPSStaffMessage? = call.receive()
+            val dsm: DAPSStaffMessage = call.receive()
             val time: TimedValue<Unit> = measureTimedValue {
                 val session: DAPSSession? = call.sessions.get<DAPSSession>()
                 cache.remove(dsm,session!!)

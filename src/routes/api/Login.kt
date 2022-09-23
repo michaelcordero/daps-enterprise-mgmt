@@ -26,7 +26,7 @@ fun Route.login() {
     post<Login> {
         val post = call.receive<Parameters>()
         val user: User? = cache.users_map().values.find { user ->
-            user.email == post["user"] ?: "" && user.passwordHash == DAPSSecurity.hash(
+            user.email == (post["user"] ?: "") && user.passwordHash == DAPSSecurity.hash(
                 post["password"] ?: ""
             )
         }

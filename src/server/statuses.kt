@@ -2,7 +2,6 @@ package server
 
 import application.log
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.locations.*
 import io.ktor.server.request.*
