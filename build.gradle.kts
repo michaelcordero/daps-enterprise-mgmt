@@ -82,7 +82,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("me.tongfei:progressbar:$progress_bar_version")
-    implementation("com.icerockdev.service:email-service:$email_service_version")
+//    implementation("com.icerockdev.service:email-service:$email_service_version")
     implementation("commons-codec:commons-codec:$commons_codec_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
