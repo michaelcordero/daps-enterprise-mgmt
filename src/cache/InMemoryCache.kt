@@ -6,7 +6,7 @@ import cache.JSONRouteValues.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import database.queries.DataQuery
-import io.ktor.http.cio.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import model.*
 import org.slf4j.Logger

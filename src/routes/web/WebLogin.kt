@@ -1,15 +1,15 @@
 package routes.web
 
 import application.dapsJWT
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.freemarker.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.locations.post
-import io.ktor.response.*
-import io.ktor.routing.Route
-import io.ktor.sessions.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.freemarker.*
+import io.ktor.server.locations.*
+import io.ktor.server.locations.post
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import model.User
 import presenters.WebLoginPresenter
 import presenters.WelcomePresenter

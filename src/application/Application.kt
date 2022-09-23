@@ -9,23 +9,29 @@ import com.fasterxml.jackson.databind.introspect.VisibilityChecker
 import database.LocalDataQuery
 import database.queries.DataQuery
 import freemarker.cache.ClassTemplateLoader
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.auth.jwt.*
-import io.ktor.features.*
-import io.ktor.freemarker.*
 import io.ktor.http.*
-import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
-import io.ktor.jackson.*
-import io.ktor.locations.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.engine.*
+import io.ktor.server.freemarker.*
+import io.ktor.server.http.content.*
+import io.ktor.server.locations.*
 import io.ktor.server.netty.*
-import io.ktor.sessions.*
-import io.ktor.webjars.*
+import io.ktor.server.plugins.cachingheaders.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.conditionalheaders.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import io.ktor.server.webjars.*
+import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import model.User
@@ -49,13 +55,14 @@ val dq: DataQuery = LocalDataQuery()
 val cache: DataCache = InMemoryCache(dq)
 val theme: Theme = Theme.LIGHT
 val host = System.getProperty("host") ?: "localhost"
+
 //NetworkInterface.getNetworkInterfaces()
 //.toList().stream()
 //.flatMap { i -> i.interfaceAddresses.stream() }
 //.filter { ia -> ia.address is Inet4Address && !ia.address.isLoopbackAddress }
 //.toList().first().address.hostAddress.toString()
 val port = System.getProperty("port") ?: "8080"
-val connections: MutableMap<String?,DefaultWebSocketServerSession> = mutableMapOf()
+val connections: MutableMap<String?, DefaultWebSocketServerSession> = mutableMapOf()
 
 @ExperimentalTime
 @ExperimentalStdlibApi
@@ -94,7 +101,7 @@ fun Application.module() {  //testing: Boolean = false
                     val session = call.sessions.get<DAPSSession>()
                     dapsJWT.verifier.verify(session?.sessionId)
                     return@skipWhen true
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     return@skipWhen false
                 }
             }
@@ -105,7 +112,7 @@ fun Application.module() {  //testing: Boolean = false
                     val session: DAPSSession? = call.sessions.get<DAPSSession>()
                     val user: User? = cache.users_map().values.find { user -> user.email == session?.emailId }
                     return@skipWhen user?.role == DAPSRole.ADMIN
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     return@skipWhen false
                 }
             }
@@ -142,7 +149,8 @@ fun Application.module() {  //testing: Boolean = false
         }
     }
     // This adds automatically Date and Server headers to each response
-    install(DefaultHeaders)
+     install(DefaultHeaders)
+
     // This feature enables truly open access across domain boundaries
 //    install(CORS) {
 //        host("localhost:4000") to specify client app
@@ -161,33 +169,32 @@ fun Application.module() {  //testing: Boolean = false
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
-    install(PartialContent)
     // cache control
-    install(CachingHeaders) {
-        options { outgoing ->
-            when(outgoing.contentType?.withoutParameters()) {
+            install (CachingHeaders) {
+        options { call, outgoing ->
+            when (outgoing.contentType?.withoutParameters()) {
                 ContentType.Text.CSS -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
                 ContentType.Text.JavaScript -> CachingOptions(CacheControl.MaxAge(maxAgeSeconds = 24 * 60 * 60))
                 else -> CachingOptions(CacheControl.NoStore(CacheControl.Visibility.Public))
             }
         }
     }
-    // SESSION cookie
-    install(Sessions) {
+            // SESSION cookie
+            install (Sessions) {
         cookie<DAPSSession>("DAPS_SESSION_ID") {
             cookie.path = "/"
         }
     }
-    install(StatusPages) { statuses(WebStatusPresenter(this)) }
-    install(Locations)
-    install(FreeMarker) {
+            install (StatusPages) { statuses(WebStatusPresenter(this)) }
+            install (Locations)
+            install (FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
-    install(WebSockets)
-    install(Webjars) {
+            install (WebSockets)
+            install (Webjars) {
         path = "/webjars" //defaults to /webjars
     }
-    routing {
+            routing {
         // static content
         static("/static/") {
             // css, javascript & images served here
@@ -270,9 +277,8 @@ fun Application.module() {  //testing: Boolean = false
                         }
                     }
                 } catch (e: ClosedReceiveChannelException) {
-                    log.info("connection closed. ignore.")
-                }
-                finally {
+                    application.log.info("connection closed. ignore.")
+                } finally {
                     connections.remove(sessionId)
                 }
             }

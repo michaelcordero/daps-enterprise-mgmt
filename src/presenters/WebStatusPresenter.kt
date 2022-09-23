@@ -1,5 +1,5 @@
 package presenters
 
-import io.ktor.features.*
+import io.ktor.server.plugins.statuspages.*
 
-class WebStatusPresenter(val configuration: StatusPages.Configuration) : AbstractPresenter()
+class WebStatusPresenter(val configuration: StatusPagesConfig) : AbstractPresenter()

@@ -3,15 +3,15 @@ package routes.web
 import application.cache
 import application.log
 import application.redirect
-import io.ktor.application.*
-import io.ktor.freemarker.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.locations.post
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.sessions.*
+import io.ktor.server.application.*
+import io.ktor.server.freemarker.*
+import io.ktor.server.locations.*
+import io.ktor.server.locations.post
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import model.User
 import presenters.RegisterPresenter
 import presenters.WebSettingsPresenter
@@ -105,7 +105,7 @@ fun Route.websettings(presenter: WebSettingsPresenter) {
                                     mapOf(
                                         "presenter" to presenter,
                                         "user" to saved_user,
-                                        "validator" to RegisterPresenter.Validator,
+                                        "validator" to RegisterPresenter,
                                         "password_updated" to "password updated"
                                     ),
                                     "settings-etag:${LocalDateTime.now()}"

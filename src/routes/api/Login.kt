@@ -2,13 +2,13 @@ package routes.api
 
 import application.cache
 import application.dapsJWT
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.locations.post
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.Route
+import io.ktor.server.application.*
+import io.ktor.server.locations.*
+import io.ktor.server.locations.post
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import model.User
 import security.DAPSSecurity
 

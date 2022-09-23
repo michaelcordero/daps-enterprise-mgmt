@@ -1,10 +1,10 @@
 package routes.web
 
-import io.ktor.application.*
-import io.ktor.freemarker.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.freemarker.*
+import io.ktor.server.locations.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import presenters.WebPaymentsPresenter
 import java.time.LocalDateTime
 
@@ -17,7 +17,9 @@ class WebPayments
 @KtorExperimentalLocationsAPI
 fun Route.webpayments(presenter: WebPaymentsPresenter){
     get<WebPayments>{
-        call.respond(FreeMarkerContent("payments.ftl", mapOf("presenter" to presenter),
-        "payments-e-tag:${LocalDateTime.now()}"))
+        call.respond(
+            FreeMarkerContent("payments.ftl", mapOf("presenter" to presenter),
+        "payments-e-tag:${LocalDateTime.now()}")
+        )
     }
 }
