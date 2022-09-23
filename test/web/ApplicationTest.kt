@@ -1,13 +1,9 @@
 package com.daps.ent.web
 
 import application.module
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.locations
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.http.*
+import io.ktor.locations.*
+import io.ktor.server.testing.*
 import org.junit.Test
 import routes.web.Index
 import kotlin.test.assertEquals
@@ -16,7 +12,7 @@ import kotlin.time.ExperimentalTime
 
 class ApplicationTest {
     @ExperimentalTime
-    @KtorExperimentalAPI
+
     @KtorExperimentalLocationsAPI
     @Test
     fun testIndex() {
@@ -31,7 +27,7 @@ class ApplicationTest {
         }
     }
 
-//    @KtorExperimentalAPI
+//
 //    @KtorExperimentalLocationsAPI
 //    @Test
 //    fun testClients() {

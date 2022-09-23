@@ -1,13 +1,11 @@
 package presenters
 
 import application.cache
-import io.ktor.util.*
 import model.User
 import security.DAPSRole
 import security.DAPSSession
 import kotlin.random.Random
 
-@KtorExperimentalAPI
 open class RegisterPresenter : AbstractPresenter() {
 
     fun createUser(

@@ -5,11 +5,12 @@ import application.log
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
+import io.ktor.locations.put
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
-import io.ktor.util.*
 import model.WorkOrder
 import security.DAPSSession
 import kotlin.time.ExperimentalTime
@@ -22,7 +23,6 @@ class WorkOrders
 
 @ExperimentalTime
 @KtorExperimentalLocationsAPI
-@KtorExperimentalAPI
 fun Route.work_orders() {
     // HTTP GET METHOD
     get<WorkOrders> {

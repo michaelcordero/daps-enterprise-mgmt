@@ -11,16 +11,13 @@ import io.ktor.locations.post
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.Route
-import io.ktor.util.*
 import presenters.WebResetPasswordPresenter
 import java.time.LocalDateTime
 
 @KtorExperimentalLocationsAPI
-@KtorExperimentalAPI
 @Location("/reset_password")
 data class WebResetPassword(val email: String = "", val error: String = "")
 
-@KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Route.webresetpassword(presenter: WebResetPasswordPresenter) {
     // HTTP POST METHOD

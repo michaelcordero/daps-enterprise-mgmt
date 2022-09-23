@@ -9,7 +9,7 @@ import java.sql.Timestamp
 import java.time.Instant
 
 
-class JavaTimestampColumnType : ColumnType(), IDateColumnType {
+class JavaTimestampColumnType(override val hasTimePart: Boolean) : ColumnType(), IDateColumnType {
     override fun sqlType(): String {
        return currentDialect.dataTypeProvider.dateTimeType()
     }
@@ -45,4 +45,4 @@ class JavaTimestampColumnType : ColumnType(), IDateColumnType {
  *
  * @param name The column name
  */
-fun Table.realtimestamp(name: String): Column<Timestamp> = registerColumn(name, JavaTimestampColumnType())
+fun Table.realtimestamp(name: String): Column<Timestamp> = registerColumn(name, JavaTimestampColumnType(true))

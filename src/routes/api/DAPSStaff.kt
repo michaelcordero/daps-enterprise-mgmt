@@ -2,15 +2,13 @@ package routes.api
 
 import application.cache
 import application.log
-import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
+import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.locations.*
-import io.ktor.request.receive
-import io.ktor.response.respond
+import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.sessions.*
 import security.DAPSSession
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimedValue
@@ -21,7 +19,7 @@ import kotlin.time.measureTimedValue
 class DAPSStaff
 
 @ExperimentalTime
-@KtorExperimentalAPI
+
 @KtorExperimentalLocationsAPI
 fun Route.daps_staff(){
     get<DAPSStaff>{
