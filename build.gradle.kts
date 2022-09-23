@@ -1,4 +1,5 @@
-val ktor_version: String by project
+val ktor_tools_version: String by project
+val ktor_server_tests_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val kotlinx_coroutines: String by project
@@ -62,19 +63,19 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-serialization:$ktor_version")
+    implementation("io.ktor:ktor-serialization:$ktor_tools_version")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines")
-    implementation("io.ktor:ktor-jackson:$ktor_version")
-    implementation("io.ktor:ktor-websockets:$ktor_version")
-    implementation("io.ktor:ktor-auth-jwt:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-jackson:$ktor_tools_version")
+    implementation("io.ktor:ktor-websockets:$ktor_tools_version")
+    implementation("io.ktor:ktor-auth-jwt:$ktor_tools_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_tools_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-html-builder:$ktor_version")
-    implementation("io.ktor:ktor-locations:$ktor_version")
-    implementation("io.ktor:ktor-freemarker:$ktor_version")
-    implementation("io.ktor:ktor-webjars:$ktor_version")
+    implementation("io.ktor:ktor-server-core:$ktor_tools_version")
+    implementation("io.ktor:ktor-html-builder:$ktor_tools_version")
+    implementation("io.ktor:ktor-locations:$ktor_tools_version")
+    implementation("io.ktor:ktor-freemarker:$ktor_tools_version")
+    implementation("io.ktor:ktor-webjars:$ktor_tools_version")
     implementation("com.h2database:h2:$h2_version")
     implementation("com.zaxxer:HikariCP:$hikari_cp_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
@@ -84,7 +85,7 @@ dependencies {
     implementation("me.tongfei:progressbar:$progress_bar_version")
 //    implementation("com.icerockdev.service:email-service:$email_service_version")
     implementation("commons-codec:commons-codec:$commons_codec_version")
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_server_tests_version")
 }
 
 
