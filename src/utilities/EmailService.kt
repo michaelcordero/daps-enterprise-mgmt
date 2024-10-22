@@ -15,7 +15,6 @@
 //            smtpSecure = SMTPSecure.TLS,
 //            smtpAuth = true,
 //            username = "corderosoft@gmail.com",
-//            password = "zslgufvfsnvskfij")
 //    )
 //    fun send_email(user: User,password: String): Job {
 //       return mailer.compose().apply {
